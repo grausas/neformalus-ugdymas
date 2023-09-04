@@ -3,11 +3,22 @@
   outline: none !important;
 }
 
-.container {
-  width: 100px;
+.esri-view .esri-view-surface:focus::after {
+  outline: none !important;
 }
 
-.viewDiv {
-  width: 100px;
-  height: 100px;
+.esri-ui-corner {
+  flex-direction: column;
+}
+
+.esri-ui-bottom-right .esri-component {
+  margin-top: 10px;
+}
+
+.esri-view-width-xsmall .esri-expand--auto .esri-expand__container--expanded {
+  position: sticky;
+}
+
+.esri-ui-manual-container > .esri-component {
+  display: none;
 }
