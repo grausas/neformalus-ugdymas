@@ -7,7 +7,6 @@ const montserrat = Montserrat({ subsets: ["latin"], display: "swap" });
 export default function Home() {
   return (
     <>
-      <Navbar />
       <Button bg="brand.30">Hello</Button>
     </>
   );
