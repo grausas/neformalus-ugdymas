@@ -9,6 +9,7 @@ import {
   AbsoluteCenter,
 } from "@chakra-ui/react";
 import Card from "@/components/Card";
+import NoResults from "@/components/NoResults";
 import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
@@ -23,19 +24,37 @@ export default function Map() {
   const [loading, setLoading] = useState(true);
 
   const queryFeatures = async () => {
+    const layer = featureLayerPublic();
     setLoading(true);
-    featureLayerPublic()
-      .queryFeatures({
-        returnGeometry: true,
-        geometry: view?.extent,
-        outFields: featureLayerFeatures,
-      })
-      .then(function (results) {
-        console.log("results", results);
-        setLoading(false);
-        // prints the array of result graphics to the console
-        return setData(results.features);
+
+    const featureResults = await layer.queryFeatures({
+      returnGeometry: true,
+      geometry: view?.extent,
+      outFields: featureLayerFeatures,
+    });
+
+    const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
+
+    if (featureResults.features.length > 0) {
+      const relatedFeatures = await layer.queryRelatedFeatures({
+        outFields: ["*"],
+        relationshipId: layer.relationships[0].id,
+        objectIds: objectIds,
       });
+      objectIds.forEach(function (objectId) {
+        if (relatedFeatures[objectId]) {
+          const key = "relatedFeatures";
+          featureResults.features.forEach((f) => {
+            if (f.attributes.OBJECTID === objectId) {
+              f.attributes[key] = relatedFeatures[objectId].features;
+            }
+          });
+        }
+      });
+    }
+
+    setLoading(false);
+    return setData(featureResults.features);
   };
 
   useEffect(() => {
@@ -85,9 +104,11 @@ export default function Map() {
           </AbsoluteCenter>
         )}
         {!loading &&
+          data.length > 0 &&
           data.map((item) => (
             <Card key={item.attributes.OBJECTID} cardData={item} />
           ))}
+        {!loading && data.length === 0 && <NoResults />}
       </Flex>
       <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.20">
         <ArcGISMap />
