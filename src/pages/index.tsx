@@ -1,7 +1,12 @@
-import { Inter } from "next/font/google";
+import { Button, Box } from "@chakra-ui/react";
+import { Montserrat } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"], display: "swap" });
 
 export default function Home() {
-  return <main className={` ${inter.className}`}>Neformalus ugdymas</main>;
+  return (
+    <main className={montserrat.className}>
+      <Button bg="brand.30">Hello</Button>
+    </main>
+  );
 }
