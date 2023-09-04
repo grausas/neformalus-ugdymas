@@ -66,12 +66,17 @@ export default function Simple() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Link href="/">
-              <Box color="brand.50">Logo</Box>
+              <Box color="brand.50">
+                <SunIcon />
+              </Box>
             </Link>
+          </HStack>
+          <Flex alignItems={"center"}>
             <HStack
               as={"nav"}
-              spacing={4}
+              spacing={2}
               display={{ base: "none", md: "flex" }}
+              mr="5"
             >
               {Links.map((link) => (
                 <NavLink key={link.name} url={link.url}>
@@ -79,8 +84,6 @@ export default function Simple() {
                 </NavLink>
               ))}
             </HStack>
-          </HStack>
-          <Flex alignItems={"center"}>
             <Button
             //  onClick={toggleColorMode}
             >

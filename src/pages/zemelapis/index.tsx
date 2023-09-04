@@ -8,6 +8,7 @@ import {
   Stack,
   AbsoluteCenter,
 } from "@chakra-ui/react";
+import Card from "@/components/Card";
 import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
@@ -63,8 +64,15 @@ export default function Map() {
   }, [view]);
 
   return (
-    <Stack direction="row">
-      <Flex minW="500px" flexDirection="column" position="relative" p="4">
+    <Stack direction="row" gap="0">
+      <Flex
+        maxW="600px"
+        w="100%"
+        flexDirection="column"
+        position="relative"
+        p="3"
+        gap="3"
+      >
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner
@@ -78,12 +86,10 @@ export default function Map() {
         )}
         {!loading &&
           data.map((item) => (
-            <Text key={item.attributes.OBJECTID}>
-              {item.attributes.PAVADIN}
-            </Text>
+            <Card key={item.attributes.OBJECTID} cardData={item} />
           ))}
       </Flex>
-      <Box position="relative" w="100%" h="calc(100vh - 64px)">
+      <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.20">
         <ArcGISMap />
       </Box>
     </Stack>
