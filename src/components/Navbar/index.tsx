@@ -3,18 +3,10 @@ import NextLink from "next/link";
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
-  Text,
   IconButton,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   useDisclosure,
-  useColorModeValue,
   useColorMode,
   Stack,
 } from "@chakra-ui/react";
@@ -59,7 +51,13 @@ export default function Simple() {
   return (
     <>
       <Box bg="brand.10" px={4}>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+        <Flex
+          maxW="1440px"
+          h={16}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          margin="0 auto"
+        >
           <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}

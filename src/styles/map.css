@@ -1,0 +1,13 @@
+/* esri modules css */
+.esri-view .esri-view-surface--inset-outline:focus::after {
+  outline: none !important;
+}
+
+.container {
+  width: 100px;
+}
+
+.viewDiv {
+  width: 100px;
+  height: 100px;
+}

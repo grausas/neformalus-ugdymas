@@ -1,3 +1,5 @@
+@import "https://js.arcgis.com/next/esri/themes/light/main.css";
+
 :root {
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
