@@ -19,6 +19,9 @@ const theme = extendTheme({
       },
     },
   },
+  fonts: {
+    body: "var(--font-rubik)",
+  },
   colors: {
     brand: {
       10: "#fffffe",

@@ -4,14 +4,27 @@ import type { AppProps } from "next/app";
 import { Chakra } from "@/chakra";
 import { MapProvider } from "@/context/map-context";
 import Layout from "@/components/Layout";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"], display: "swap" });
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Chakra>
-      <Layout>
-        <MapProvider>
-          <Component {...pageProps} />
-        </MapProvider>
-      </Layout>
-    </Chakra>
+    <>
+      <style jsx global>
+        {`
+          :root {
+            --font-rubik: ${montserrat.style.fontFamily};
+          }
+        `}
+      </style>
+      <Chakra>
+        <Layout>
+          <MapProvider>
+            <Component {...pageProps} />
+          </MapProvider>
+        </Layout>
+      </Chakra>
+    </>
   );
 }
