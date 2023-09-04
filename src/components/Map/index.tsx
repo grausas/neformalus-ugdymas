@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useLayoutEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import { MapContext } from "../../context/map-context";
 import { featureLayerPublic } from "../../layers";
@@ -10,7 +10,7 @@ const ArcGISMap = () => {
   const { loadMap } = useContext(MapContext);
   const layer = featureLayerPublic();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (mapRef.current && loadMap) {
       loadMap(mapRef.current, layer);
     }

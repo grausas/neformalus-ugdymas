@@ -1,5 +1,4 @@
 "use client";
-import NextLink from "next/link";
 import {
   Box,
   Flex,
@@ -10,6 +9,8 @@ import {
   useColorMode,
   Stack,
 } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
+
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 interface Props {
@@ -26,21 +27,19 @@ const NavLink = (props: Props) => {
   const { children, url } = props;
 
   return (
-    <NextLink href={url} passHref>
-      <Box
-        //   as="a"
-        px={2}
-        py={1}
-        rounded={"md"}
-        _hover={{
-          textDecoration: "none",
-          bg: "gray.200",
-        }}
-        //   href={url}
-      >
-        {children}
-      </Box>
-    </NextLink>
+    <Link
+      color="brand.40"
+      href={url}
+      px={2}
+      py={1}
+      rounded={"md"}
+      _hover={{
+        textDecoration: "none",
+        bg: "gray.200",
+      }}
+    >
+      {children}
+    </Link>
   );
 };
 
@@ -66,9 +65,9 @@ export default function Simple() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={"center"}>
-            <NextLink href="/" passHref>
+            <Link href="/">
               <Box color="brand.50">Logo</Box>
-            </NextLink>
+            </Link>
             <HStack
               as={"nav"}
               spacing={4}

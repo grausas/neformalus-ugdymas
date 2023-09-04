@@ -64,7 +64,7 @@ export default function Map() {
 
   return (
     <Stack direction="row">
-      <Flex minW="500px" flexDirection="column" position="relative">
+      <Flex minW="500px" flexDirection="column" position="relative" p="4">
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner
