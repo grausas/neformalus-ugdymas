@@ -4,6 +4,7 @@ import { CategoryData } from "@/utils/categoryData";
 import { ClassData } from "@/utils/classData";
 import Image from "next/image";
 import { EmailIcon, PhoneIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import location from "@/assets/location.svg";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
@@ -67,7 +68,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         {cardData.attributes.PAVADIN}
       </Heading>
       <Box color="brand.40" mt="2">
-        <Text>{cardData.attributes.ADRESAS}</Text>
+        <Flex alignItems="center">
+          <Image width={16} height={16} src={location} alt="adresas" />
+          <Text ml="2" fontWeight="500">
+            {cardData.attributes.ADRESAS}
+          </Text>
+        </Flex>
         <Flex alignItems="center">
           <EmailIcon mr="2" color="brand.30" />
           <Text>{cardData.attributes.EL_PASTAS}</Text>
@@ -76,7 +82,11 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         <Text>{cardData.attributes.SOC_TINKL}</Text>
         <Flex alignItems="center">
           <PhoneIcon mr="2" color="brand.30" />
-          <Text>+{cardData.attributes.TELEF_MOB}</Text>
+          <Text>
+            {cardData.attributes.TELEF_MOB
+              ? "+" + cardData.attributes.TELEF_MOB
+              : cardData.attributes.TELEF}
+          </Text>
         </Flex>
         <Flex alignItems="center">
           <ExternalLinkIcon mr="2" color="brand.30" />
@@ -84,7 +94,6 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
             {cardData.attributes.NUORODA}
           </Link>
         </Flex>
-        <Text>{cardData.attributes.TELEFONAS}</Text>
       </Box>
       <Flex justifyContent="space-between" mt="1">
         <Flex justify="center">
@@ -102,7 +111,11 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
               width={26}
               height={26}
               src={hasNvsKrepse ? nvs : nonvs}
-              alt="fe"
+              alt={
+                hasNvsKrepse
+                  ? "Taikomas NVŠ krepšelis"
+                  : "Netaikomas NVŠ krepšelis"
+              }
             />
           </Tooltip>
         </Flex>
