@@ -9,11 +9,9 @@ import nonvs from "@/assets/nonvs.svg";
 export default function Card({ cardData }: { cardData: __esri.Graphic }) {
   console.log("cardData", cardData);
 
-  const isNvs = cardData.attributes.relatedFeatures.some((related: any) => {
-    return related.attributes.NVS_KREPSE === 1;
-  });
-
-  console.log("isNvs", isNvs);
+  const hasNvsKrepse = cardData.attributes.relatedFeatures.some(
+    (related: any) => related.attributes.NVS_KREPSE === 1
+  );
 
   return (
     <Flex direction="column" bg="brand.20" p="3" rounded="xl" shadow="md">
@@ -39,51 +37,53 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           <Text>+{cardData.attributes.TELEF_MOB}</Text>
         </Flex>
         <Text>{cardData.attributes.TELEFONAS}</Text>
-        <Flex justifyContent="space-between" mt="1">
-          <Flex justify="center">
-            <Tooltip
-              label={
-                isNvs ? "Taikomas NVŠ krepšelis" : "Netaikomas NVŠ krepšelis"
-              }
-              fontSize="xs"
-              bg="brand.30"
-              color="brand.50"
-            >
-              <Image
-                width={24}
-                height={24}
-                src={isNvs ? nvs : nonvs}
-                alt="fe"
-              />
-            </Tooltip>
-          </Flex>
-          <Flex>
-            {cardData.attributes.relatedFeatures.map((related: any) => {
-              return CategoryData.map((category) => {
-                if (related.attributes.LO_VEIKLA === category.value) {
-                  return (
-                    <Box key={category.id} ml="1">
-                      <Tooltip
-                        label={category.text}
-                        fontSize="xs"
-                        bg="brand.30"
-                        color="brand.50"
-                      >
-                        <Image
-                          width={24}
-                          height={24}
-                          src={category.icon}
-                          alt={category.text}
-                        />
-                      </Tooltip>
-                    </Box>
-                  );
-                }
-              });
-            })}
-          </Flex>
-        </Flex>
       </Box>
+      <Flex justifyContent="space-between" mt="1">
+        <Flex justify="center">
+          <Tooltip
+            label={
+              hasNvsKrepse
+                ? "Taikomas NVŠ krepšelis"
+                : "Netaikomas NVŠ krepšelis"
+            }
+            fontSize="xs"
+            bg="brand.30"
+            color="brand.50"
+          >
+            <Image
+              width={24}
+              height={24}
+              src={hasNvsKrepse ? nvs : nonvs}
+              alt="fe"
+            />
+          </Tooltip>
+        </Flex>
+        <Flex>
+          {cardData.attributes.relatedFeatures.map((related: any) => {
+            return CategoryData.map((category) => {
+              if (related.attributes.LO_VEIKLA === category.value) {
+                return (
+                  <Box key={category.id} ml="1">
+                    <Tooltip
+                      label={category.text}
+                      fontSize="xs"
+                      bg="brand.30"
+                      color="brand.50"
+                    >
+                      <Image
+                        width={24}
+                        height={24}
+                        src={category.icon}
+                        alt={category.text}
+                      />
+                    </Tooltip>
+                  </Box>
+                );
+              }
+            });
+          })}
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

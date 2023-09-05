@@ -29,10 +29,10 @@ const NavLink = (props: Props) => {
   return (
     <Link
       color="brand.10"
+      fontWeight="500"
       href={url}
       px={2}
       py={1}
-      rounded={"md"}
       _hover={{
         textDecoration: "none",
         color: "brand.40",
