@@ -1,9 +1,12 @@
 import React, { PropsWithChildren } from "react";
+import { usePathname } from "next/navigation";
+
 import Navbar from "./Navbar";
 const Layout = ({ children }: PropsWithChildren) => {
+  const pathname = usePathname();
   return (
     <>
-      <Navbar />
+      {pathname !== "/login" && <Navbar />}
       {children}
     </>
   );
