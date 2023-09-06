@@ -1,14 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import ArcGISMap from "@/components/Map";
-import {
-  Box,
-  Spinner,
-  Text,
-  Flex,
-  Stack,
-  AbsoluteCenter,
-} from "@chakra-ui/react";
+import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
 import Card from "@/components/Card";
+import Filter from "@/components/Filter";
 import NoResults from "@/components/NoResults";
 import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
@@ -16,12 +10,21 @@ import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
 import { MapContext } from "@/context/map-context";
 import { featureLayerFeatures } from "@/utils/featureLayer";
+import { whereParamsChange } from "@/helpers/whereParams";
+
+const defaultWhereParams = "1=1";
 
 export default function Map() {
   const { view } = useContext(MapContext);
 
   const [data, setData] = useState<__esri.Graphic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [whereParams, setWhereParams] = useState(defaultWhereParams);
+  const [category, setCategory] = useState<string[]>([]);
+
+  useEffect(() => {
+    setWhereParams(whereParamsChange(category));
+  }, [category]);
 
   const queryFeatures = async () => {
     const layer = featureLayerPublic();
@@ -36,11 +39,26 @@ export default function Map() {
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
 
     if (featureResults.features.length > 0) {
+      const relatedGlobalIds = await layer.queryRelatedFeatures({
+        outFields: ["GUID"],
+        relationshipId: layer.relationships[0].id,
+        objectIds: objectIds,
+        where: whereParams,
+      });
+      const globalIds = Object.keys(relatedGlobalIds);
+
+      const filteredFeatures = featureResults.features.filter((f) => {
+        const objectId = f.attributes.OBJECTID.toString();
+        return globalIds.includes(objectId);
+      });
+      featureResults.features = filteredFeatures;
+
       const relatedFeatures = await layer.queryRelatedFeatures({
         outFields: ["*"],
         relationshipId: layer.relationships[0].id,
         objectIds: objectIds,
       });
+
       objectIds.forEach(function (objectId) {
         if (relatedFeatures[objectId]) {
           const key = "relatedFeatures";
@@ -80,7 +98,11 @@ export default function Map() {
 
     return () => handles.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view]);
+  }, [view, whereParams]);
+
+  const handleFilter = useCallback((category: string[]) => {
+    setCategory(category);
+  }, []);
 
   return (
     <Stack direction="row" gap="0">
@@ -92,6 +114,7 @@ export default function Map() {
         p="3"
         gap="3"
       >
+        <Filter handleFilter={handleFilter} />
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner

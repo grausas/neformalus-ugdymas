@@ -9,26 +9,24 @@ import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
 export default function Card({ cardData }: { cardData: __esri.Graphic }) {
-  console.log("cardData", cardData);
-
   const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
 
-  const hasNvsKrepse = cardData.attributes.relatedFeatures.some(
-    (related: any) => related.attributes.NVS_KREPSE === 1
-  );
+  const hasNvsKrepse =
+    cardData.attributes.relatedFeatures &&
+    cardData.attributes.relatedFeatures.some(
+      (related: any) => related.attributes.NVS_KREPSE === 1
+    );
   const classArr: any = [];
 
   const filteredClass = klaseArr.find((klase) => {
-    cardData.attributes.relatedFeatures.map((f: any) => {
-      if (classArr.includes(klase)) return;
-      if (f.attributes[klase] === 1) {
-        return classArr.push(klase);
-      }
-    });
+    cardData.attributes.relatedFeatures &&
+      cardData.attributes.relatedFeatures.map((f: any) => {
+        if (classArr.includes(klase)) return;
+        if (f.attributes[klase] === 1) {
+          return classArr.push(klase);
+        }
+      });
   });
-  console.log("filteredClass", filteredClass);
-
-  console.log("classArr", classArr);
 
   return (
     <Flex
@@ -120,29 +118,30 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           </Tooltip>
         </Flex>
         <Flex>
-          {cardData.attributes.relatedFeatures.map((related: any) => {
-            return CategoryData.map((category) => {
-              if (related.attributes.LO_VEIKLA === category.value) {
-                return (
-                  <Box key={category.id} ml="1">
-                    <Tooltip
-                      label={category.text}
-                      fontSize="xs"
-                      bg="brand.30"
-                      color="brand.50"
-                    >
-                      <Image
-                        width={26}
-                        height={26}
-                        src={category.icon}
-                        alt={category.text}
-                      />
-                    </Tooltip>
-                  </Box>
-                );
-              }
-            });
-          })}
+          {cardData.attributes.relatedFeatures &&
+            cardData.attributes.relatedFeatures.map((related: any) => {
+              return CategoryData.map((category) => {
+                if (related.attributes.LO_VEIKLA === category.value) {
+                  return (
+                    <Box key={category.id} ml="1">
+                      <Tooltip
+                        label={category.text}
+                        fontSize="xs"
+                        bg="brand.30"
+                        color="brand.50"
+                      >
+                        <Image
+                          width={26}
+                          height={26}
+                          src={category.icon}
+                          alt={category.text}
+                        />
+                      </Tooltip>
+                    </Box>
+                  );
+                }
+              });
+            })}
         </Flex>
       </Flex>
     </Flex>
