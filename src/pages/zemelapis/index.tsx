@@ -8,6 +8,7 @@ import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
+import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter.js";
 import { MapContext } from "@/context/map-context";
 import { featureLayerFeatures } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
@@ -26,7 +27,7 @@ export default function Map() {
     setWhereParams(whereParamsChange(category));
   }, [category]);
 
-  const queryFeatures = async () => {
+  const queryFeatures = async (layerView: __esri.FeatureLayerView) => {
     const layer = featureLayerPublic();
     setLoading(true);
 
@@ -46,20 +47,28 @@ export default function Map() {
         where: whereParams,
       });
       const globalIds = Object.keys(relatedGlobalIds);
+      const globalIdsAsNumber = globalIds.map((gid) => {
+        return parseInt(gid);
+      });
 
       const filteredFeatures = featureResults.features.filter((f) => {
-        const objectId = f.attributes.OBJECTID.toString();
-        return globalIds.includes(objectId);
+        return globalIdsAsNumber.includes(f.attributes.OBJECTID);
       });
+
+      const featureFilter = new FeatureFilter({
+        objectIds: globalIdsAsNumber,
+      });
+      layerView.filter = featureFilter;
+
       featureResults.features = filteredFeatures;
 
       const relatedFeatures = await layer.queryRelatedFeatures({
         outFields: ["*"],
         relationshipId: layer.relationships[0].id,
-        objectIds: objectIds,
+        objectIds: globalIdsAsNumber,
       });
 
-      objectIds.forEach(function (objectId) {
+      globalIdsAsNumber.forEach(function (objectId) {
         if (relatedFeatures[objectId]) {
           const key = "relatedFeatures";
           featureResults.features.forEach((f) => {
@@ -80,8 +89,8 @@ export default function Map() {
     if (!view) return;
     const layer = view?.map.layers.getItemAt(0) as __esri.FeatureLayer;
 
-    view?.whenLayerView(layer).then(async () => {
-      await queryFeatures();
+    view?.whenLayerView(layer).then(async (layerView) => {
+      await queryFeatures(layerView);
 
       // subsequent map interaction
       handles.add(
@@ -89,7 +98,7 @@ export default function Map() {
           () => [view.stationary, view.extent],
           ([stationary]) => {
             if (stationary) {
-              promiseUtils.debounce(queryFeatures());
+              promiseUtils.debounce(queryFeatures(layerView));
             }
           }
         )
