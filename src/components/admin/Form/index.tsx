@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -15,17 +17,8 @@ import InputField from "../Input";
 import { drawPoints } from "@/helpers/sketch";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
-
-type FormValues = {
-  PAVADIN: string;
-  ADRESAS: string;
-  EL_PASTAS: string;
-  NUORODA: string;
-  TELEF_MOB: string;
-  TELEFONAS: string;
-  SOC_TINKL: string;
-  PASTABA: string;
-};
+import { AddFeature } from "@/helpers/addFeature";
+import { FormValues } from "@/types/form";
 
 type Props = {
   auth: any;
@@ -40,7 +33,10 @@ export default function Form({ auth, view }: Props) {
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    const results = await AddFeature(data);
+    console.log("results", results);
+  };
   const onInvalid = () => null;
 
   // add sketch widget to map if user is logged in

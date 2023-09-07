@@ -9,6 +9,7 @@ import Legend from "@arcgis/core/widgets/Legend.js";
 import Home from "@arcgis/core/widgets/Home.js";
 import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol.js";
 import Expand from "@arcgis/core/widgets/Expand.js";
+import { simpleRenderer, layerRenderer } from "./layerRenderer";
 
 interface MapApp {
   view?: MapView;
@@ -60,6 +61,31 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       snapToZoom: false,
     },
   });
+
+  const labelClass = {
+    // autocasts as new LabelClass()
+    symbol: {
+      type: "text", // autocasts as new TextSymbol()
+      color: "green",
+      backgroundColor: [213, 184, 255, 0.75],
+      borderLineColor: "green",
+      borderLineSize: 1,
+      yoffset: 5,
+      font: {
+        // autocast as new Font()
+        family: "Playfair Display",
+        size: 12,
+        weight: "bold",
+      },
+    },
+    labelPlacement: "above-center",
+    labelExpressionInfo: {
+      expression: "$feature.OBJECTID",
+    },
+  };
+  layer.labelingInfo = labelClass;
+
+  layer.renderer = simpleRenderer;
 
   const marker = new SimpleMarkerSymbol({ color: [203, 52, 52, 0.93] });
 
