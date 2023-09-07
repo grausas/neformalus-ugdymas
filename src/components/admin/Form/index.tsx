@@ -14,11 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, EmailIcon, LinkIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
+import SelectField from "../Select";
 import { drawPoints } from "@/helpers/sketch";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { AddFeature } from "@/helpers/addFeature";
 import { FormValues } from "@/types/form";
+import { CategoryData } from "@/utils/categoryData";
 
 type Props = {
   auth: any;
@@ -35,9 +37,11 @@ export default function Form({ auth, view }: Props) {
   const [geometry, setGeometry] = useState<__esri.Geometry>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const onSubmit = async (attributes: FormValues) => {
+    console.log("attributes", attributes);
     if (!geometry) return console.log("error nera geometrijos");
-    const results = await AddFeature(attributes, geometry);
-    console.log("results", results);
+    const relatedAttributes = attributes.related;
+    // const results = await AddFeature(attributes, geometry, relatedAttributes);
+    // console.log("results", results);
   };
   const onInvalid = () => null;
 
@@ -107,18 +111,21 @@ export default function Form({ auth, view }: Props) {
           <SimpleGrid columns={[1, 2]} spacing="3">
             <InputField
               register={register}
+              registerValue="PAVADIN"
               error={errors.PAVADIN && errors.PAVADIN.message}
               name="Pavadinimas"
               id="PAVADIN"
             />
             <InputField
               register={register}
+              registerValue="ADRESAS"
               error={errors.ADRESAS && errors.ADRESAS.message}
               name="Adresas"
               id="ADRESAS"
             />
             <InputField
               register={register}
+              registerValue="EL_PASTAS"
               error={errors.EL_PASTAS && errors.EL_PASTAS.message}
               name="El. paštas"
               id="EL_PASTAS"
@@ -129,6 +136,7 @@ export default function Form({ auth, view }: Props) {
             </InputField>
             <InputField
               register={register}
+              registerValue="NUORODA"
               error={errors.NUORODA && errors.NUORODA.message}
               name="Nuoroda"
               id="NUORODA"
@@ -139,6 +147,7 @@ export default function Form({ auth, view }: Props) {
             </InputField>
             <InputField
               register={register}
+              registerValue="TELEF_MOB"
               error={errors.TELEF_MOB && errors.TELEF_MOB.message}
               name="Mobilaus telefono numeris"
               id="TELEF_MOB"
@@ -147,6 +156,7 @@ export default function Form({ auth, view }: Props) {
             </InputField>
             <InputField
               register={register}
+              registerValue="TELEFONAS"
               error={errors.TELEFONAS && errors.TELEFONAS.message}
               name="Telefonas"
               id="TELEFONAS"
@@ -157,6 +167,7 @@ export default function Form({ auth, view }: Props) {
             </InputField>
             <InputField
               register={register}
+              registerValue="SOC_TINKL"
               error={errors.SOC_TINKL && errors.SOC_TINKL.message}
               name="Socialiniai tinklai"
               id="SOC_TINKL"
@@ -164,9 +175,22 @@ export default function Form({ auth, view }: Props) {
 
             <InputField
               register={register}
+              registerValue="PASTABA"
               error={errors.PASTABA && errors.PASTABA.message}
               name="Pastaba"
               id="PASTABA"
+            />
+
+            <SelectField
+              register={register}
+              registerValue={`related.${"LO_VEIKLA"}`}
+              options={{ valueAsNumber: true }}
+              error={
+                errors.related?.LO_VEIKLA && errors.related?.LO_VEIKLA.message
+              }
+              name="Veiklos"
+              id="LO_VEIKLA"
+              selectOptions={CategoryData}
             />
           </SimpleGrid>
           <Flex justify="space-between" w="100%">

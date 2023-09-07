@@ -9,8 +9,11 @@ import React from "react";
 
 type Props = {
   register: any;
+  registerValue: string;
+  options?: any;
   error?: string;
   name: string;
+  type?: string;
   placeholder?: string;
   id: string;
   children?: React.ReactNode;
@@ -18,8 +21,11 @@ type Props = {
 
 export default function InputField({
   register,
+  registerValue,
+  options,
   error,
   name,
+  type,
   placeholder,
   id,
   children,
@@ -32,9 +38,10 @@ export default function InputField({
       <InputGroup>
         {children}
         <Input
+          type={type}
           id={id}
           placeholder={placeholder}
-          {...register(id)}
+          {...register(registerValue, options)}
           bg="brand.10"
         />
       </InputGroup>
