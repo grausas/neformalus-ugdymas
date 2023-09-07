@@ -64,7 +64,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           expires,
         })
       );
-      router.push("/");
+      router.push("/zemelapis");
     });
   };
 
