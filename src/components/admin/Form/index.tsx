@@ -32,9 +32,11 @@ export default function Form({ auth, view }: Props) {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
+  const [geometry, setGeometry] = useState<__esri.Geometry>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const onSubmit = async (data: FormValues) => {
-    const results = await AddFeature(data);
+  const onSubmit = async (attributes: FormValues) => {
+    if (!geometry) return console.log("error nera geometrijos");
+    const results = await AddFeature(attributes, geometry);
     console.log("results", results);
   };
   const onInvalid = () => null;
@@ -60,6 +62,12 @@ export default function Form({ auth, view }: Props) {
     }
     return () => handles.remove();
   }, [auth, view]);
+
+  sketch?.on("create", function (event) {
+    if (event.state === "complete") {
+      setGeometry(event.graphic.geometry);
+    }
+  });
 
   return (
     <>

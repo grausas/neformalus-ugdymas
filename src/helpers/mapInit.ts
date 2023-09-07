@@ -83,9 +83,9 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       expression: "$feature.OBJECTID",
     },
   };
-  layer.labelingInfo = labelClass;
+  // layer.labelingInfo = labelClass;
 
-  layer.renderer = simpleRenderer;
+  // layer.renderer = simpleRenderer;
 
   const marker = new SimpleMarkerSymbol({ color: [203, 52, 52, 0.93] });
 

@@ -2,9 +2,13 @@ import { featureLayerPrivate } from "@/layers";
 import Graphic from "@arcgis/core/Graphic";
 import { FormValues } from "@/types/form";
 
-export const AddFeature = async (feature: FormValues) => {
+export const AddFeature = async (
+  attributes: FormValues,
+  geometry: __esri.Geometry
+) => {
   const addFeature = new Graphic({
-    attributes: feature,
+    attributes,
+    geometry,
   });
 
   const edits = {
