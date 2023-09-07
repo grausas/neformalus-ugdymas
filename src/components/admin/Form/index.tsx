@@ -72,7 +72,7 @@ export default function Form() {
           name="El. paštas"
           id="EL_PASTAS"
         >
-          <InputLeftAddon>
+          <InputLeftAddon bg="brand.10">
             <EmailIcon />
           </InputLeftAddon>
         </InputField>
@@ -82,7 +82,7 @@ export default function Form() {
           name="Nuoroda"
           id="NUORODA"
         >
-          <InputLeftAddon>
+          <InputLeftAddon bg="brand.10">
             <LinkIcon />
           </InputLeftAddon>
         </InputField>
@@ -92,7 +92,7 @@ export default function Form() {
           name="Mobilaus telefono numeris"
           id="TELEF_MOB"
         >
-          <InputLeftAddon>370</InputLeftAddon>
+          <InputLeftAddon bg="brand.10">+370</InputLeftAddon>
         </InputField>
         <InputField
           register={register}
@@ -100,7 +100,7 @@ export default function Form() {
           name="Telefonas"
           id="TELEFONAS"
         >
-          <InputLeftAddon pointerEvents="none">
+          <InputLeftAddon bg="brand.10">
             <PhoneIcon />
           </InputLeftAddon>
         </InputField>
@@ -119,9 +119,13 @@ export default function Form() {
         />
       </SimpleGrid>
       <Flex justify="space-between" w="100%">
-        <Button bg="brand.20">Atšaukti</Button>
+        <Button bg="brand.20" fontSize="sm" textTransform="uppercase">
+          Atšaukti
+        </Button>
         <Button
           bg="brand.30"
+          fontSize="sm"
+          textTransform="uppercase"
           _hover={{ bg: "brand.31" }}
           isLoading={isSubmitting}
           type="submit"

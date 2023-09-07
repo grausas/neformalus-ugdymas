@@ -26,12 +26,17 @@ export default function InputField({
 }: Props) {
   return (
     <FormControl>
-      <FormLabel htmlFor={id} m="0" fontSize="sm">
+      <FormLabel htmlFor={id} m="0" fontSize="sm" color="brand.40">
         {name}
       </FormLabel>
       <InputGroup>
         {children}
-        <Input id={id} placeholder={placeholder} {...register(id)} />
+        <Input
+          id={id}
+          placeholder={placeholder}
+          {...register(id)}
+          bg="brand.10"
+        />
       </InputGroup>
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
