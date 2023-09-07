@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
@@ -11,6 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, EmailIcon, LinkIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
+import { drawPoints } from "@/helpers/sketch";
+import Handles from "@arcgis/core/core/Handles.js";
+import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 
 type FormValues = {
   PAVADIN: string;
@@ -23,15 +27,43 @@ type FormValues = {
   PASTABA: string;
 };
 
-export default function Form() {
+type Props = {
+  auth: any;
+  view?: __esri.MapView;
+};
+
+export default function Form({ auth, view }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
+  const [sketch, setSketch] = useState<__esri.Sketch>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const onSubmit = (data) => console.log(data);
   const onInvalid = () => null;
+
+  // add sketch widget to map if user is logged in
+  useEffect(() => {
+    const handles = new Handles();
+    if (auth && view) {
+      handles.add(
+        reactiveUtils.when(
+          () => !view.updating,
+          () => {
+            const getPolygons = async () => {
+              const home = await drawPoints(view);
+              setSketch(home);
+            };
+
+            getPolygons();
+          },
+          { once: true }
+        )
+      );
+    }
+    return () => handles.remove();
+  }, [auth, view]);
 
   return (
     <>
@@ -41,7 +73,7 @@ export default function Form() {
         _hover={{ bg: "brand.31" }}
         shadow="md"
         right="4"
-        top="4"
+        top="20"
         size="sm"
         onClick={onOpen}
       >
@@ -51,7 +83,7 @@ export default function Form() {
         <VStack
           as="form"
           position="absolute"
-          top="4"
+          top="20"
           right="4"
           maxW="600px"
           maxH="500px"
