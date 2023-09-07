@@ -4,12 +4,14 @@ import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
 import NoResults from "@/components/NoResults";
+import Form from "@/components/admin/Form";
 import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
 import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter.js";
 import { MapContext } from "@/context/map-context";
+import { AuthContext } from "@/context/auth";
 import { featureLayerFeatures } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
 
@@ -17,7 +19,7 @@ const defaultWhereParams = "1=1";
 
 export default function Map() {
   const { view } = useContext(MapContext);
-
+  const auth = useContext(AuthContext);
   const [data, setData] = useState<__esri.Graphic[]>([]);
   const [loading, setLoading] = useState(true);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
@@ -144,6 +146,7 @@ export default function Map() {
       </Flex>
       <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.20">
         <ArcGISMap />
+        {auth.user.token && <Form />}
       </Box>
     </Stack>
   );
