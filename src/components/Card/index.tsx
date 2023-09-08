@@ -50,8 +50,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                     color="brand.50"
                   >
                     <Image
-                      width={26}
-                      height={26}
+                      width={24}
+                      height={24}
                       src={item.icon}
                       alt={item.text}
                     />
@@ -65,7 +65,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       <Heading size="md" color="brand.50">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Box color="brand.40" mt="2">
+      <Box color="brand.40" mt="2" mb="2">
         <Flex alignItems="center">
           <Image width={16} height={16} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">
@@ -106,8 +106,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
             color="brand.50"
           >
             <Image
-              width={26}
-              height={26}
+              width={24}
+              height={24}
               src={hasNvsKrepse ? nvs : nonvs}
               alt={
                 hasNvsKrepse
@@ -131,8 +131,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                         color="brand.50"
                       >
                         <Image
-                          width={26}
-                          height={26}
+                          width={24}
+                          height={24}
                           src={category.icon}
                           alt={category.text}
                         />
