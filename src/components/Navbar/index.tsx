@@ -21,7 +21,9 @@ interface Props {
 
 const Links = [
   { name: "Žemėlapis", url: "/zemelapis" },
-  { name: "Mes", url: "#" },
+  { name: "Apie mus", url: "#" },
+  { name: "Informacija", url: "#" },
+  { name: "Kontaktai", url: "#" },
 ];
 
 const NavLink = (props: Props) => {
@@ -38,7 +40,6 @@ const NavLink = (props: Props) => {
         textDecoration: "none",
         color: "brand.40",
       }}
-      textTransform="uppercase"
     >
       {children}
     </Link>
