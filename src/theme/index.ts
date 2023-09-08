@@ -5,7 +5,7 @@ const theme = extendTheme({
     global: {
       // styles for the `body`
       body: {
-        bg: "brand.10",
+        bg: "brand.20",
         minHeight: "100vh",
         textRendering: "optimizeSpeed",
         lineHeight: "1.5",

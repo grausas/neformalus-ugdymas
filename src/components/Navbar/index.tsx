@@ -97,8 +97,9 @@ export default function Simple() {
             {auth.user.token && (
               <Button
                 onClick={() => auth.logout()}
-                size={{ base: "sm", md: "md" }}
+                size="sm"
                 ml="2"
+                bg="brand.10"
               >
                 Atsijungti
               </Button>

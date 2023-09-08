@@ -31,7 +31,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
   return (
     <Flex
       direction="column"
-      bg="brand.20"
+      bg="brand.10"
       p="3"
       rounded="xl"
       shadow="md"

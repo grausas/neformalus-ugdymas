@@ -41,7 +41,7 @@ function Filter({ handleFilter }: FilterProps) {
   return (
     <FormControl>
       <Menu closeOnSelect={false}>
-        <MenuButton as={Button} size="sm" bg="brand.20">
+        <MenuButton as={Button} size="sm" bg="brand.10">
           Veiklos
         </MenuButton>
         <MenuList>
