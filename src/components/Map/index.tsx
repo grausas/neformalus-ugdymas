@@ -3,12 +3,14 @@
 import { useContext, useEffect, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import { MapContext } from "../../context/map-context";
-import { featureLayerPublic } from "../../layers";
+import { AuthContext } from "@/context/auth";
+import { featureLayerPublic, featureLayerPrivate } from "../../layers";
 
 const ArcGISMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { loadMap } = useContext(MapContext);
-  const layer = featureLayerPublic();
+  const auth = useContext(AuthContext);
+  const layer = auth.user.token ? featureLayerPrivate() : featureLayerPublic();
 
   useEffect(() => {
     if (mapRef.current && loadMap) {
