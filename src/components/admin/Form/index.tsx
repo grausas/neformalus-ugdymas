@@ -146,6 +146,7 @@ export default function Form({ auth, view }: Props) {
               </InputLeftAddon>
             </InputField>
             <InputField
+              type="number"
               register={register}
               registerValue="TELEF_MOB"
               error={errors.TELEF_MOB && errors.TELEF_MOB.message}
