@@ -38,7 +38,6 @@ export default function Map() {
       geometry: view?.extent,
       outFields: featureLayerFeatures,
     });
-
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
 
     if (featureResults.features.length > 0) {
@@ -58,28 +57,29 @@ export default function Map() {
       });
 
       const featureFilter = new FeatureFilter({
-        objectIds: globalIdsAsNumber,
+        objectIds: globalIdsAsNumber.length === 0 ? [0] : globalIdsAsNumber,
       });
       layerView.filter = featureFilter;
 
       featureResults.features = filteredFeatures;
+      if (globalIdsAsNumber.length > 0) {
+        const relatedFeatures = await layer.queryRelatedFeatures({
+          outFields: ["*"],
+          relationshipId: layer.relationships[0].id,
+          objectIds: globalIdsAsNumber,
+        });
 
-      const relatedFeatures = await layer.queryRelatedFeatures({
-        outFields: ["*"],
-        relationshipId: layer.relationships[0].id,
-        objectIds: globalIdsAsNumber,
-      });
-
-      globalIdsAsNumber.forEach(function (objectId) {
-        if (relatedFeatures[objectId]) {
-          const key = "relatedFeatures";
-          featureResults.features.forEach((f) => {
-            if (f.attributes.OBJECTID === objectId) {
-              f.attributes[key] = relatedFeatures[objectId].features;
-            }
-          });
-        }
-      });
+        globalIdsAsNumber.forEach(function (objectId) {
+          if (relatedFeatures[objectId]) {
+            const key = "relatedFeatures";
+            featureResults.features.forEach((f) => {
+              if (f.attributes.OBJECTID === objectId) {
+                f.attributes[key] = relatedFeatures[objectId].features;
+              }
+            });
+          }
+        });
+      }
     }
 
     setLoading(false);
