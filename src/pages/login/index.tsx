@@ -37,17 +37,17 @@ export default function Login() {
     <Stack
       minH={"100vh"}
       direction={{ base: "column", md: "row" }}
-      bg={"brand.grey"}
+      bg="brand.20"
     >
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
         <Stack
           spacing={4}
           w={"full"}
           maxW={"md"}
-          bg="brand.white"
           p="6"
-          borderRadius="md"
+          rounded="xl"
           shadow="md"
+          bg="brand.10"
         >
           <Heading fontSize={"2xl"}>Prisijungti prie savo paskyros</Heading>
           <FormControl

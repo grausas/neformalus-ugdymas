@@ -3,6 +3,8 @@ import ArcGISMap from "@/components/Map";
 import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
+import AppliedFilters from "@/components/AppliedFilters";
+import Search from "@/components/Search";
 import NoResults from "@/components/NoResults";
 import Form from "@/components/admin/Form";
 import { featureLayerPublic } from "@/layers";
@@ -52,16 +54,23 @@ export default function Map() {
         return parseInt(gid);
       });
 
-      const filteredFeatures = featureResults.features.filter((f) => {
-        return globalIdsAsNumber.includes(f.attributes.OBJECTID);
-      });
+      if (whereParams) {
+        console.log("whereParams", whereParams);
+        console.log("herere");
+        const filteredFeatures = featureResults.features.filter((f) => {
+          return globalIdsAsNumber.includes(f.attributes.OBJECTID);
+        });
+        const featureFilter = new FeatureFilter({
+          objectIds: globalIdsAsNumber.length === 0 ? [0] : globalIdsAsNumber,
+        });
+        layerView.filter = featureFilter;
 
-      const featureFilter = new FeatureFilter({
-        objectIds: globalIdsAsNumber.length === 0 ? [0] : globalIdsAsNumber,
-      });
-      layerView.filter = featureFilter;
+        featureResults.features = filteredFeatures;
+      } else {
+        const featureFilter = new FeatureFilter({});
+        layerView.filter = featureFilter;
+      }
 
-      featureResults.features = filteredFeatures;
       if (globalIdsAsNumber.length > 0) {
         const relatedFeatures = await layer.queryRelatedFeatures({
           outFields: ["*"],
@@ -125,7 +134,9 @@ export default function Map() {
         p="3"
         gap="3"
       >
+        <Search />
         <Filter handleFilter={handleFilter} />
+        {category.length > 0 && <AppliedFilters category={category} />}
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner
@@ -137,12 +148,30 @@ export default function Map() {
             />
           </AbsoluteCenter>
         )}
-        {!loading &&
-          data.length > 0 &&
-          data.map((item) => (
-            <Card key={item.attributes.OBJECTID} cardData={item} />
-          ))}
-        {!loading && data.length === 0 && <NoResults />}
+        <Stack
+          h="calc(100vh - 180px)"
+          overflow="auto"
+          css={{
+            "&::-webkit-scrollbar": {
+              height: "8px",
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#ff8e3c",
+              borderRadius: "24px",
+            },
+          }}
+        >
+          {!loading &&
+            data.length > 0 &&
+            data.map((item) => (
+              <Card key={item.attributes.OBJECTID} cardData={item} />
+            ))}
+          {!loading && data.length === 0 && <NoResults />}
+        </Stack>
       </Flex>
       <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.10">
         <ArcGISMap />
