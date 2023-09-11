@@ -40,7 +40,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
     <Flex
       direction="column"
       bg="brand.10"
-      p="3"
+      p="4"
       rounded="xl"
       shadow="md"
       position="relative"

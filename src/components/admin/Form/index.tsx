@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  Text,
   Button,
   VStack,
   Flex,
@@ -12,6 +13,7 @@ import {
   useDisclosure,
   CloseButton,
   Checkbox,
+  HStack,
 } from "@chakra-ui/react";
 import { PhoneIcon, EmailIcon, LinkIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
@@ -209,7 +211,15 @@ export default function Form({ auth, view }: Props) {
               id="PEDAGOGAS"
             />
           </SimpleGrid>
-          <Flex flexDirection="column">
+          <HStack spacing="4" my="1">
+            <Text fontWeight="500" fontSize="sm">
+              Klasės:
+            </Text>
+            <Checkbox>1-4 klasė</Checkbox>
+            <Checkbox>5-8 klasė</Checkbox>
+            <Checkbox>9-12 klasė</Checkbox>
+          </HStack>
+          <Flex flexDirection="column" mb="2">
             <Checkbox
               onChange={(e) => {
                 setValue("related.NVS_KREPSE", e.target.checked ? 1 : 2);
