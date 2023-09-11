@@ -47,13 +47,15 @@ function Filter({ handleFilter }: FilterProps) {
     setCategory(newCategory);
   };
 
-  // useEffect(() => {
-  //   handleFilter(category);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [category]);
-
   const handleCategory = () => {
     handleFilter(category);
+  };
+
+  const clearFilterCategory = () => {
+    console.log("hello");
+    setCategory([]);
+    setCheckedItems(CategoryData.map(() => false));
+    handleFilter([]);
   };
 
   return (
@@ -71,6 +73,7 @@ function Filter({ handleFilter }: FilterProps) {
                     value={item.value}
                     onChange={(e) => handleChange(e, index)}
                     size="sm"
+                    isChecked={checkedItems[index]}
                   >
                     {item.text}
                   </Checkbox>
@@ -83,6 +86,7 @@ function Filter({ handleFilter }: FilterProps) {
                 fontWeight="500"
                 _hover={{ cursor: "pointer", textDecoration: "underline" }}
                 color="brand.31"
+                onClick={clearFilterCategory}
               >
                 Išvalyti
               </Text>
