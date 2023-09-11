@@ -11,6 +11,7 @@ import {
   Heading,
   useDisclosure,
   CloseButton,
+  Checkbox,
 } from "@chakra-ui/react";
 import { PhoneIcon, EmailIcon, LinkIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
@@ -31,10 +32,13 @@ export default function Form({ auth, view }: Props) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
   const [geometry, setGeometry] = useState<__esri.Geometry>();
+  const [nvsKrepse, setNvsKrepse] = useState<boolean>(false);
+  const [spcPoreikiai, setSpcPoreikiai] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const onSubmit = async (attributes: FormValues) => {
     console.log("attributes", attributes);
@@ -94,7 +98,7 @@ export default function Form({ auth, view }: Props) {
           top="20"
           right="4"
           maxW="600px"
-          maxH="500px"
+          maxH="100%"
           bg="brand.10"
           p="4"
           shadow="md"
@@ -193,7 +197,34 @@ export default function Form({ auth, view }: Props) {
               id="LO_VEIKLA"
               selectOptions={CategoryData}
             />
+            <InputField
+              register={register}
+              registerValue={`related.${"PEDAGOGAS"}`}
+              error={
+                errors.related?.PEDAGOGAS && errors.related?.PEDAGOGAS.message
+              }
+              name="Pedagogas"
+              id="PEDAGOGAS"
+            />
           </SimpleGrid>
+          <Flex flexDirection="column">
+            <Checkbox
+              onChange={(e) => {
+                setValue("related.NVS_KREPSE", e.target.checked ? 1 : 2);
+                setNvsKrepse(!nvsKrepse);
+              }}
+            >
+              Taikomas NVŠ krepšelis
+            </Checkbox>
+            <Checkbox
+              onChange={(e) => {
+                setValue("related.SPC_POREIK", e.target.checked ? 1 : 2);
+                setSpcPoreikiai(!spcPoreikiai);
+              }}
+            >
+              Priimami vaikai turintys specialiųjų ugdymo poreikių
+            </Checkbox>
+          </Flex>
           <Flex justify="space-between" w="100%">
             <Button
               bg="brand.20"

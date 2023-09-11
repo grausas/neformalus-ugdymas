@@ -144,7 +144,7 @@ export default function Map() {
           ))}
         {!loading && data.length === 0 && <NoResults />}
       </Flex>
-      <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.20">
+      <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.10">
         <ArcGISMap />
         {auth.user.token && <Form auth={auth.user.token} view={view} />}
       </Box>
