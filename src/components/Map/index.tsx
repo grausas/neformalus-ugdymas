@@ -25,6 +25,7 @@ const ArcGISMap = () => {
       left="0"
       w="100%"
       h="100%"
+      overflow="hidden"
       ref={mapRef}
     ></Box>
   );

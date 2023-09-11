@@ -45,7 +45,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       shadow="md"
       position="relative"
     >
-      <Flex flexDirection="column" position="absolute" right="3">
+      <Flex flexDirection="column" position="absolute" right="4">
         {classArr.map((arrItem: any) => {
           return ClassData.map((item) => {
             if (arrItem === item.value) {
