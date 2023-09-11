@@ -33,6 +33,23 @@ const theme = extendTheme({
       50: "#0d0d0d",
     },
   },
+  components: {
+    Checkbox: {
+      baseStyle: {
+        control: {
+          _checked: {
+            bg: "brand.30", // Change this to your desired color
+            borderColor: "brand.30",
+          },
+        },
+      },
+    },
+    Button: {
+      baseStyle: {
+        rounded: "xl",
+      },
+    },
+  },
 });
 
 export default theme;

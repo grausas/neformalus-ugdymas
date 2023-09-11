@@ -88,6 +88,7 @@ export default function Form({ auth, view }: Props) {
         top="20"
         size="sm"
         onClick={onOpen}
+        px="5"
       >
         Užpildyti formą
       </Button>
@@ -102,6 +103,7 @@ export default function Form({ auth, view }: Props) {
           bg="brand.10"
           p="4"
           shadow="md"
+          rounded="xl"
           onSubmit={handleSubmit(onSubmit, onInvalid)}
           align="left"
         >
@@ -231,6 +233,7 @@ export default function Form({ auth, view }: Props) {
               fontSize="sm"
               textTransform="uppercase"
               onClick={onClose}
+              shadow="md"
             >
               Atšaukti
             </Button>
@@ -241,6 +244,7 @@ export default function Form({ auth, view }: Props) {
               _hover={{ bg: "brand.31" }}
               isLoading={isSubmitting}
               type="submit"
+              shadow="md"
             >
               Pridėti
             </Button>

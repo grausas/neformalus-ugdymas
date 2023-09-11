@@ -100,6 +100,8 @@ export default function Simple() {
                 size="sm"
                 ml="2"
                 bg="brand.10"
+                shadow="md"
+                px="5"
               >
                 Atsijungti
               </Button>

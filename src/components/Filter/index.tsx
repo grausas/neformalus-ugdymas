@@ -54,7 +54,7 @@ function Filter({ handleFilter }: FilterProps) {
     <FormControl>
       <Stack direction="row">
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10">
+          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
             Veiklos
           </MenuButton>
           <MenuList>
@@ -74,7 +74,7 @@ function Filter({ handleFilter }: FilterProps) {
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10">
+          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
             NVŠ krepšelis
           </MenuButton>
           <MenuList>
@@ -94,7 +94,7 @@ function Filter({ handleFilter }: FilterProps) {
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10">
+          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
             Klasės
           </MenuButton>
           <MenuList>

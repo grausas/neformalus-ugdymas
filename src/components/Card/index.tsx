@@ -1,5 +1,13 @@
 import React from "react";
-import { Flex, Text, Heading, Box, Tooltip, Link } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Heading,
+  Box,
+  Tooltip,
+  Link,
+  Stack,
+} from "@chakra-ui/react";
 import { CategoryData } from "@/utils/categoryData";
 import { ClassData } from "@/utils/classData";
 import Image from "next/image";
@@ -62,10 +70,10 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.50">
+      <Heading size="md" color="brand.50" ml="5" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Box color="brand.40" mt="2" mb="2">
+      <Stack color="brand.40" my="3" spacing="0">
         <Flex alignItems="center">
           <Image width={16} height={16} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">
@@ -76,8 +84,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           <EmailIcon mr="2" color="brand.30" />
           <Text>{cardData.attributes.EL_PASTAS}</Text>
         </Flex>
-        <Text>{cardData.attributes.PASTABA}</Text>
-        <Text>{cardData.attributes.SOC_TINKL}</Text>
+        {cardData.attributes.PASTABA && (
+          <Text>{cardData.attributes.PASTABA}</Text>
+        )}
+        {cardData.attributes.SOC_TINKL && (
+          <Text>{cardData.attributes.SOC_TINKL}</Text>
+        )}
         <Flex alignItems="center">
           <PhoneIcon mr="2" color="brand.30" />
           <Text>
@@ -92,7 +104,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
             {cardData.attributes.NUORODA}
           </Link>
         </Flex>
-      </Box>
+      </Stack>
       <Flex justifyContent="space-between" mt="1">
         <Flex justify="center">
           <Tooltip
