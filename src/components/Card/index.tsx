@@ -84,12 +84,6 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           <EmailIcon mr="2" color="brand.30" />
           <Text>{cardData.attributes.EL_PASTAS}</Text>
         </Flex>
-        {cardData.attributes.PASTABA && (
-          <Text>{cardData.attributes.PASTABA}</Text>
-        )}
-        {cardData.attributes.SOC_TINKL && (
-          <Text>{cardData.attributes.SOC_TINKL}</Text>
-        )}
         <Flex alignItems="center">
           <PhoneIcon mr="2" color="brand.30" />
           <Text>
@@ -104,6 +98,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
             {cardData.attributes.NUORODA}
           </Link>
         </Flex>
+        {cardData.attributes.SOC_TINKL && (
+          <Text>{cardData.attributes.SOC_TINKL}</Text>
+        )}
+        {cardData.attributes.PASTABA && (
+          <Text>{cardData.attributes.PASTABA}</Text>
+        )}
       </Stack>
       <Flex justifyContent="space-between" mt="1">
         <Flex justify="center">

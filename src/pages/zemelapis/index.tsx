@@ -31,6 +31,8 @@ export default function Map() {
     setWhereParams(whereParamsChange(category));
   }, [category]);
 
+  console.log("whereParams324234234234", whereParams);
+
   const queryFeatures = async (layerView: __esri.FeatureLayerView) => {
     const layer = featureLayerPublic();
     setLoading(true);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Text,
   Button,
   Checkbox,
   FormControl,
@@ -8,6 +9,7 @@ import {
   MenuList,
   MenuItem,
   Stack,
+  Flex,
 } from "@chakra-ui/react";
 import { CategoryData } from "@/utils/categoryData";
 
@@ -45,10 +47,14 @@ function Filter({ handleFilter }: FilterProps) {
     setCategory(newCategory);
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   handleFilter(category);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [category]);
+
+  const handleCategory = () => {
     handleFilter(category);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  };
 
   return (
     <FormControl>
@@ -71,6 +77,24 @@ function Filter({ handleFilter }: FilterProps) {
                 </MenuItem>
               );
             })}
+            <Flex justify="space-between" px="4" align="center" mt="2">
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                _hover={{ cursor: "pointer", textDecoration: "underline" }}
+                color="brand.31"
+              >
+                Išvalyti
+              </Text>
+              <Button
+                size="sm"
+                bg="brand.30"
+                _hover={{ bg: "brand.31" }}
+                onClick={handleCategory}
+              >
+                Ieškoti
+              </Button>
+            </Flex>
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
