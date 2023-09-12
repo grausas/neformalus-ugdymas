@@ -19,6 +19,13 @@ import {
   Text,
   Link,
   Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import location from "@/assets/location.svg";
@@ -27,7 +34,7 @@ import { DeleteFeature } from "@/helpers/deleteFeature";
 function CardModal({ isOpen, onClose, modalData }: any) {
   console.log("modalData", modalData);
   const deleteFeature = async () => {
-    await DeleteFeature(modalData.attributes.OBJECTID);
+    // await DeleteFeature(modalData.attributes.OBJECTID);
     onClose();
   };
 
@@ -84,14 +91,33 @@ function CardModal({ isOpen, onClose, modalData }: any) {
             >
               Redaguoti
             </Button>
-            <Button
-              colorScheme="red"
-              size="sm"
-              onClick={deleteFeature}
-              leftIcon={<DeleteIcon />}
-            >
-              Ištrinti
-            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <Button
+                  mt="2"
+                  colorScheme="red"
+                  size="sm"
+                  leftIcon={<DeleteIcon />}
+                >
+                  Ištrinti
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader>Ar tikrai norite ištrinti?</PopoverHeader>
+                <PopoverBody display="flex" justifyContent="flex-end">
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={deleteFeature}
+                    leftIcon={<DeleteIcon />}
+                  >
+                    Ištrinti
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           </ModalFooter>
         </ModalContent>
       </Modal>
