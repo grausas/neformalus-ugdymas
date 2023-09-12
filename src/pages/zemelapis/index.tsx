@@ -204,7 +204,12 @@ export default function Map() {
             setSearchTerm(e.target.value)
           }
         />
-        <Filter handleFilter={handleFilter} />
+        <Flex direction="row" alignItems="center">
+          <Filter handleFilter={handleFilter} />
+          <Box w="100%" textAlign="right" fontSize="sm">
+            Rodomos {!loading ? filteredData.length : "..."} veiklos
+          </Box>
+        </Flex>
         {category.length > 0 && <AppliedFilters category={category} />}
         {loading && (
           <AbsoluteCenter axis="both">
