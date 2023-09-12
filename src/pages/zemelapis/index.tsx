@@ -1,12 +1,20 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import ArcGISMap from "@/components/Map";
-import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
+import {
+  Box,
+  Spinner,
+  Flex,
+  Stack,
+  AbsoluteCenter,
+  useDisclosure,
+} from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
 import AppliedFilters from "@/components/AppliedFilters";
 import Search from "@/components/Search";
 import NoResults from "@/components/NoResults";
 import Form from "@/components/admin/Form";
+import CardModal from "@/components/Modal";
 import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
@@ -16,6 +24,7 @@ import { MapContext } from "@/context/map-context";
 import { AuthContext } from "@/context/auth";
 import { featureLayerFeatures } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
+import { simpleRenderer } from "@/helpers/layerRenderer";
 
 const defaultWhereParams = "1=1";
 
@@ -26,6 +35,8 @@ export default function Map() {
   const [loading, setLoading] = useState(true);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [category, setCategory] = useState<string[]>([]);
+  const [modalData, setModalData] = useState<__esri.Graphic>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     setWhereParams(whereParamsChange(category));
@@ -94,6 +105,7 @@ export default function Map() {
     }
 
     setLoading(false);
+    // layer.renderer = simpleRenderer("{B367C74C-53E1-42EB-B0BE-019F56DE2370}");
     return setData(featureResults.features);
   };
 
@@ -122,9 +134,39 @@ export default function Map() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, whereParams]);
 
+  // filter features on map click
+  // useEffect(() => {
+  //   if (view) {
+  //     view.on("click", async (event) => {
+  //       const response = await view.hitTest(event);
+  //       if (response.results.length) {
+  //         const results = response.results?.filter(
+  //           (hitResult) =>
+  //             hitResult.type === "graphic" &&
+  //             hitResult.graphic.layer.id === "public"
+  //         );
+  //         // const results = response.results;
+  //         const filteredData = data.filter((g) => {
+  //           return results
+  //             ?.map((r) => r.graphic.attributes.OBJECTID)
+  //             .includes(g.attributes.OBJECTID);
+  //         });
+  //         setData(filteredData);
+  //       }
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [view]);
+
   const handleFilter = useCallback((category: string[]) => {
     setCategory(category);
   }, []);
+
+  const handleOpenModal = (data: __esri.Graphic) => {
+    console.log("data", data);
+    setModalData(data);
+    onOpen();
+  };
 
   return (
     <Stack direction="row" gap="0">
@@ -136,6 +178,9 @@ export default function Map() {
         p="3"
         gap="3"
       >
+        {modalData && (
+          <CardModal isOpen={isOpen} onClose={onClose} modalData={modalData} />
+        )}
         <Search />
         <Filter handleFilter={handleFilter} />
         {category.length > 0 && <AppliedFilters category={category} />}
@@ -170,7 +215,11 @@ export default function Map() {
           {!loading &&
             data.length > 0 &&
             data.map((item) => (
-              <Card key={item.attributes.OBJECTID} cardData={item} />
+              <Card
+                key={item.attributes.OBJECTID}
+                cardData={item}
+                handleOpenModal={handleOpenModal}
+              />
             ))}
           {!loading && data.length === 0 && <NoResults />}
         </Stack>

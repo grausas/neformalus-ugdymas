@@ -16,7 +16,13 @@ import location from "@/assets/location.svg";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
-export default function Card({ cardData }: { cardData: __esri.Graphic }) {
+export default function Card({
+  cardData,
+  handleOpenModal,
+}: {
+  cardData: __esri.Graphic;
+  handleOpenModal: any;
+}) {
   const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
 
   const hasNvsKrepse =
@@ -44,6 +50,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       rounded="xl"
       shadow="md"
       position="relative"
+      onClick={() => handleOpenModal(cardData)}
+      _hover={{ cursor: "pointer" }}
     >
       <Flex flexDirection="column" position="absolute" right="4">
         {classArr.map((arrItem: any) => {
@@ -73,7 +81,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       <Heading size="md" color="brand.50" ml="5" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack color="brand.40" my="3" spacing="0">
+      <Stack color="brand.40" my="3" spacing="0" fontSize="sm">
         <Flex alignItems="center">
           <Image width={16} height={16} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">
