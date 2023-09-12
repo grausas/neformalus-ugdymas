@@ -1,4 +1,10 @@
-import { EmailIcon, ExternalLinkIcon, PhoneIcon } from "@chakra-ui/icons";
+import {
+  EmailIcon,
+  ExternalLinkIcon,
+  PhoneIcon,
+  DeleteIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -12,12 +18,19 @@ import {
   Flex,
   Text,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import location from "@/assets/location.svg";
+import { DeleteFeature } from "@/helpers/deleteFeature";
 
 function CardModal({ isOpen, onClose, modalData }: any) {
   console.log("modalData", modalData);
+  const deleteFeature = async () => {
+    await DeleteFeature(modalData.attributes.OBJECTID);
+    onClose();
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
@@ -62,6 +75,24 @@ function CardModal({ isOpen, onClose, modalData }: any) {
               )}
             </Stack>
           </ModalBody>
+          <ModalFooter justifyContent="space-between">
+            <Button
+              bg="brand.20"
+              size="sm"
+              onClick={deleteFeature}
+              leftIcon={<EditIcon />}
+            >
+              Redaguoti
+            </Button>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={deleteFeature}
+              leftIcon={<DeleteIcon />}
+            >
+              Ištrinti
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
