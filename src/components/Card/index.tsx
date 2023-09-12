@@ -78,7 +78,7 @@ export default function Card({
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.50" ml="5" fontWeight="600">
+      <Heading size="md" color="brand.50" pl="5" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
       <Stack color="brand.40" my="3" spacing="0" fontSize="sm">
