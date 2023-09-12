@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import ArcGISMap from "@/components/Map";
 import {
   Box,
@@ -34,6 +40,7 @@ export default function Map() {
   const [data, setData] = useState<__esri.Graphic[]>([]);
   const [loading, setLoading] = useState(true);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
+  const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState<string[]>([]);
   const [modalData, setModalData] = useState<__esri.Graphic>();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -168,6 +175,17 @@ export default function Map() {
     onOpen();
   };
 
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return data;
+
+    const filterData = data.filter((item) => {
+      return item.attributes.PAVADIN.toLowerCase().includes(
+        searchTerm.toLowerCase()
+      );
+    });
+    return filterData;
+  }, [searchTerm, data]);
+
   return (
     <Stack direction="row" gap="0">
       <Flex
@@ -181,7 +199,11 @@ export default function Map() {
         {modalData && (
           <CardModal isOpen={isOpen} onClose={onClose} modalData={modalData} />
         )}
-        <Search />
+        <Search
+          handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(e.target.value)
+          }
+        />
         <Filter handleFilter={handleFilter} />
         {category.length > 0 && <AppliedFilters category={category} />}
         {loading && (
@@ -213,8 +235,8 @@ export default function Map() {
           }}
         >
           {!loading &&
-            data.length > 0 &&
-            data.map((item) => (
+            filteredData.length > 0 &&
+            filteredData.map((item) => (
               <Card
                 key={item.attributes.OBJECTID}
                 cardData={item}
