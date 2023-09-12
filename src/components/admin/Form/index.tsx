@@ -46,7 +46,7 @@ export default function Form({ auth, view }: Props) {
     console.log("attributes", attributes);
     if (!geometry) return console.log("error nera geometrijos");
     const relatedAttributes = attributes.related;
-    // const results = await AddFeature(attributes, geometry, relatedAttributes);
+    const results = await AddFeature(attributes, geometry, relatedAttributes);
     // console.log("results", results);
   };
   const onInvalid = () => null;
@@ -100,7 +100,7 @@ export default function Form({ auth, view }: Props) {
           position="absolute"
           top="20"
           right="4"
-          maxW="600px"
+          maxW="650px"
           maxH="100%"
           bg="brand.10"
           p="4"
