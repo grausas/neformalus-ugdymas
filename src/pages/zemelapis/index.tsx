@@ -28,7 +28,7 @@ import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
 import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter.js";
 import { MapContext } from "@/context/map-context";
 import { AuthContext } from "@/context/auth";
-import { featureLayerFeatures } from "@/utils/featureLayer";
+import { featuresFields, relatedFeaturesFields } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
 import { simpleRenderer } from "@/helpers/layerRenderer";
 
@@ -51,32 +51,30 @@ export default function Map() {
 
   console.log("whereParams324234234234", whereParams);
 
-  const queryFeatures = async (layerView: __esri.FeatureLayerView) => {
-    const layer = featureLayerPublic();
+  const queryFeatures = async (
+    layer: __esri.FeatureLayer,
+    layerView: __esri.FeatureLayerView
+  ) => {
     setLoading(true);
 
     const featureResults = await layer.queryFeatures({
       returnGeometry: true,
       geometry: view?.extent,
-      outFields: featureLayerFeatures,
+      outFields: featuresFields,
     });
+
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
 
-    if (featureResults.features.length > 0) {
-      const relatedGlobalIds = await layer.queryRelatedFeatures({
-        outFields: ["GUID"],
+    if (objectIds.length > 0) {
+      const relatedFeatures = await layer.queryRelatedFeatures({
+        outFields: relatedFeaturesFields,
         relationshipId: layer.relationships[0].id,
         objectIds: objectIds,
         where: whereParams,
       });
-      const globalIds = Object.keys(relatedGlobalIds);
-      const globalIdsAsNumber = globalIds.map((gid) => {
-        return parseInt(gid);
-      });
+      const globalIdsAsNumber = Object.keys(relatedFeatures).map(Number);
 
       if (whereParams) {
-        console.log("whereParams", whereParams);
-        console.log("herere");
         const filteredFeatures = featureResults.features.filter((f) => {
           return globalIdsAsNumber.includes(f.attributes.OBJECTID);
         });
@@ -92,13 +90,7 @@ export default function Map() {
       }
 
       if (globalIdsAsNumber.length > 0) {
-        const relatedFeatures = await layer.queryRelatedFeatures({
-          outFields: ["*"],
-          relationshipId: layer.relationships[0].id,
-          objectIds: globalIdsAsNumber,
-        });
-
-        globalIdsAsNumber.forEach(function (objectId) {
+        globalIdsAsNumber.forEach((objectId) => {
           if (relatedFeatures[objectId]) {
             const key = "relatedFeatures";
             featureResults.features.forEach((f) => {
@@ -112,7 +104,6 @@ export default function Map() {
     }
 
     setLoading(false);
-    // layer.renderer = simpleRenderer("{B367C74C-53E1-42EB-B0BE-019F56DE2370}");
     return setData(featureResults.features);
   };
 
@@ -122,7 +113,7 @@ export default function Map() {
     const layer = view?.map.layers.getItemAt(0) as __esri.FeatureLayer;
 
     view?.whenLayerView(layer).then(async (layerView) => {
-      await queryFeatures(layerView);
+      await queryFeatures(layer, layerView);
 
       // subsequent map interaction
       handles.add(
@@ -130,7 +121,7 @@ export default function Map() {
           () => [view.stationary, view.extent],
           ([stationary]) => {
             if (stationary) {
-              promiseUtils.debounce(queryFeatures(layerView));
+              promiseUtils.debounce(queryFeatures(layer, layerView));
             }
           }
         )
