@@ -1,4 +1,4 @@
-export const featureLayerFeatures = [
+export const featuresFields = [
   "ADRESAS",
   "EL_PASTAS",
   "GlobalID",
@@ -9,4 +9,18 @@ export const featureLayerFeatures = [
   "SOC_TINKL",
   "TELEFONAS",
   "TELEF_MOB",
+];
+
+export const relatedFeaturesFields = [
+  "OBJECTID",
+  "GlobalID ",
+  "LO_VEIKLA",
+  "KLASE_1_4",
+  "KLASE_5_8",
+  "KLASE_9_12",
+  "NVS_KREPSE",
+  "SPC_POREIK",
+  "PEDAGOGAS",
+  "GUID",
+  "PASTABA",
 ];
