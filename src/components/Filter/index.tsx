@@ -119,6 +119,19 @@ function Filter({ handleFilter }: FilterProps) {
                 </MenuItem>
               );
             })}
+            <Flex justify="space-between" px="4" align="center" mt="2">
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                _hover={{ cursor: "pointer", textDecoration: "underline" }}
+                color="brand.31"
+              >
+                Išvalyti
+              </Text>
+              <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
+                Ieškoti
+              </Button>
+            </Flex>
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
@@ -139,6 +152,19 @@ function Filter({ handleFilter }: FilterProps) {
                 </MenuItem>
               );
             })}
+            <Flex justify="space-between" px="4" align="center" mt="2">
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                _hover={{ cursor: "pointer", textDecoration: "underline" }}
+                color="brand.31"
+              >
+                Išvalyti
+              </Text>
+              <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
+                Ieškoti
+              </Button>
+            </Flex>
           </MenuList>
         </Menu>
       </Stack>

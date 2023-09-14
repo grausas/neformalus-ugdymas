@@ -46,12 +46,19 @@ export default function Card({
     <Flex
       direction="column"
       bg="brand.10"
+      border="2px solid"
+      borderColor="brand.10"
+      // bg="brand.20"
       p="4"
       rounded="xl"
       shadow="md"
       position="relative"
       onClick={() => handleOpenModal(cardData)}
-      _hover={{ cursor: "pointer" }}
+      _hover={{
+        cursor: "pointer",
+        border: "2px solid",
+        borderColor: "brand.30",
+      }}
     >
       <Flex flexDirection="column" position="absolute" right="4">
         {classArr.map((arrItem: any) => {
@@ -78,7 +85,7 @@ export default function Card({
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.50" pl="5" pr="8" fontWeight="600">
+      <Heading size="md" color="brand.40" pl="5" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
       <Stack color="brand.40" my="3" spacing="0" fontSize="sm">

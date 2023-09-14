@@ -6,6 +6,7 @@ const theme = extendTheme({
       // styles for the `body`
       body: {
         bg: "brand.20",
+        // bg: "brand.40",
         minHeight: "100vh",
         textRendering: "optimizeSpeed",
         lineHeight: "1.5",
