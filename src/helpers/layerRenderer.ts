@@ -1,9 +1,3 @@
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
-// category icons
-import technologijos from "../assets/technologijos.svg";
-import choreografija from "../assets/choreografija.svg";
-import technineKuryba from "../assets/technine_kuryba.png";
-
 const symbol = (url: string, width: string, height: string) => ({
   type: "picture-marker",
   url,
@@ -12,60 +6,24 @@ const symbol = (url: string, width: string, height: string) => ({
 });
 
 const uniqueValueInfos = [
-  { value: "2", symbol: symbol("choreografija.svg", "23px", "23px") },
-  { value: "3", symbol: symbol("technologijos.svg", "23px", "23px") },
+  { value: "1", symbol: symbol("sportas.svg", "23px", "23px") },
+  { value: "2", symbol: symbol("technologijos.svg", "23px", "23px") },
+  { value: "3", symbol: symbol("drama.svg", "23px", "23px") },
+  { value: "4", symbol: symbol("kalbos.svg", "23px", "23px") },
+  { value: "5", symbol: symbol("choreografija.svg", "23px", "23px") },
+  { value: "6", symbol: symbol("daile.svg", "23px", "23px") },
+  { value: "7", symbol: symbol("muzika.svg", "23px", "23px") },
+  { value: "8", symbol: symbol("turizmas.svg", "23px", "23px") },
+  { value: "9", symbol: symbol("etnokultura.svg", "23px", "23px") },
+  { value: "10", symbol: symbol("gamta.svg", "23px", "23px") },
+  { value: "11", symbol: symbol("technine_kuryba.png", "23px", "23px") },
+  { value: "12", symbol: symbol("pilietiskumas.svg", "23px", "23px") },
+  { value: "13", symbol: symbol("saugus_eismas.svg", "23px", "23px") },
+  { value: "14", symbol: symbol("medijos.svg", "23px", "23px") },
 ];
-
-const name = "$feature.OBJECTID";
 
 export const simpleRenderer = {
   type: "unique-value",
-  field: "OBJECTID",
-  valueExpression: `When($feature.OBJECTID > 1, "3")`,
+  field: "LO_VEIKLA",
   uniqueValueInfos,
 };
-
-// export const layerRenderer = (view: any) => {
-//   reactiveUtils
-//     .whenOnce(() => view.ready)
-//     .then(() => {
-//       if (view.map.layers.length === 0) return;
-
-//       // create unique render values with icons
-//       const symbol = (url: string, width: string, height: string) => ({
-//         type: "picture-marker",
-//         url,
-//         width,
-//         height,
-//       });
-
-//       const uniqueValueInfos = [
-//         { value: "2", symbol: symbol("technologijos.svg", "23px", "23px") },
-//         // { value: "3", symbol: symbol(choreografija, "23px", "23px") },
-//       ];
-
-//       const uniqueValueInfosBig = uniqueValueInfos.map((info) => ({
-//         ...info,
-//         symbol: symbol(info.symbol.url, "30px", "30px"),
-//       }));
-
-//       const simpleRenderer = {
-//         type: "unique-value",
-//         field: "KATEGORIJA",
-//         uniqueValueInfos,
-//       };
-
-//       //   change render symbol depending on zoom level
-//       reactiveUtils.watch(
-//         () => view.zoom,
-//         () => {
-//           view.map.layers.items[0].renderer = simpleRenderer;
-//         },
-//         {
-//           initial: true,
-//         }
-//       );
-//     });
-
-//   return view;
-// };
