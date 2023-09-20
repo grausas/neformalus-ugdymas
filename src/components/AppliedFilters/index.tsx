@@ -4,7 +4,7 @@ import { CategoryData } from "@/utils/categoryData";
 import { Flex, Text } from "@chakra-ui/react";
 
 interface Props {
-  category: string[];
+  category?: string[];
 }
 
 export default function AppliedFilters({ category }: Props) {
@@ -13,7 +13,7 @@ export default function AppliedFilters({ category }: Props) {
       <Text fontWeight="500" mr="1">
         Filtrai:
       </Text>
-      {category.map((item: any) => {
+      {category?.map((item: any) => {
         return CategoryData.map((category) => {
           if (Number(item) === category.value) {
             return (

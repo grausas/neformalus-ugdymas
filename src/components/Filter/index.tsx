@@ -75,7 +75,7 @@ function Filter({ handleFilter }: FilterProps) {
                     value={item.value}
                     onChange={(e) => handleChange(e, index)}
                     size="sm"
-                    isChecked={checkedItems[index]}
+                    checked={checkedItems[index]}
                   >
                     {item.text}
                   </Checkbox>

@@ -18,13 +18,7 @@ import location from "@/assets/location.svg";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
-export default function Card({
-  cardData,
-  handleOpenModal,
-}: {
-  cardData: __esri.Graphic;
-  handleOpenModal: any;
-}) {
+export default function Card({ cardData }: { cardData: __esri.Graphic }) {
   const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
 
   const hasNvsKrepse =
@@ -55,7 +49,6 @@ export default function Card({
       rounded="xl"
       shadow="md"
       position="relative"
-      onClick={() => handleOpenModal(cardData)}
       _hover={{
         cursor: "pointer",
         border: "2px solid",
