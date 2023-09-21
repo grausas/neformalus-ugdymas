@@ -30,6 +30,9 @@ import Graphic from "@arcgis/core/Graphic";
 import * as geometryEngine from "@arcgis/core/geometry/geometryEngine.js";
 import { CategoryData } from "@/utils/categoryData";
 import Point from "@arcgis/core/geometry/Point.js";
+import Polyline from "@arcgis/core/geometry/Polyline.js";
+import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
+import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol.js";
 
 const defaultWhereParams = "1=1";
 
@@ -227,7 +230,7 @@ export default function Map() {
               console.log("features", features);
 
               const radius =
-                uniqueFeatures.length < 8 ? view.scale / 100 : view.scale / 80;
+                uniqueFeatures.length < 8 ? view.scale / 85 : view.scale / 70;
 
               const points = calculatePointsAroundCenter(
                 clusterGeometry,
@@ -262,11 +265,55 @@ export default function Map() {
                       height: "25px",
                     },
                   });
+                  const startPoint = [
+                    // @ts-ignore
+                    results[0].graphic.geometry.x,
+                    // @ts-ignore
+                    results[0].graphic.geometry.y,
+                  ];
+                  const endPoint = [point.x, point.y];
+
+                  const line = new Polyline({
+                    paths: [[startPoint, endPoint]],
+                    spatialReference: view.spatialReference,
+                  });
+
+                  const lineSymbol = {
+                    type: "simple-line",
+                    color: "#f15a24",
+                    width: 1,
+                  };
+                  const lineGraphic = new Graphic({
+                    geometry: line,
+                    symbol: lineSymbol,
+                  });
+
+                  graphicArray.push(lineGraphic);
                   graphicArray.push(graphic);
                 }
               });
               console.log("graphicArray", graphicArray);
+
+              const centerPoint = {
+                // @ts-ignore
+                type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                color: "#f15a24",
+                size: 26,
+                outline: {
+                  // autocasts as new SimpleLineSymbol()
+                  color: "#fffffe",
+                  width: 1, // points
+                },
+              };
+
+              const centerPointGraphic = new Graphic({
+                // @ts-ignore
+                geometry: results[0].graphic.geometry,
+                symbol: centerPoint,
+              });
+
               view.graphics.addMany(graphicArray);
+              view.graphics.add(centerPointGraphic);
               console.log("view", view);
             } else {
               //@ts-ignore
@@ -294,7 +341,6 @@ export default function Map() {
                 },
               });
 
-              console.log("graphicArray", graphic);
               view.graphics.add(graphic);
             }
             console.log("objectIdsHere", objectIds);

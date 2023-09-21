@@ -69,16 +69,16 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
 
   layer.featureReduction = {
     type: "cluster",
-    clusterRadius: 60,
-    clusterMinSize: 16,
-    clusterMaxSize: 24,
+    clusterRadius: 80,
+    clusterMinSize: 18,
+    clusterMaxSize: 26,
     popupEnabled: false,
     symbol: {
       type: "simple-marker",
       // @ts-ignore
       color: "#ff8e3c",
       outline: {
-        color: "#f15a24",
+        color: "#fffffe",
         width: 1, // points
       },
     },
@@ -103,6 +103,8 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       },
     ],
   };
+
+  console.log("layer.featureReduction", layer.featureReduction);
 
   const marker = new SimpleMarkerSymbol({ color: [222, 222, 152, 0.93] });
 

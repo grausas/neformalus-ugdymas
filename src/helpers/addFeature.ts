@@ -12,6 +12,9 @@ export const AddFeature = async (
     geometry,
   });
 
+  console.log("attributes", attributes);
+  console.log("relatedAttributes", relatedAttributes);
+
   const addRelatedFeatures = new Graphic({
     attributes: relatedAttributes,
   });
@@ -28,35 +31,38 @@ export const AddFeature = async (
 
   let results;
 
-  await featureLayerPrivateTable()
-    .applyEdits(relatedEdits)
-    .then((response) => {
-      if (response) {
-        console.log("resultsTable", response);
-        results = "success";
-      }
-    })
-    .catch((error) => {
-      if (error) {
-        console.log("resultsErrorTable", error);
-        results = "error";
-      }
-    });
+  // const addRelatedData = async () => {
+  //   await featureLayerPrivateTable()
+  //     .applyEdits(relatedEdits)
+  //     .then((response) => {
+  //       if (response) {
+  //         console.log("resultsTable", response);
+  //         results = "success";
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error) {
+  //         console.log("resultsErrorTable", error);
+  //         results = "error";
+  //       }
+  //     });
+  // };
 
-  await featureLayerPrivate()
-    .applyEdits(edits)
-    .then((response) => {
-      if (response) {
-        console.log("results", response);
-        results = "success";
-      }
-    })
-    .catch((error) => {
-      if (error) {
-        console.log("resultsError", error);
-        results = "error";
-      }
-    });
+  // await featureLayerPrivate()
+  //   .applyEdits(edits)
+  //   .then((response) => {
+  //     if (response) {
+  //       addRelatedData();
+  //       console.log("results", response);
+  //       results = "success";
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     if (error) {
+  //       console.log("resultsError", error);
+  //       results = "error";
+  //     }
+  //   });
 
   return results;
 };
