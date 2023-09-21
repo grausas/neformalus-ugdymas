@@ -1,5 +1,3 @@
-"use client";
-import React from "react";
 import { CategoryData } from "@/utils/categoryData";
 import { Flex, Text } from "@chakra-ui/react";
 
@@ -9,7 +7,7 @@ interface Props {
 
 export default function AppliedFilters({ category }: Props) {
   return (
-    <Flex fontSize="sm" wrap="wrap">
+    <Flex fontSize="sm" wrap="wrap" color="brand.40">
       <Text fontWeight="500" mr="1">
         Filtrai:
       </Text>

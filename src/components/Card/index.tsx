@@ -42,17 +42,15 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
     <Flex
       direction="column"
       bg="brand.10"
-      border="2px solid"
-      borderColor="brand.10"
-      // bg="brand.20"
       p="4"
-      rounded="xl"
-      shadow="md"
+      rounded="lg"
+      shadow="sm"
+      border="1px solid"
+      borderColor="brand.21"
       position="relative"
       _hover={{
         cursor: "pointer",
-        border: "2px solid",
-        borderColor: "brand.30",
+        bg: "brand.11",
       }}
     >
       <Flex flexDirection="column" position="absolute" right="4">
@@ -80,15 +78,13 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.50" pl="6" pr="8" fontWeight="600">
+      <Heading size="md" color="brand.50" pr="8" fontWeight="700">
         {cardData.attributes.PAVADIN}
       </Heading>
       <Stack color="brand.40" my="3" spacing="0" minH="40px">
         <Flex alignItems="center">
           <Image width={16} height={16} src={location} alt="adresas" />
-          <Text ml="2" fontWeight="500">
-            {cardData.attributes.ADRESAS}
-          </Text>
+          <Text ml="2">{cardData.attributes.ADRESAS}</Text>
         </Flex>
         {cardData.attributes.EL_PASTAS && (
           <Flex alignItems="center">

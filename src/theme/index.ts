@@ -27,7 +27,9 @@ const theme = extendTheme({
   colors: {
     brand: {
       10: "#fffffe",
+      11: "#feefec",
       20: "#f2f4f6",
+      21: "#dddddd",
       30: "#ff8e3c",
       31: "#f15a24",
       40: "#2d334a",
@@ -47,7 +49,10 @@ const theme = extendTheme({
     },
     Button: {
       baseStyle: {
-        rounded: "xl",
+        rounded: "lg",
+        shadow: "sm",
+        border: "1px solid",
+        borderColor: "brand.21",
       },
     },
   },

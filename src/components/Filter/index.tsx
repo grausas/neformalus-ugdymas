@@ -69,7 +69,6 @@ function Filter({ handleFilter }: FilterProps) {
             size="sm"
             bg="brand.10"
             color="brand.50"
-            shadow="md"
             px="5"
           >
             Veiklos
@@ -117,7 +116,6 @@ function Filter({ handleFilter }: FilterProps) {
             size="sm"
             bg="brand.10"
             color="brand.50"
-            shadow="md"
             px="5"
           >
             NVŠ krepšelis
@@ -156,7 +154,6 @@ function Filter({ handleFilter }: FilterProps) {
             as={Button}
             size="sm"
             bg="brand.10"
-            shadow="md"
             px="5"
             color="brand.50"
           >

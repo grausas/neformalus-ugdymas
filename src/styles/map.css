@@ -22,3 +22,15 @@
 .esri-ui-manual-container > .esri-component {
   display: none;
 }
+
+.esri-widget--button {
+  border-radius: 8px;
+}
+
+.esri-ui-corner .esri-component {
+  border-radius: 8px;
+}
+
+.esri-basemap-toggle__container {
+  border-radius: 8px;
+}

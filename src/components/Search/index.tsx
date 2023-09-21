@@ -12,14 +12,16 @@ export default function Search({ handleSearch, value }: any) {
       <Input
         placeholder="Ieškoti veiklos"
         fontSize="sm"
-        shadow="md"
+        shadow="sm"
         bg="brand.10"
         pl="10"
-        rounded="xl"
+        rounded="lg"
         h="0"
         py="4"
         onChange={handleSearch}
         value={value}
+        border="1px solid"
+        borderColor="brand.21"
       />
     </InputGroup>
   );
