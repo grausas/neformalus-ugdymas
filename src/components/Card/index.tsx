@@ -80,12 +80,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.40" pl="5" pr="8" fontWeight="600">
+      <Heading size="md" color="brand.40" pl="6" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack color="brand.40" my="3" spacing="1" fontSize="sm">
+      <Stack color="brand.40" my="3" spacing="0">
         <Flex alignItems="center">
-          <Image width={18} height={18} src={location} alt="adresas" />
+          <Image width={16} height={16} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">
             {cardData.attributes.ADRESAS}
           </Text>
@@ -118,7 +118,9 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           <Text>{cardData.attributes.SOC_TINKL}</Text>
         )}
         {cardData.attributes.PASTABA && (
-          <Text>{cardData.attributes.PASTABA}</Text>
+          <Text fontSize="sm" pr="8">
+            {cardData.attributes.PASTABA}
+          </Text>
         )}
       </Stack>
       <Flex justifyContent="space-between" mt="1">
