@@ -31,14 +31,14 @@ const NavLink = (props: Props) => {
 
   return (
     <Link
-      color="brand.10"
+      color="brand.50"
       fontWeight="500"
       href={url}
       px={2}
       py={1}
       _hover={{
         textDecoration: "none",
-        color: "brand.40",
+        color: "brand.20",
       }}
     >
       {children}
@@ -53,7 +53,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg="brand.31" px={4}>
+      <Box bg="brand.30" px={4}>
         <Flex
           maxW="1440px"
           h={16}
@@ -70,9 +70,7 @@ export default function Simple() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Link href="/">
-              <Box color="brand.50">
-                <SunIcon color="brand.10" />
-              </Box>
+              <SunIcon color="brand.50" />
             </Link>
           </HStack>
           <Flex alignItems={"center"}>

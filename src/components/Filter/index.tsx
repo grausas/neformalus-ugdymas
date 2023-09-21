@@ -64,7 +64,14 @@ function Filter({ handleFilter }: FilterProps) {
     <FormControl>
       <Stack direction="row">
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
+          <MenuButton
+            as={Button}
+            size="sm"
+            bg="brand.10"
+            color="brand.50"
+            shadow="md"
+            px="5"
+          >
             Veiklos
           </MenuButton>
           <MenuList>
@@ -76,6 +83,7 @@ function Filter({ handleFilter }: FilterProps) {
                     onChange={(e) => handleChange(e, index)}
                     size="sm"
                     checked={checkedItems[index]}
+                    color="brand.40"
                   >
                     {item.text}
                   </Checkbox>
@@ -104,7 +112,14 @@ function Filter({ handleFilter }: FilterProps) {
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
+          <MenuButton
+            as={Button}
+            size="sm"
+            bg="brand.10"
+            color="brand.50"
+            shadow="md"
+            px="5"
+          >
             NVŠ krepšelis
           </MenuButton>
           <MenuList>
@@ -137,7 +152,14 @@ function Filter({ handleFilter }: FilterProps) {
           </MenuList>
         </Menu>
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} size="sm" bg="brand.10" shadow="md" px="5">
+          <MenuButton
+            as={Button}
+            size="sm"
+            bg="brand.10"
+            shadow="md"
+            px="5"
+            color="brand.50"
+          >
             Klasės
           </MenuButton>
           <MenuList>

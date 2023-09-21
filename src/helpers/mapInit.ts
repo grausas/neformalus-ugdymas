@@ -92,7 +92,7 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
         symbol: {
           type: "text",
           // @ts-ignore
-          color: "#2a2a2a",
+          color: "#272343",
 
           // @ts-ignore
           font: {

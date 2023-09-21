@@ -27,11 +27,11 @@ const theme = extendTheme({
   colors: {
     brand: {
       10: "#fffffe",
-      20: "#eff0f3",
+      20: "#f2f4f6",
       30: "#ff8e3c",
       31: "#f15a24",
-      40: "#2a2a2a",
-      50: "#0d0d0d",
+      40: "#2d334a",
+      50: "#272343",
     },
   },
   components: {
