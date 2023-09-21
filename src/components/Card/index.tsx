@@ -83,7 +83,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       <Heading size="md" color="brand.40" pl="6" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack color="brand.40" my="3" spacing="0">
+      <Stack color="brand.40" my="3" spacing="0" minH="40px">
         <Flex alignItems="center">
           <Image width={16} height={16} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">

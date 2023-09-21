@@ -5,57 +5,101 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import ArcGISMap from "@/components/Map";
-import {
-  Box,
-  Spinner,
-  Flex,
-  Stack,
-  AbsoluteCenter,
-  useDisclosure,
-} from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+const ArcGISMap = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+});
+import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
 import AppliedFilters from "@/components/AppliedFilters";
 import Search from "@/components/Search";
 import NoResults from "@/components/NoResults";
 import Form from "@/components/admin/Form";
-import CardModal from "@/components/Modal";
-import { featureLayerPublic } from "@/layers";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
 import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter.js";
+import FeatureEffect from "@arcgis/core/layers/support/FeatureEffect.js";
 import { MapContext } from "@/context/map-context";
 import { AuthContext } from "@/context/auth";
 import { featuresFields, relatedFeaturesFields } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
-import { simpleRenderer } from "@/helpers/layerRenderer";
+import { featureLayerPublic } from "@/layers";
+import Graphic from "@arcgis/core/Graphic";
+import * as geometryEngine from "@arcgis/core/geometry/geometryEngine.js";
+import { CategoryData } from "@/utils/categoryData";
+import Point from "@arcgis/core/geometry/Point.js";
 
 const defaultWhereParams = "1=1";
 
+function calculatePointsAroundCenter(
+  centerPoint: { x: number; y: number; spatialReference: any },
+  numPoints: number,
+  radius: number
+) {
+  const points = [];
+  const angleIncrement = (2 * Math.PI) / numPoints;
+
+  for (let i = 0; i < numPoints; i++) {
+    const angle = i * angleIncrement;
+    const x = centerPoint.x + radius * Math.cos(angle);
+    const y = centerPoint.y + radius * Math.sin(angle);
+    const point = new Point({
+      x,
+      y,
+      spatialReference: centerPoint.spatialReference,
+    });
+    points.push(point);
+  }
+
+  return points;
+}
+
 export default function Map() {
   const { view } = useContext(MapContext);
+  const [featureLayer, setFeatureLayer] = useState<
+    __esri.FeatureLayer | undefined
+  >();
   const auth = useContext(AuthContext);
   const [data, setData] = useState<__esri.Graphic[]>([]);
+  const [filteredData, setFilteredData] = useState<__esri.Graphic[]>([]);
+  const [objIds, setObjIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState<string[]>([]);
-  const [modalData, setModalData] = useState<__esri.Graphic>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     setWhereParams(whereParamsChange(category));
   }, [category]);
 
-  console.log("whereParams324234234234", whereParams);
+  useEffect(() => {
+    if (objIds.length === 0) return;
+    const filterDataOnClick = async () => {
+      console.log("objectIds", objIds);
+      const filteredArray = await data.filter((item) => {
+        return objIds.includes(item.attributes.OBJECTID);
+      });
+      console.log("filteredArray", filteredArray);
+      setFilteredData(filteredArray);
+      setLoading(false);
+    };
+
+    filterDataOnClick();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [objIds]);
 
   const queryFeatures = async (
     layer: __esri.FeatureLayer,
     layerView: __esri.FeatureLayerView
   ) => {
     setLoading(true);
+    view?.graphics.removeAll();
+    layerView.featureEffect = new FeatureEffect({
+      excludedEffect: "opacity(100%)",
+    });
 
     const featureResults = await layer.queryFeatures({
       returnGeometry: true,
@@ -72,14 +116,17 @@ export default function Map() {
         objectIds: objectIds,
         where: whereParams,
       });
+
       const globalIdsAsNumber = Object.keys(relatedFeatures).map(Number);
 
       if (whereParams) {
         const filteredFeatures = featureResults.features.filter((f) => {
           return globalIdsAsNumber.includes(f.attributes.OBJECTID);
         });
+        const filterWhereClause =
+          "OBJECTID IN (" + globalIdsAsNumber.join(",") + ")";
         const featureFilter = new FeatureFilter({
-          objectIds: globalIdsAsNumber.length === 0 ? [0] : globalIdsAsNumber,
+          where: filterWhereClause,
         });
         layerView.filter = featureFilter;
 
@@ -108,12 +155,15 @@ export default function Map() {
   };
 
   useEffect(() => {
-    const handles = new Handles();
     if (!view) return;
-    const layer = view?.map.layers.getItemAt(0) as __esri.FeatureLayer;
+    const handles = new Handles();
+    const layer = view.map.layers.getItemAt(0) as __esri.FeatureLayer;
+    const publicLayer = featureLayerPublic();
 
-    view?.whenLayerView(layer).then(async (layerView) => {
-      await queryFeatures(layer, layerView);
+    setFeatureLayer(layer);
+
+    view.whenLayerView(layer).then((layerView) => {
+      queryFeatures(publicLayer, layerView);
 
       // subsequent map interaction
       handles.add(
@@ -121,7 +171,7 @@ export default function Map() {
           () => [view.stationary, view.extent],
           ([stationary]) => {
             if (stationary) {
-              promiseUtils.debounce(queryFeatures(layer, layerView));
+              promiseUtils.debounce(queryFeatures(publicLayer, layerView));
             }
           }
         )
@@ -133,48 +183,157 @@ export default function Map() {
   }, [view, whereParams]);
 
   // filter features on map click
-  // useEffect(() => {
-  //   if (view) {
-  //     view.on("click", async (event) => {
-  //       const response = await view.hitTest(event);
-  //       if (response.results.length) {
-  //         const results = response.results?.filter(
-  //           (hitResult) =>
-  //             hitResult.type === "graphic" &&
-  //             hitResult.graphic.layer.id === "public"
-  //         );
-  //         // const results = response.results;
-  //         const filteredData = data.filter((g) => {
-  //           return results
-  //             ?.map((r) => r.graphic.attributes.OBJECTID)
-  //             .includes(g.attributes.OBJECTID);
-  //         });
-  //         setData(filteredData);
-  //       }
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [view]);
+  useEffect(() => {
+    if (view && featureLayer) {
+      view.on("click", async (event) => {
+        console.log("event", event);
+        const response = await view.hitTest(event, {
+          include: featureLayer,
+        });
+        view.whenLayerView(featureLayer).then(async (layerView) => {
+          if (response.results.length) {
+            setLoading(true);
+            view.graphics.removeAll();
+            let objectIds: number[] = [];
+
+            const results = response.results;
+            console.log("response", response.results);
+            // @ts-ignore
+            if (results[0].graphic.attributes.aggregateId) {
+              const query = layerView.createQuery();
+              // @ts-ignore
+              const aggregateId = results[0].graphic.attributes.aggregateId;
+              // @ts-ignore
+              const clusterGeometry = results[0].graphic.geometry;
+
+              query.aggregateIds = [aggregateId];
+              console.log("query", query);
+              const { features } = await layerView.queryFeatures(query);
+              const uniqueFeatures = features.filter(
+                (obj, index) =>
+                  features.findIndex(
+                    (item) =>
+                      item.attributes.LO_VEIKLA === obj.attributes.LO_VEIKLA
+                  ) === index
+              );
+
+              console.log("uniqueFeatures", uniqueFeatures);
+
+              objectIds = features.map((f) => f.attributes.OBJECTID);
+              setObjIds(objectIds);
+              console.log("objectIds", objectIds);
+              console.log("data", data);
+
+              console.log("features", features);
+
+              const radius =
+                uniqueFeatures.length < 8 ? view.scale / 100 : view.scale / 80;
+
+              const points = calculatePointsAroundCenter(
+                clusterGeometry,
+                uniqueFeatures.length,
+                radius
+              );
+
+              console.log("points", points);
+
+              let pointUrl: string;
+
+              // const graphicArray: Graphic[] = [];
+              const graphicArray: Graphic[] = [];
+              uniqueFeatures.forEach((feature, index) => {
+                const category = CategoryData.find(
+                  (category) => feature.attributes.LO_VEIKLA === category.value
+                );
+
+                if (category && index < points.length) {
+                  console.log("poitn", points);
+                  const point = points[index];
+                  const pointUrl = category.url;
+
+                  const graphic = new Graphic({
+                    geometry: point,
+                    attributes: feature.attributes,
+                    symbol: {
+                      // @ts-ignore
+                      type: "picture-marker",
+                      url: pointUrl,
+                      width: "25px",
+                      height: "25px",
+                    },
+                  });
+                  graphicArray.push(graphic);
+                }
+              });
+              console.log("graphicArray", graphicArray);
+              view.graphics.addMany(graphicArray);
+              console.log("view", view);
+            } else {
+              //@ts-ignore
+              objectIds = [results[0].graphic.attributes.OBJECTID];
+              setObjIds(objectIds);
+              const category = CategoryData.find(
+                (category) =>
+                  //@ts-ignore
+                  results[0].graphic.attributes.LO_VEIKLA === category.value
+              );
+
+              const pointUrl = category?.url;
+
+              const graphic = new Graphic({
+                //@ts-ignore
+                geometry: results[0].graphic.geometry,
+                //@ts-ignore
+                attributes: results[0].graphic.attributes,
+                symbol: {
+                  // @ts-ignore
+                  type: "picture-marker",
+                  url: pointUrl,
+                  width: "25px",
+                  height: "25px",
+                },
+              });
+
+              console.log("graphicArray", graphic);
+              view.graphics.add(graphic);
+            }
+            console.log("objectIdsHere", objectIds);
+            const featureFilter = new FeatureFilter({
+              objectIds: objectIds,
+            });
+            console.log("featureFilter", featureFilter);
+
+            layerView.featureEffect = new FeatureEffect({
+              filter: featureFilter,
+              excludedEffect: "grayscale(100%) opacity(30%)",
+            });
+          } else {
+            console.log("hererere");
+            layerView.featureEffect = new FeatureEffect({
+              excludedEffect: "opacity(100%)",
+            });
+            view.graphics.removeAll();
+            setObjIds([]);
+          }
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, featureLayer]);
 
   const handleFilter = useCallback((category: string[]) => {
     setCategory(category);
   }, []);
 
-  const handleOpenModal = (data: __esri.Graphic) => {
-    console.log("data", data);
-    setModalData(data);
-    onOpen();
-  };
-
-  const filteredData = useMemo(() => {
-    if (!searchTerm) return data;
+  useEffect(() => {
+    if (!searchTerm) return setFilteredData(data);
 
     const filterData = data.filter((item) => {
       return item.attributes.PAVADIN.toLowerCase().includes(
         searchTerm.toLowerCase()
       );
     });
-    return filterData;
+    return setFilteredData(filterData);
   }, [searchTerm, data]);
 
   return (
@@ -187,9 +346,6 @@ export default function Map() {
         p="3"
         gap="3"
       >
-        {modalData && (
-          <CardModal isOpen={isOpen} onClose={onClose} modalData={modalData} />
-        )}
         <Search
           handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSearchTerm(e.target.value)
@@ -233,11 +389,7 @@ export default function Map() {
           {!loading &&
             filteredData.length > 0 &&
             filteredData.map((item) => (
-              <Card
-                key={item.attributes.OBJECTID}
-                cardData={item}
-                handleOpenModal={handleOpenModal}
-              />
+              <Card key={item.attributes.OBJECTID} cardData={item} />
             ))}
           {!loading && data.length === 0 && <NoResults />}
         </Stack>

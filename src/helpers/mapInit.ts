@@ -7,9 +7,9 @@ import Search from "@arcgis/core/widgets/Search.js";
 import Zoom from "@arcgis/core/widgets/Zoom.js";
 import Legend from "@arcgis/core/widgets/Legend.js";
 import Home from "@arcgis/core/widgets/Home.js";
-import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol.js";
 import Expand from "@arcgis/core/widgets/Expand.js";
-import { simpleRenderer, layerRenderer } from "./layerRenderer";
+import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol.js";
+import { featureLayerPublic } from "@/layers";
 
 interface MapApp {
   view?: MapView;
@@ -26,7 +26,10 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
     baseLayers: [
       new VectorTileLayer({
         portalItem: {
+          // sviesus
           id: "34adce6f797846bf8e971f402a251403",
+          // tamsus
+          // id: "e52404960466403b8f8ddc935e6d1e0d",
         },
       }),
     ],
@@ -56,38 +59,52 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       components: ["attribution"],
     },
     constraints: {
-      minScale: 500000,
-      maxScale: 100,
+      maxZoom: 20,
+      minZoom: 10,
       snapToZoom: false,
     },
   });
 
-  const labelClass = {
-    // autocasts as new LabelClass()
+  console.log("layer", layer);
+
+  layer.featureReduction = {
+    type: "cluster",
+    clusterRadius: 60,
+    clusterMinSize: 16,
+    clusterMaxSize: 24,
+    popupEnabled: false,
     symbol: {
-      type: "text", // autocasts as new TextSymbol()
-      color: "green",
-      backgroundColor: [213, 184, 255, 0.75],
-      borderLineColor: "green",
-      borderLineSize: 1,
-      yoffset: 5,
-      font: {
-        // autocast as new Font()
-        family: "Playfair Display",
-        size: 12,
-        weight: "bold",
+      type: "simple-marker",
+      // @ts-ignore
+      color: "#ff8e3c",
+      outline: {
+        color: "#f15a24",
+        width: 1, // points
       },
     },
-    labelPlacement: "above-center",
-    labelExpressionInfo: {
-      expression: "$feature.OBJECTID",
-    },
+    labelingInfo: [
+      {
+        labelExpressionInfo: {
+          expression: "Text($feature.cluster_count, '#,###')",
+        },
+        deconflictionStrategy: "none",
+        labelPlacement: "center-center",
+        symbol: {
+          type: "text",
+          // @ts-ignore
+          color: "#2a2a2a",
+
+          // @ts-ignore
+          font: {
+            family: "Noto Sans",
+            size: 12,
+          },
+        },
+      },
+    ],
   };
-  // layer.labelingInfo = labelClass;
 
-  // layer.renderer = simpleRenderer;
-
-  const marker = new SimpleMarkerSymbol({ color: [203, 52, 52, 0.93] });
+  const marker = new SimpleMarkerSymbol({ color: [222, 222, 152, 0.93] });
 
   const sources = [
     {
@@ -100,11 +117,28 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       minSuggestCharacters: 0,
       resultSymbol: marker,
     },
+
+    {
+      layer: featureLayerPublic(),
+      searchFields: ["PAVADIN"],
+      displayField: "PAVADIN",
+      exactMatch: false,
+      outFields: ["*"],
+      name: "Ieškoti veiklos",
+      placeholder: "Ieškoti veiklos",
+      maxResults: 6,
+      maxSuggestions: 6,
+      suggestionsEnabled: true,
+      minSuggestCharacters: 0,
+      zoomScale: 500,
+      resultSymbol: marker,
+    },
   ];
 
   const searchWidget = new Search({
     view: view,
     includeDefaultSources: false,
+    allPlaceholder: "Ieškoti vietovės, veiklos",
     sources: sources,
     popupEnabled: false,
     id: "search",
