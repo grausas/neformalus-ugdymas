@@ -83,31 +83,37 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       <Heading size="md" color="brand.40" pl="5" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack color="brand.40" my="3" spacing="0" fontSize="sm">
+      <Stack color="brand.40" my="3" spacing="1" fontSize="sm">
         <Flex alignItems="center">
-          <Image width={16} height={16} src={location} alt="adresas" />
+          <Image width={18} height={18} src={location} alt="adresas" />
           <Text ml="2" fontWeight="500">
             {cardData.attributes.ADRESAS}
           </Text>
         </Flex>
-        <Flex alignItems="center">
-          <EmailIcon mr="2" color="brand.30" />
-          <Text>{cardData.attributes.EL_PASTAS}</Text>
-        </Flex>
-        <Flex alignItems="center">
-          <PhoneIcon mr="2" color="brand.30" />
-          <Text>
-            {cardData.attributes.TELEF_MOB
-              ? "+" + cardData.attributes.TELEF_MOB
-              : cardData.attributes.TELEF}
-          </Text>
-        </Flex>
-        <Flex alignItems="center">
-          <ExternalLinkIcon mr="2" color="brand.30" />
-          <Link href={`http://${cardData.attributes.NUORODA}`} isExternal>
-            {cardData.attributes.NUORODA}
-          </Link>
-        </Flex>
+        {cardData.attributes.EL_PASTAS && (
+          <Flex alignItems="center">
+            <EmailIcon mr="2" color="brand.30" />
+            <Text>{cardData.attributes.EL_PASTAS}</Text>
+          </Flex>
+        )}
+        {(cardData.attributes.TELEF_MOB || cardData.attributes.TELEF) && (
+          <Flex alignItems="center">
+            <PhoneIcon mr="2" color="brand.30" />
+            <Text>
+              {cardData.attributes.TELEF_MOB
+                ? "+" + cardData.attributes.TELEF_MOB
+                : cardData.attributes.TELEF}
+            </Text>
+          </Flex>
+        )}
+        {cardData.attributes.NUOROD && (
+          <Flex alignItems="center">
+            <ExternalLinkIcon mr="2" color="brand.30" />
+            <Link href={`http://${cardData.attributes.NUORODA}`} isExternal>
+              {cardData.attributes.NUORODA}
+            </Link>
+          </Flex>
+        )}
         {cardData.attributes.SOC_TINKL && (
           <Text>{cardData.attributes.SOC_TINKL}</Text>
         )}
