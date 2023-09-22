@@ -9,10 +9,13 @@ import {
   useDisclosure,
   useColorMode,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
+import Image from "next/image";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { AuthContext } from "@/context/auth";
+import logo from "@/assets/logo.png";
 
 interface Props {
   children: React.ReactNode;
@@ -31,14 +34,15 @@ const NavLink = (props: Props) => {
 
   return (
     <Link
-      color="brand.50"
+      color="brand.10"
       fontWeight="500"
       href={url}
       px={2}
       py={1}
       _hover={{
         textDecoration: "none",
-        color: "brand.20",
+        color: "brand.10",
+        transition: "0.3s ease-in-out",
       }}
     >
       {children}
@@ -53,7 +57,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg="brand.30" px={4}>
+      <Box bg="brand.31" px={4}>
         <Flex
           maxW="1440px"
           h={16}
@@ -68,11 +72,19 @@ export default function Simple() {
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <HStack spacing={8} alignItems={"center"}>
-            <Link href="/">
-              <SunIcon color="brand.50" />
-            </Link>
-          </HStack>
+          <Link href="/" _hover={{ textDecoration: "none" }}>
+            <HStack spacing={3} alignItems={"center"}>
+              <Image width={36} height={36} src={logo} alt="logo" />
+              <Text
+                color="brand.10"
+                textTransform="uppercase"
+                fontWeight="600"
+                fontSize="lg"
+              >
+                Neformalus vilnius
+              </Text>
+            </HStack>
+          </Link>
           <Flex alignItems={"center"}>
             <HStack
               as={"nav"}
