@@ -13,6 +13,7 @@ import {
   Stack,
   Flex,
 } from "@chakra-ui/react";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { CategoryData } from "@/utils/categoryData";
 
 type FilterProps = {
@@ -68,8 +69,10 @@ function Filter({ handleFilter }: FilterProps) {
             as={Button}
             size="sm"
             bg="brand.10"
-            color="brand.50"
+            color="brand.21"
             px="5"
+            rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
+            _active={{ borderColor: "brand.21", bg: "brand.10" }}
           >
             Veiklos
           </MenuButton>
@@ -92,7 +95,7 @@ function Filter({ handleFilter }: FilterProps) {
             <Flex justify="space-between" px="4" align="center" mt="2">
               <Text
                 fontSize="sm"
-                fontWeight="500"
+                fontWeight="600"
                 _hover={{ cursor: "pointer", textDecoration: "underline" }}
                 color="brand.31"
                 onClick={clearFilterCategory}
@@ -115,8 +118,10 @@ function Filter({ handleFilter }: FilterProps) {
             as={Button}
             size="sm"
             bg="brand.10"
-            color="brand.50"
+            color="brand.21"
             px="5"
+            rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
+            _active={{ borderColor: "brand.21", bg: "brand.10" }}
           >
             NVŠ krepšelis
           </MenuButton>
@@ -137,7 +142,7 @@ function Filter({ handleFilter }: FilterProps) {
             <Flex justify="space-between" px="4" align="center" mt="2">
               <Text
                 fontSize="sm"
-                fontWeight="500"
+                fontWeight="600"
                 _hover={{ cursor: "pointer", textDecoration: "underline" }}
                 color="brand.31"
               >
@@ -155,7 +160,9 @@ function Filter({ handleFilter }: FilterProps) {
             size="sm"
             bg="brand.10"
             px="5"
-            color="brand.50"
+            color="brand.21"
+            rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
+            _active={{ borderColor: "brand.21", bg: "brand.10" }}
           >
             Klasės
           </MenuButton>
@@ -176,7 +183,7 @@ function Filter({ handleFilter }: FilterProps) {
             <Flex justify="space-between" px="4" align="center" mt="2">
               <Text
                 fontSize="sm"
-                fontWeight="500"
+                fontWeight="600"
                 _hover={{ cursor: "pointer", textDecoration: "underline" }}
                 color="brand.31"
               >

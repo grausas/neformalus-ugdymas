@@ -41,7 +41,7 @@ const NavLink = (props: Props) => {
       py={1}
       _hover={{
         textDecoration: "none",
-        color: "brand.10",
+        color: "brand.40",
         transition: "0.3s ease-in-out",
       }}
     >
@@ -60,7 +60,7 @@ export default function Simple() {
       <Box bg="brand.31" px={4}>
         <Flex
           maxW="1440px"
-          h={16}
+          h={14}
           alignItems={"center"}
           justifyContent={"space-between"}
           margin="0 auto"
@@ -74,7 +74,7 @@ export default function Simple() {
           />
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"}>
-              <Image width={36} height={36} src={logo} alt="logo" />
+              <Image width={30} height={30} src={logo} alt="logo" />
               <Text
                 color="brand.10"
                 textTransform="uppercase"

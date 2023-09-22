@@ -64,7 +64,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                 <Box key={item.id} mb="1">
                   <Tooltip
                     label={item.text}
-                    fontSize="xs"
+                    fontSize="sm"
                     bg="brand.30"
                     color="brand.50"
                   >
@@ -91,13 +91,13 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         </Flex>
         {cardData.attributes.EL_PASTAS && (
           <Flex alignItems="center">
-            <EmailIcon mr="2" color="brand.31" />
+            <EmailIcon mr="2" color="brand.40" />
             <Text>{cardData.attributes.EL_PASTAS}</Text>
           </Flex>
         )}
         {(cardData.attributes.TELEF_MOB || cardData.attributes.TELEF) && (
           <Flex alignItems="center">
-            <PhoneIcon mr="2" color="brand.31" />
+            <PhoneIcon mr="2" color="brand.40" />
             <Text>
               {cardData.attributes.TELEF_MOB
                 ? "+" + cardData.attributes.TELEF_MOB
@@ -123,39 +123,16 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         )}
       </Stack>
       <Flex justifyContent="space-between" mt="1">
-        <Flex justify="center">
-          <Tooltip
-            label={
-              hasNvsKrepse
-                ? "Taikomas NVŠ krepšelis"
-                : "Netaikomas NVŠ krepšelis"
-            }
-            fontSize="xs"
-            bg="brand.30"
-            color="brand.50"
-          >
-            <Image
-              width={24}
-              height={24}
-              src={hasNvsKrepse ? nvs : nonvs}
-              alt={
-                hasNvsKrepse
-                  ? "Taikomas NVŠ krepšelis"
-                  : "Netaikomas NVŠ krepšelis"
-              }
-            />
-          </Tooltip>
-        </Flex>
         <Flex>
           {cardData.attributes.relatedFeatures &&
             cardData.attributes.relatedFeatures.map((related: any) => {
               return CategoryData.map((category) => {
                 if (related.attributes.LO_VEIKLA === category.value) {
                   return (
-                    <Box key={category.id} ml="1">
+                    <Box key={category.id} mr="1">
                       <Tooltip
                         label={category.text}
-                        fontSize="xs"
+                        fontSize="sm"
                         bg="brand.30"
                         color="brand.50"
                       >
@@ -171,6 +148,29 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                 }
               });
             })}
+        </Flex>
+        <Flex justify="center">
+          <Tooltip
+            label={
+              hasNvsKrepse
+                ? "Taikomas NVŠ krepšelis"
+                : "Netaikomas NVŠ krepšelis"
+            }
+            fontSize="sm"
+            bg="brand.30"
+            color="brand.50"
+          >
+            <Image
+              width={24}
+              height={24}
+              src={hasNvsKrepse ? nvs : nonvs}
+              alt={
+                hasNvsKrepse
+                  ? "Taikomas NVŠ krepšelis"
+                  : "Netaikomas NVŠ krepšelis"
+              }
+            />
+          </Tooltip>
         </Flex>
       </Flex>
     </Flex>
