@@ -21,7 +21,7 @@ export default function Search({ handleSearch, value }: any) {
         onChange={handleSearch}
         value={value}
         border="1px solid"
-        borderColor="brand.21"
+        borderColor="brand.11"
       />
     </InputGroup>
   );

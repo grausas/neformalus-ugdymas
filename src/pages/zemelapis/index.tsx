@@ -411,7 +411,7 @@ export default function Map() {
               speed="0.65s"
               emptyColor="brand.10"
               size="xl"
-              color="brand.30"
+              color="brand.31"
             />
           </AbsoluteCenter>
         )}
@@ -427,7 +427,7 @@ export default function Map() {
               width: "6px",
             },
             "&::-webkit-scrollbar-thumb": {
-              background: "#ff8e3c",
+              background: "#f15a24",
               borderRadius: "24px",
             },
           }}

@@ -9,6 +9,8 @@ import {
   Tooltip,
   Link,
   Stack,
+  Icon,
+  createIcon,
 } from "@chakra-ui/react";
 import { CategoryData } from "@/utils/categoryData";
 import { ClassData } from "@/utils/classData";
@@ -46,11 +48,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       rounded="lg"
       shadow="sm"
       border="1px solid"
-      borderColor="brand.21"
+      borderColor="brand.11"
       position="relative"
       _hover={{
         cursor: "pointer",
-        bg: "brand.11",
+        borderColor: "brand.21",
+        transition: "0.3s ease-in-out",
       }}
     >
       <Flex flexDirection="column" position="absolute" right="4">
@@ -88,13 +91,13 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         </Flex>
         {cardData.attributes.EL_PASTAS && (
           <Flex alignItems="center">
-            <EmailIcon mr="2" color="brand.30" />
+            <EmailIcon mr="2" color="brand.31" />
             <Text>{cardData.attributes.EL_PASTAS}</Text>
           </Flex>
         )}
         {(cardData.attributes.TELEF_MOB || cardData.attributes.TELEF) && (
           <Flex alignItems="center">
-            <PhoneIcon mr="2" color="brand.30" />
+            <PhoneIcon mr="2" color="brand.31" />
             <Text>
               {cardData.attributes.TELEF_MOB
                 ? "+" + cardData.attributes.TELEF_MOB
@@ -104,7 +107,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         )}
         {cardData.attributes.NUOROD && (
           <Flex alignItems="center">
-            <ExternalLinkIcon mr="2" color="brand.30" />
+            <ExternalLinkIcon mr="2" color="brand.31" />
             <Link href={`http://${cardData.attributes.NUORODA}`} isExternal>
               {cardData.attributes.NUORODA}
             </Link>
