@@ -22,8 +22,6 @@ interface Props {
 
 const Links = [
   { name: "Žemėlapis", url: "/zemelapis" },
-  { name: "Apie mus", url: "#" },
-  { name: "Informacija", url: "#" },
   { name: "Kontaktai", url: "#" },
 ];
 
@@ -56,7 +54,6 @@ export default function Simple() {
     <>
       <Box bg="brand.31" px={4}>
         <Flex
-          maxW="1440px"
           h={14}
           alignItems={"center"}
           justifyContent={"space-between"}
