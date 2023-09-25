@@ -1,41 +1,31 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Image from "next/image";
+import { GroupData } from "@/utils/groupData";
 
 const GroupTabs = () => {
   return (
-    <Tabs>
-      <TabList w="100%" justifyContent="space-between">
-        <Tab>
-          <Image
-            src="/neformalus_svietimas.svg"
-            alt=""
-            width={30}
-            height={30}
-          />
-        </Tab>
-        <Tab>
-          <Image
-            src="/vaiku_jaunimo_klubai.svg"
-            alt=""
-            width={30}
-            height={30}
-          />
-        </Tab>
-        <Tab>
-          <Image
-            src="/atviri_jaunimo_centrai.svg"
-            alt=""
-            width={30}
-            height={30}
-          />
-        </Tab>
-        <Tab>
-          <Image src="/nvo_istaigos.svg" alt="" width={30} height={30} />
-        </Tab>
-        <Tab>
-          <Image src="/vaiku_stovyklos.svg" alt="" width={30} height={30} />
-        </Tab>
+    <Tabs isFitted>
+      <TabList>
+        {GroupData.map((group) => (
+          <Tab key={group.id}>
+            <Image src={group.url} alt={group.text} width={30} height={30} />
+          </Tab>
+        ))}
       </TabList>
+      <TabPanels>
+        {GroupData.map((group) => (
+          <TabPanel
+            key={group.id}
+            p="0"
+            pt="1"
+            m="0"
+            fontSize="sm"
+            fontWeight="500"
+          >
+            {group.text}
+          </TabPanel>
+        ))}
+      </TabPanels>
     </Tabs>
   );
 };
