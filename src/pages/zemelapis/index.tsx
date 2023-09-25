@@ -30,6 +30,7 @@ import Graphic from "@arcgis/core/Graphic";
 import { CategoryData } from "@/utils/categoryData";
 import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
+import GroupTabs from "@/components/GroupTabs";
 
 const defaultWhereParams = "1=1";
 
@@ -385,14 +386,15 @@ export default function Map() {
         w="100%"
         flexDirection="column"
         position="relative"
-        p="3"
-        gap="3"
+        px="3"
+        gap="2"
       >
-        <Search
+        {/* <Search
           handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSearchTerm(e.target.value)
           }
-        />
+        /> */}
+        <GroupTabs />
         <Flex direction="row" alignItems="center">
           <Filter handleFilter={handleFilter} />
           <Box w="100%" textAlign="right" fontSize="sm">
