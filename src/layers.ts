@@ -1,4 +1,3 @@
-"use client";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 
 export const featureLayerPublic = () => {

@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useState } from "react";
 import type MapView from "@arcgis/core/views/MapView";
 

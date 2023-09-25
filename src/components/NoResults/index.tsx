@@ -1,5 +1,3 @@
-"use client";
-
 import { Box, Text, Icon, Flex, Heading } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 

@@ -1,4 +1,3 @@
-"use client";
 import { useContext } from "react";
 import {
   Box,
@@ -7,13 +6,12 @@ import {
   IconButton,
   Button,
   useDisclosure,
-  useColorMode,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import Image from "next/image";
-import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { AuthContext } from "@/context/auth";
 import logo from "@/assets/logo.png";
 
@@ -53,7 +51,6 @@ const NavLink = (props: Props) => {
 export default function Simple() {
   const auth = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <>
@@ -98,12 +95,7 @@ export default function Simple() {
                 </NavLink>
               ))}
             </HStack>
-            {/* <Button
-              size={{ base: "sm", md: "md" }}
-              //  onClick={toggleColorMode}
-            >
-              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button> */}
+
             {auth.user.token && (
               <Button
                 onClick={() => auth.logout()}

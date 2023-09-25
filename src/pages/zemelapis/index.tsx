@@ -27,12 +27,9 @@ import { featuresFields, relatedFeaturesFields } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
 import { featureLayerPublic } from "@/layers";
 import Graphic from "@arcgis/core/Graphic";
-import * as geometryEngine from "@arcgis/core/geometry/geometryEngine.js";
 import { CategoryData } from "@/utils/categoryData";
 import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
-import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
-import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol.js";
 
 const defaultWhereParams = "1=1";
 
@@ -296,13 +293,12 @@ export default function Map() {
 
               const centerPoint = {
                 // @ts-ignore
-                type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                type: "simple-marker",
                 color: "#f15a24",
                 size: 26,
                 outline: {
-                  // autocasts as new SimpleLineSymbol()
                   color: "#fffffe",
-                  width: 1, // points
+                  width: 1,
                 },
               };
 
@@ -385,7 +381,7 @@ export default function Map() {
   return (
     <Stack direction="row" gap="0">
       <Flex
-        maxW="600px"
+        maxW="550px"
         w="100%"
         flexDirection="column"
         position="relative"

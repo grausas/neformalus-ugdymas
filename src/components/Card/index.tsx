@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Flex,
@@ -9,8 +7,6 @@ import {
   Tooltip,
   Link,
   Stack,
-  Icon,
-  createIcon,
 } from "@chakra-ui/react";
 import { CategoryData } from "@/utils/categoryData";
 import { ClassData } from "@/utils/classData";

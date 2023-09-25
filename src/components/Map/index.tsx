@@ -1,5 +1,3 @@
-"use client";
-
 import { useContext, useEffect, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import { MapContext } from "../../context/map-context";
