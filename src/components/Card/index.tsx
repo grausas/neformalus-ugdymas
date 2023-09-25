@@ -135,7 +135,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                         <Image
                           width={24}
                           height={24}
-                          src={category.icon}
+                          src={category.url}
                           alt={category.text}
                         />
                       </Tooltip>
