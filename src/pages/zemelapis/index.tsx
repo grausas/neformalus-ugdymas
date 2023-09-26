@@ -73,8 +73,6 @@ export default function Map() {
   const [category, setCategory] = useState<string[]>([]);
   const [group, setGroup] = useState(defaultGroup);
 
-  console.log("group", group);
-
   useEffect(() => {
     setWhereParams(whereParamsChange(category, group));
   }, [category, group]);
