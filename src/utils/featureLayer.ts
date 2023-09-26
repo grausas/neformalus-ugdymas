@@ -14,7 +14,7 @@ export const featuresFields = [
 export const relatedFeaturesFields = [
   "OBJECTID",
   "GlobalID ",
-  "LO_VEIKLA",
+  "VEIKLAID",
   "KLASE_1_4",
   "KLASE_5_8",
   "KLASE_9_12",
@@ -23,4 +23,5 @@ export const relatedFeaturesFields = [
   "PEDAGOGAS",
   "GUID",
   "PASTABA",
+  "VEIKLAGRID",
 ];

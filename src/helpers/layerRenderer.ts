@@ -73,6 +73,6 @@ const uniqueValueInfos = [
 
 export const simpleRenderer = {
   type: "unique-value",
-  field: "LO_VEIKLA",
+  field: "VEIKLAID",
   uniqueValueInfos,
 };

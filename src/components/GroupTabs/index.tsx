@@ -5,13 +5,6 @@ import { GroupData } from "@/utils/groupData";
 const GroupTabs = () => {
   return (
     <Tabs isFitted>
-      <TabList>
-        {GroupData.map((group) => (
-          <Tab key={group.id}>
-            <Image src={group.url} alt={group.text} width={30} height={30} />
-          </Tab>
-        ))}
-      </TabList>
       <TabPanels>
         {GroupData.map((group) => (
           <TabPanel
@@ -26,6 +19,13 @@ const GroupTabs = () => {
           </TabPanel>
         ))}
       </TabPanels>
+      <TabList>
+        {GroupData.map((group) => (
+          <Tab key={group.id}>
+            <Image src={group.url} alt={group.text} width={30} height={30} />
+          </Tab>
+        ))}
+      </TabList>
     </Tabs>
   );
 };

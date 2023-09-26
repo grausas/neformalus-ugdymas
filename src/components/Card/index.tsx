@@ -123,7 +123,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           {cardData.attributes.relatedFeatures &&
             cardData.attributes.relatedFeatures.map((related: any) => {
               return CategoryData.map((category) => {
-                if (related.attributes.LO_VEIKLA === category.value) {
+                if (related.attributes.VEIKLAID === category.value) {
                   return (
                     <Box key={category.id} mr="1">
                       <Tooltip

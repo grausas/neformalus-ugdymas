@@ -109,6 +109,7 @@ export default function Map() {
     });
 
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
+    console.log("objectIds", objectIds);
 
     if (objectIds.length > 0) {
       const relatedFeatures = await layer.queryRelatedFeatures({
@@ -117,6 +118,7 @@ export default function Map() {
         objectIds: objectIds,
         where: whereParams,
       });
+      console.log("relatedFeatures", relatedFeatures);
 
       const globalIdsAsNumber = Object.keys(relatedFeatures).map(Number);
 
@@ -150,6 +152,8 @@ export default function Map() {
         });
       }
     }
+
+    console.log("featureResults", featureResults);
 
     setLoading(false);
     return setData(featureResults.features);
