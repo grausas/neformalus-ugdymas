@@ -8,7 +8,7 @@ import {
   Link,
   Stack,
 } from "@chakra-ui/react";
-import { CategoryData } from "@/utils/categoryData";
+import { ActivitiesData } from "@/utils/activitiesData";
 import { ClassData } from "@/utils/classData";
 import Image from "next/image";
 import { EmailIcon, PhoneIcon, ExternalLinkIcon } from "@chakra-ui/icons";
@@ -122,12 +122,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         <Flex>
           {cardData.attributes.relatedFeatures &&
             cardData.attributes.relatedFeatures.map((related: any) => {
-              return CategoryData.map((category) => {
-                if (related.attributes.VEIKLAID === category.value) {
+              return ActivitiesData.map((activity) => {
+                if (related.attributes.VEIKLAID === activity.value) {
                   return (
-                    <Box key={category.id} mr="1">
+                    <Box key={activity.id} mr="1">
                       <Tooltip
-                        label={category.text}
+                        label={activity.text}
                         fontSize="sm"
                         bg="brand.30"
                         color="brand.50"
@@ -135,8 +135,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
                         <Image
                           width={24}
                           height={24}
-                          src={category.url}
-                          alt={category.text}
+                          src={activity.url}
+                          alt={activity.text}
                         />
                       </Tooltip>
                     </Box>

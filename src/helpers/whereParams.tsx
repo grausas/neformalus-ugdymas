@@ -1,6 +1,6 @@
-export const whereParamsChange = (category: string[], group: number) => {
+export const whereParamsChange = (activity: string[], group: number) => {
   const params: string[] = [];
   if (group) params.push(`VEIKLAGRID = ${group}`);
-  if (category.length) params.push(`VEIKLAID IN (${category.join(",")})`);
+  if (activity.length) params.push(`VEIKLAID IN (${activity.join(",")})`);
   return params.join(" AND ");
 };

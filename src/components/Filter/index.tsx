@@ -12,10 +12,10 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
-import { CategoryData } from "@/utils/categoryData";
+import { ActivitiesData } from "@/utils/activitiesData";
 
 type FilterProps = {
-  handleFilter: (category: string[]) => void;
+  handleFilter: (activity: string[]) => void;
 };
 
 const NVS = [
@@ -30,9 +30,9 @@ const classData = [
 ];
 
 function Filter({ handleFilter }: FilterProps) {
-  const [category, setCategory] = useState<string[]>([]);
+  const [activity, setActivity] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
-    CategoryData.map(() => false)
+    ActivitiesData.map(() => false)
   );
 
   const handleChange = (
@@ -42,20 +42,20 @@ function Filter({ handleFilter }: FilterProps) {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = event.target.checked;
     setCheckedItems(newCheckedItems);
-    const newCategory = event.target.checked
-      ? [...category, event.target.value]
-      : category.filter((item) => item !== event.target.value);
-    setCategory(newCategory);
+    const newActivity = event.target.checked
+      ? [...activity, event.target.value]
+      : activity.filter((item) => item !== event.target.value);
+    setActivity(newActivity);
   };
 
-  const handleCategory = () => {
-    handleFilter(category);
+  const handleActivities = () => {
+    handleFilter(activity);
   };
 
-  const clearFilterCategory = () => {
+  const clearFilterActivity = () => {
     console.log("hello");
-    setCategory([]);
-    setCheckedItems(CategoryData.map(() => false));
+    setActivity([]);
+    setCheckedItems(ActivitiesData.map(() => false));
     handleFilter([]);
   };
 
@@ -75,7 +75,7 @@ function Filter({ handleFilter }: FilterProps) {
             Veiklos
           </MenuButton>
           <MenuList>
-            {CategoryData.map((item, index) => {
+            {ActivitiesData.map((item, index) => {
               return (
                 <MenuItem key={item.id} py="1">
                   <Checkbox
@@ -96,7 +96,7 @@ function Filter({ handleFilter }: FilterProps) {
                 fontWeight="600"
                 _hover={{ cursor: "pointer", textDecoration: "underline" }}
                 color="brand.31"
-                onClick={clearFilterCategory}
+                onClick={clearFilterActivity}
               >
                 Išvalyti
               </Text>
@@ -104,7 +104,7 @@ function Filter({ handleFilter }: FilterProps) {
                 size="sm"
                 bg="brand.30"
                 _hover={{ bg: "brand.31" }}
-                onClick={handleCategory}
+                onClick={handleActivities}
               >
                 Ieškoti
               </Button>

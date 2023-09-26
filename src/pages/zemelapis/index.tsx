@@ -27,7 +27,7 @@ import { featuresFields, relatedFeaturesFields } from "@/utils/featureLayer";
 import { whereParamsChange } from "@/helpers/whereParams";
 import { featureLayerPublic } from "@/layers";
 import Graphic from "@arcgis/core/Graphic";
-import { CategoryData } from "@/utils/categoryData";
+import { ActivitiesData } from "@/utils/activitiesData";
 import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
 import GroupTabs from "@/components/GroupTabs";
@@ -70,12 +70,12 @@ export default function Map() {
   const [loading, setLoading] = useState(true);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState<string[]>([]);
+  const [activities, setActivities] = useState<string[]>([]);
   const [group, setGroup] = useState(defaultGroup);
 
   useEffect(() => {
-    setWhereParams(whereParamsChange(category, group));
-  }, [category, group]);
+    setWhereParams(whereParamsChange(activities, group));
+  }, [activities, group]);
 
   useEffect(() => {
     if (objIds.length === 0) return;
@@ -248,14 +248,14 @@ export default function Map() {
               // const graphicArray: Graphic[] = [];
               const graphicArray: Graphic[] = [];
               uniqueFeatures.forEach((feature, index) => {
-                const category = CategoryData.find(
-                  (category) => feature.attributes.VEIKLAID === category.value
+                const activity = ActivitiesData.find(
+                  (activity) => feature.attributes.VEIKLAID === activity.value
                 );
 
-                if (category && index < points.length) {
+                if (activity && index < points.length) {
                   console.log("poitn", points);
                   const point = points[index];
-                  const pointUrl = category.url;
+                  const pointUrl = activity.url;
 
                   const graphic = new Graphic({
                     geometry: point,
@@ -321,13 +321,13 @@ export default function Map() {
               //@ts-ignore
               objectIds = [results[0].graphic.attributes.OBJECTID];
               setObjIds(objectIds);
-              const category = CategoryData.find(
-                (category) =>
+              const activity = ActivitiesData.find(
+                (activity) =>
                   //@ts-ignore
-                  results[0].graphic.attributes.VEIKLAID === category.value
+                  results[0].graphic.attributes.VEIKLAID === activity.value
               );
 
-              const pointUrl = category?.url;
+              const pointUrl = activity?.url;
 
               const graphic = new Graphic({
                 //@ts-ignore
@@ -369,8 +369,8 @@ export default function Map() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, featureLayer]);
 
-  const handleFilter = useCallback((category: string[]) => {
-    setCategory(category);
+  const handleFilter = useCallback((activity: string[]) => {
+    setActivities(activity);
   }, []);
 
   useEffect(() => {
@@ -412,7 +412,7 @@ export default function Map() {
             Rodomos {!loading ? filteredData.length : "..."} veiklos
           </Box>
         </Flex>
-        {category.length > 0 && <AppliedFilters category={category} />}
+        {activities.length > 0 && <AppliedFilters activities={activities} />}
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner

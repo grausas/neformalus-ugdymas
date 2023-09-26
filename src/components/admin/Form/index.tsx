@@ -21,7 +21,7 @@ import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { AddFeature } from "@/helpers/addFeature";
 import { FormValues } from "@/types/form";
-import { CategoryData } from "@/utils/categoryData";
+import { ActivitiesData } from "@/utils/activitiesData";
 
 type Props = {
   auth: any;
@@ -197,7 +197,7 @@ export default function Form({ auth, view }: Props) {
               }
               name="Veiklos"
               id="LO_VEIKLA"
-              selectOptions={CategoryData}
+              selectOptions={ActivitiesData}
             />
             <InputField
               register={register}

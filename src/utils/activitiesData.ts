@@ -1,4 +1,4 @@
-export const CategoryData = [
+export const ActivitiesData = [
   {
     id: 1,
     value: 1,

@@ -1,22 +1,22 @@
-import { CategoryData } from "@/utils/categoryData";
+import { ActivitiesData } from "@/utils/activitiesData";
 import { Flex, Text } from "@chakra-ui/react";
 
 interface Props {
-  category?: string[];
+  activities?: string[];
 }
 
-export default function AppliedFilters({ category }: Props) {
+export default function AppliedFilters({ activities }: Props) {
   return (
     <Flex fontSize="sm" wrap="wrap" color="brand.40">
       <Text fontWeight="500" mr="1">
         Filtrai:
       </Text>
-      {category?.map((item: any) => {
-        return CategoryData.map((category) => {
-          if (Number(item) === category.value) {
+      {activities?.map((item: any) => {
+        return ActivitiesData.map((activity) => {
+          if (Number(item) === activity.value) {
             return (
-              <Text key={category.id} mr="1">
-                {category.text},
+              <Text key={activity.id} mr="1">
+                {activity.text},
               </Text>
             );
           }
