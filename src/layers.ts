@@ -52,6 +52,7 @@ export const featureLayerForRenderer = (renderer: any) => {
     title: "Jaunimo ugdymas",
     id: "renderer",
     effect: "drop-shadow(0px, 0px, 3px)",
+    // definitionExpression: "VEIKLAGRID = 1",
     renderer,
   });
   return layer;

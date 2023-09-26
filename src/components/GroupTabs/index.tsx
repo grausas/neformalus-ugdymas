@@ -2,9 +2,13 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Image from "next/image";
 import { GroupData } from "@/utils/groupData";
 
-const GroupTabs = () => {
+type Props = {
+  changeGroup: (e: number) => void;
+};
+
+const GroupTabs = ({ changeGroup }: Props) => {
   return (
-    <Tabs isFitted>
+    <Tabs isFitted onChange={(e) => changeGroup(e + 1)}>
       <TabPanels>
         {GroupData.map((group) => (
           <TabPanel

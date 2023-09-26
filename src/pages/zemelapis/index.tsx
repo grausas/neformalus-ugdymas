@@ -33,6 +33,7 @@ import Polyline from "@arcgis/core/geometry/Polyline.js";
 import GroupTabs from "@/components/GroupTabs";
 
 const defaultWhereParams = "1=1";
+const defaultGroup = 1;
 
 function calculatePointsAroundCenter(
   centerPoint: { x: number; y: number; spatialReference: any },
@@ -70,10 +71,13 @@ export default function Map() {
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState<string[]>([]);
+  const [group, setGroup] = useState(defaultGroup);
+
+  console.log("group", group);
 
   useEffect(() => {
-    setWhereParams(whereParamsChange(category));
-  }, [category]);
+    setWhereParams(whereParamsChange(category, group));
+  }, [category, group]);
 
   useEffect(() => {
     if (objIds.length === 0) return;
@@ -154,9 +158,8 @@ export default function Map() {
     }
 
     console.log("featureResults", featureResults);
-
+    setData(featureResults.features);
     setLoading(false);
-    return setData(featureResults.features);
   };
 
   useEffect(() => {
@@ -218,7 +221,7 @@ export default function Map() {
                 (obj, index) =>
                   features.findIndex(
                     (item) =>
-                      item.attributes.LO_VEIKLA === obj.attributes.LO_VEIKLA
+                      item.attributes.VEIKLAID === obj.attributes.VEIKLAID
                   ) === index
               );
 
@@ -248,7 +251,7 @@ export default function Map() {
               const graphicArray: Graphic[] = [];
               uniqueFeatures.forEach((feature, index) => {
                 const category = CategoryData.find(
-                  (category) => feature.attributes.LO_VEIKLA === category.value
+                  (category) => feature.attributes.VEIKLAID === category.value
                 );
 
                 if (category && index < points.length) {
@@ -323,7 +326,7 @@ export default function Map() {
               const category = CategoryData.find(
                 (category) =>
                   //@ts-ignore
-                  results[0].graphic.attributes.LO_VEIKLA === category.value
+                  results[0].graphic.attributes.VEIKLAID === category.value
               );
 
               const pointUrl = category?.url;
@@ -373,14 +376,20 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
-    if (!searchTerm) return setFilteredData(data);
+    const filterData = async () => {
+      if (!searchTerm) {
+        return setFilteredData(data);
+      } else {
+        const filterData = data.filter((item) => {
+          return item.attributes.PAVADIN.toLowerCase().includes(
+            searchTerm.toLowerCase()
+          );
+        });
+        return setFilteredData(filterData);
+      }
+    };
 
-    const filterData = data.filter((item) => {
-      return item.attributes.PAVADIN.toLowerCase().includes(
-        searchTerm.toLowerCase()
-      );
-    });
-    return setFilteredData(filterData);
+    filterData();
   }, [searchTerm, data]);
 
   return (
@@ -398,7 +407,7 @@ export default function Map() {
             setSearchTerm(e.target.value)
           }
         /> */}
-        <GroupTabs />
+        <GroupTabs changeGroup={(e) => setGroup(e)} />
         <Flex direction="row" alignItems="center">
           <Filter handleFilter={handleFilter} />
           <Box w="100%" textAlign="right" fontSize="sm">
