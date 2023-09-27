@@ -26,6 +26,12 @@ export const GroupData = [
   {
     id: 5,
     value: 5,
+    text: "Nevyriausybinės jaunimo organizacijos ir su jaunimu dirbančios organizacijos",
+    url: "/nevyriausybines_organizacijos.svg",
+  },
+  {
+    id: 6,
+    value: 6,
     text: "Vaikų stovyklos",
     url: "/vaiku_stovyklos.svg",
   },

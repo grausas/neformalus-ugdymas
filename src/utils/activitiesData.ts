@@ -74,19 +74,25 @@ export const ActivitiesData = [
   {
     id: 13,
     value: 13,
-    text: "Saugus eismas",
-    url: "/saugus_eismas.svg",
-  },
-  {
-    id: 14,
-    value: 14,
     text: "Medijos",
     url: "/medijos.svg",
   },
   {
+    id: 14,
+    value: 14,
+    text: "Technologijos",
+    url: "/technologijos.svg",
+  },
+  {
     id: 15,
     value: 15,
-    text: "Kitos",
+    text: "Kitos veiklos",
     url: "/medijos.svg",
+  },
+  {
+    id: 16,
+    value: 16,
+    text: "Saugus eismas",
+    url: "/saugus_eismas.svg",
   },
 ];
