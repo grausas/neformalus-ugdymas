@@ -21,8 +21,8 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    body: "var(--font-rubik)",
-    heading: "var(--font-rubik)",
+    body: "var(--font-openSans)",
+    heading: "var(--font-poppins)",
   },
   colors: {
     brand: {
@@ -32,7 +32,7 @@ const theme = extendTheme({
       21: "#707070",
       30: "#ff8e3c",
       31: "#f15a24",
-      40: "#2d334a",
+      40: "#343434",
       50: "#272343",
     },
   },
