@@ -7,7 +7,7 @@ import {
   Button,
   useDisclosure,
   Stack,
-  Text,
+  Heading,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import Image from "next/image";
@@ -69,14 +69,15 @@ export default function Simple() {
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"}>
               <Image width={30} height={30} src={logo} alt="logo" />
-              <Text
+              <Heading
                 color="brand.10"
                 textTransform="uppercase"
                 fontWeight="600"
                 fontSize="lg"
+                letterSpacing="1px"
               >
                 Neformalus vilnius
-              </Text>
+              </Heading>
             </HStack>
           </Link>
           <Flex alignItems={"center"}>

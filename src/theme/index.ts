@@ -13,9 +13,9 @@ const theme = extendTheme({
       },
       // styles for the `a`
       a: {
-        color: "teal.500",
         _hover: {
           textDecoration: "underline",
+          color: "brand.31",
         },
       },
     },

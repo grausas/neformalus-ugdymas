@@ -42,14 +42,15 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       bg="brand.10"
       p="4"
       rounded="lg"
-      shadow="sm"
+      // shadow="sm"
       border="1px solid"
       borderColor="brand.11"
       position="relative"
       _hover={{
-        cursor: "pointer",
         borderColor: "brand.21",
         transition: "0.3s ease-in-out",
+        shadow: "md",
+        // pt: "10",
       }}
     >
       <Flex flexDirection="column" position="absolute" right="4">
@@ -77,33 +78,44 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           });
         })}
       </Flex>
-      <Heading size="md" color="brand.50" pr="8" fontWeight="700">
+      <Flex alignItems="center">
+        {/* <Image width={16} height={16} src={location} alt="adresas" /> */}
+        <Text color="brand.21" fontWeight="600" fontSize="sm">
+          {cardData.attributes.ADRESAS}
+        </Text>
+      </Flex>
+      <Heading size="md" color="brand.50" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack color="brand.40" my="3" spacing="0" minH="40px">
-        <Flex alignItems="center">
-          <Image width={16} height={16} src={location} alt="adresas" />
-          <Text ml="2">{cardData.attributes.ADRESAS}</Text>
-        </Flex>
+      <Stack
+        color="brand.40"
+        my="2"
+        spacing="0"
+        minH="40px"
+        fontSize="md"
+        lineHeight="1.3"
+      >
         {cardData.attributes.EL_PASTAS && (
           <Flex alignItems="center">
             <EmailIcon mr="2" color="brand.40" />
             <Text>{cardData.attributes.EL_PASTAS}</Text>
           </Flex>
         )}
-        {(cardData.attributes.TELEF_MOB || cardData.attributes.TELEF) && (
+        {cardData.attributes.TELEF_MOB && (
           <Flex alignItems="center">
             <PhoneIcon mr="2" color="brand.40" />
-            <Text>
-              {cardData.attributes.TELEF_MOB
-                ? "+" + cardData.attributes.TELEF_MOB
-                : cardData.attributes.TELEF}
-            </Text>
+            <Text>+{cardData.attributes.TELEF_MOB}</Text>
           </Flex>
         )}
-        {cardData.attributes.NUOROD && (
+        {cardData.attributes.TELEF && (
           <Flex alignItems="center">
-            <ExternalLinkIcon mr="2" color="brand.31" />
+            <PhoneIcon mr="2" color="brand.40" />
+            <Text>{cardData.attributes.TELEF}</Text>
+          </Flex>
+        )}
+        {cardData.attributes.NUORODA && (
+          <Flex alignItems="center">
+            <ExternalLinkIcon mr="2" color="brand.40" />
             <Link href={`http://${cardData.attributes.NUORODA}`} isExternal>
               {cardData.attributes.NUORODA}
             </Link>
