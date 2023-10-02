@@ -11,7 +11,7 @@ import {
   Stack,
   Flex,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { TriangleDownIcon } from "@chakra-ui/icons";
 import { ActivitiesData } from "@/utils/activitiesData";
 
 type FilterProps = {
@@ -53,7 +53,6 @@ function Filter({ handleFilter }: FilterProps) {
   };
 
   const clearFilterActivity = () => {
-    console.log("hello");
     setActivity([]);
     setCheckedItems(ActivitiesData.map(() => false));
     handleFilter([]);
@@ -82,7 +81,7 @@ function Filter({ handleFilter }: FilterProps) {
                     value={item.value}
                     onChange={(e) => handleChange(e, index)}
                     size="sm"
-                    checked={checkedItems[index]}
+                    isChecked={checkedItems[index]}
                     color="brand.40"
                   >
                     {item.text}
