@@ -12,9 +12,10 @@ import { GroupData } from "@/utils/groupData";
 
 type Props = {
   changeGroup: (e: number) => void;
+  loading: boolean;
 };
 
-const GroupTabs = ({ changeGroup }: Props) => {
+const GroupTabs = ({ changeGroup, loading }: Props) => {
   const [selectedTab, setSelectedTab] = useState(1);
 
   return (
@@ -33,6 +34,7 @@ const GroupTabs = ({ changeGroup }: Props) => {
             <Tab
               borderBottom="none"
               bg={selectedTab === group.id ? "brand.10" : "transparent"}
+              isDisabled={loading}
             >
               <Image src={group.url} alt={group.text} width={30} height={30} />
             </Tab>

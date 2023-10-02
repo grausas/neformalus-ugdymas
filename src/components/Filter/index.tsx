@@ -16,6 +16,7 @@ import { ActivitiesData } from "@/utils/activitiesData";
 
 type FilterProps = {
   handleFilter: (activity: string[]) => void;
+  loading: boolean;
 };
 
 const NVS = [
@@ -29,7 +30,7 @@ const classData = [
   { value: 1, text: "9-12 klasė" },
 ];
 
-function Filter({ handleFilter }: FilterProps) {
+function Filter({ handleFilter, loading }: FilterProps) {
   const [activity, setActivity] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
     ActivitiesData.map(() => false)
@@ -83,6 +84,7 @@ function Filter({ handleFilter }: FilterProps) {
                     size="sm"
                     isChecked={checkedItems[index]}
                     color="brand.40"
+                    isDisabled={loading}
                   >
                     {item.text}
                   </Checkbox>
