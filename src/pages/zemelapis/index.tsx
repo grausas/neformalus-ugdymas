@@ -31,6 +31,7 @@ import { ActivitiesData } from "@/utils/activitiesData";
 import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
 import GroupTabs from "@/components/GroupTabs";
+import { calculateArea } from "@/helpers/calculateArea";
 
 const defaultWhereParams = "1=1";
 const defaultGroup = 1;
@@ -98,8 +99,8 @@ export default function Map() {
     layer: __esri.FeatureLayer,
     layerView: __esri.FeatureLayerView
   ) => {
-    setLoading(true);
     view?.graphics.removeAll();
+    setLoading(true);
     layerView.featureEffect = new FeatureEffect({
       excludedEffect: "opacity(100%)",
     });
@@ -130,7 +131,7 @@ export default function Map() {
         });
         const filterWhereClause =
           "OBJECTID IN (" + globalIdsAsNumber.join(",") + ")";
-        const featureFilter = new FeatureFilter({
+        const featureFilter = await new FeatureFilter({
           where: filterWhereClause,
         });
         layerView.filter = featureFilter;
@@ -170,6 +171,7 @@ export default function Map() {
 
     view.whenLayerView(layer).then((layerView) => {
       queryFeatures(publicLayer, layerView);
+      calculateArea(view);
 
       // subsequent map interaction
       handles.add(
@@ -187,6 +189,31 @@ export default function Map() {
     return () => handles.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, whereParams]);
+
+  // use useMemo to setFilteredData when data changes
+  useMemo(() => {
+    setFilteredData(data);
+  }, [data]);
+
+  // useEffect(() => {
+  //   // optimize this code, because now theres is a delay between data and filteredData
+  //   const filterData = async () => {
+  //     if (!searchTerm) {
+  //       setFilteredData(data);
+  //       return;
+  //     }
+
+  //     const filteredData = data.filter((item) => {
+  //       return item.attributes.PAVADIN.toLowerCase().includes(
+  //         searchTerm.toLowerCase()
+  //       );
+  //     });
+
+  //     setFilteredData(filteredData);
+  //   };
+
+  //   filterData();
+  // }, [searchTerm, data]);
 
   // filter features on map click
   useEffect(() => {
@@ -373,23 +400,6 @@ export default function Map() {
     setActivities(activity);
   }, []);
 
-  useEffect(() => {
-    const filterData = async () => {
-      if (!searchTerm) {
-        return setFilteredData(data);
-      } else {
-        const filterData = data.filter((item) => {
-          return item.attributes.PAVADIN.toLowerCase().includes(
-            searchTerm.toLowerCase()
-          );
-        });
-        return setFilteredData(filterData);
-      }
-    };
-
-    filterData();
-  }, [searchTerm, data]);
-
   return (
     <Stack direction="row" gap="0">
       <Flex
@@ -405,11 +415,11 @@ export default function Map() {
             setSearchTerm(e.target.value)
           }
         /> */}
-        <GroupTabs changeGroup={(e) => setGroup(e)} />
+        <GroupTabs changeGroup={(e) => setGroup(e)} loading={loading} />
         <Flex direction="row" alignItems="center">
-          <Filter handleFilter={handleFilter} />
+          <Filter handleFilter={handleFilter} loading={loading} />
           <Box w="100%" textAlign="right" fontSize="sm">
-            Rodomos {!loading ? filteredData.length : "..."} veiklos
+            Rodoma {!loading ? filteredData.length : "..."}
           </Box>
         </Flex>
         {activities.length > 0 && <AppliedFilters activities={activities} />}
