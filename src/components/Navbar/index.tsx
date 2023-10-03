@@ -14,6 +14,7 @@ import Image from "next/image";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { AuthContext } from "@/context/auth";
 import logo from "@/assets/logo.png";
+import logoBlack from "@/assets/logo_black.png";
 
 interface Props {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ const NavLink = (props: Props) => {
 
   return (
     <Link
-      color="brand.10"
+      color="brand.50"
       fontWeight="500"
       href={url}
       px={2}
@@ -52,7 +53,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg="brand.31" px={4}>
+      <Box bg="brand.30" px={4}>
         <Flex
           h={14}
           alignItems={"center"}
@@ -68,16 +69,19 @@ export default function Simple() {
           />
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"}>
-              <Image width={30} height={30} src={logo} alt="logo" />
-              <Heading
-                color="brand.10"
-                textTransform="uppercase"
-                fontWeight="600"
-                fontSize="lg"
-                letterSpacing="1px"
-              >
-                Neformalus vilnius
-              </Heading>
+              <Image width={24} height={24} src={logoBlack} alt="logo" />
+              <Flex flex="column">
+                <Heading
+                  color="brand.50"
+                  textTransform="uppercase"
+                  fontWeight="600"
+                  fontSize="md"
+                  letterSpacing="1px"
+                  as="h1"
+                >
+                  Neformalus vilnius
+                </Heading>
+              </Flex>
             </HStack>
           </Link>
           <Flex alignItems={"center"}>
@@ -87,11 +91,11 @@ export default function Simple() {
               display={{ base: "none", md: "flex" }}
               mr="5"
             >
-              {Links.map((link) => (
+              {/* {Links.map((link) => (
                 <NavLink key={link.name} url={link.url}>
                   {link.name}
                 </NavLink>
-              ))}
+              ))} */}
             </HStack>
 
             {auth.user.token && (
@@ -109,7 +113,7 @@ export default function Simple() {
           </Flex>
         </Flex>
 
-        {isOpen ? (
+        {/* {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
@@ -119,7 +123,7 @@ export default function Simple() {
               ))}
             </Stack>
           </Box>
-        ) : null}
+        ) : null} */}
       </Box>
     </>
   );

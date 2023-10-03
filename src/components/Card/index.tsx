@@ -13,6 +13,7 @@ import { ClassData } from "@/utils/classData";
 import Image from "next/image";
 import { EmailIcon, PhoneIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import location from "@/assets/location.svg";
+import facebook from "@/assets/facebook.svg";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
@@ -87,14 +88,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       <Heading size="md" color="brand.50" pr="8" fontWeight="600">
         {cardData.attributes.PAVADIN}
       </Heading>
-      <Stack
-        color="brand.40"
-        my="2"
-        spacing="0"
-        minH="40px"
-        fontSize="md"
-        lineHeight="1.3"
-      >
+      <Stack color="brand.40" my="2" spacing="0" minH="40px" fontSize="md">
         {cardData.attributes.EL_PASTAS && (
           <Flex alignItems="center">
             <EmailIcon mr="2" color="brand.40" />
@@ -122,7 +116,12 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           </Flex>
         )}
         {cardData.attributes.SOC_TINKL && (
-          <Text>{cardData.attributes.SOC_TINKL}</Text>
+          <Flex>
+            {/* <Text>Soc. tinklai: </Text> */}
+            <Link href={cardData.attributes.SOC_TINKL} isExternal>
+              <Image width={24} height={24} src={facebook} alt="facebook" />
+            </Link>
+          </Flex>
         )}
         {cardData.attributes.PASTABA && (
           <Text fontSize="sm" pr="8">

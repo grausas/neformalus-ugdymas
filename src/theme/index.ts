@@ -33,7 +33,7 @@ const theme = extendTheme({
       30: "#ff8e3c",
       31: "#f15a24",
       40: "#343434",
-      50: "#272343",
+      50: "#211E39",
     },
   },
   components: {
