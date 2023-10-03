@@ -33,6 +33,7 @@ export const calculateArea = (view: __esri.MapView) => {
     const graphic = new Graphic({
       geometry: point,
       symbol: {
+        // @ts-ignore
         type: "simple-marker",
         color: "white",
         size: 8,
@@ -73,14 +74,25 @@ export const calculateArea = (view: __esri.MapView) => {
       jobInfo.waitForJobCompletion().then(async () => {
         const layer = await jobInfo.fetchResultData("Service_Areas");
         console.log("layer", layer);
+        // @ts-ignore
         if (layer.value.features.length) {
-          // Draw each service area polygon
-          layer.value.features.forEach(function (graphic) {
-            graphic.symbol = {
+          // @ts-ignore
+          layer.value.features.forEach(function (
+            feature: __esri.Graphic,
+            index: number
+          ) {
+            console.log("features", feature);
+            const colors = [
+              "rgba(177,211,50,.25)",
+              "rgba(177,211,50,.5)",
+              "rgba(177,211,50,.75)",
+            ];
+            feature.symbol = {
               type: "simple-fill",
-              color: "rgba(255,50,50,.25)",
+              // @ts-ignore
+              color: colors[index],
             };
-            graphics.push(graphic);
+            graphics.push(feature);
             // view?.graphics.add(graphic, 0);
           });
           graphicLayer.addMany(graphics);
