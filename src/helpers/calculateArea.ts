@@ -4,10 +4,14 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 
 const serviceAreaUrl =
   "https://opencity.vplanas.lt/server/rest/services/Routing/NetworkAnalysis/GPServer/GenerateServiceAreas";
-let graphicLayer: GraphicsLayer;
+
+const graphicLayer = new GraphicsLayer({
+  id: "Service_Areas",
+});
+
 export const calculateArea = (view: __esri.MapView) => {
   view?.on("click", async function (event) {
-    view.map.layers.remove(graphicLayer);
+    graphicLayer.removeAll();
     const locationGraphic = createGraphic(event.mapPoint);
 
     const params = {
@@ -19,11 +23,12 @@ export const calculateArea = (view: __esri.MapView) => {
     };
 
     await solveServiceArea(serviceAreaUrl, params);
+
     console.log("vieLAyer", view.map);
   });
 
   // Create the location graphic
-  function createGraphic(point) {
+  function createGraphic(point: __esri.Point) {
     view?.graphics.removeAll();
     const graphic = new Graphic({
       geometry: point,
@@ -34,13 +39,24 @@ export const calculateArea = (view: __esri.MapView) => {
       },
     });
 
-    view?.graphics.add(graphic);
+    graphicLayer.add(graphic);
+    view.map.add(graphicLayer);
+
     return graphic;
   }
 
-  function solveServiceArea(url, serviceAreaParams) {
+  async function solveServiceArea(
+    url: string,
+    serviceAreaParams: {
+      Facilities: { features: Graphic[] };
+      Impedance: string;
+      Time_Impedance: string;
+    }
+  ) {
+    const graphics: Graphic[] = [];
+
     console.log("serviceAreaParams", serviceAreaParams);
-    geoprocessor.submitJob(url, serviceAreaParams).then((jobInfo) => {
+    await geoprocessor.submitJob(url, serviceAreaParams).then((jobInfo) => {
       console.log("jobInfo", jobInfo);
       const jobid = jobInfo.jobId;
       console.log("ArcGIS Server job ID: ", jobid);
@@ -52,11 +68,12 @@ export const calculateArea = (view: __esri.MapView) => {
         },
       };
 
+      // reikai pridėti loading kol skaičiuoja service area
+
       jobInfo.waitForJobCompletion().then(async () => {
         const layer = await jobInfo.fetchResultData("Service_Areas");
         console.log("layer", layer);
         if (layer.value.features.length) {
-          const graphics: Graphic[] = [];
           // Draw each service area polygon
           layer.value.features.forEach(function (graphic) {
             graphic.symbol = {
@@ -66,12 +83,8 @@ export const calculateArea = (view: __esri.MapView) => {
             graphics.push(graphic);
             // view?.graphics.add(graphic, 0);
           });
-          console.log("graphics", graphics);
-          graphicLayer = new GraphicsLayer({
-            id: "Service_Areas",
-            graphics: graphics,
-          });
-          view.map.add(graphicLayer);
+          graphicLayer.addMany(graphics);
+          // console.log("graphics", graphics);
         }
       });
     });
