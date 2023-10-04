@@ -6,7 +6,7 @@ import {
   IconButton,
   Button,
   useDisclosure,
-  Stack,
+  Divider,
   Heading,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
@@ -55,7 +55,7 @@ export default function Simple() {
     <>
       <Box bg="brand.30" px={4}>
         <Flex
-          h={14}
+          h={16}
           alignItems={"center"}
           justifyContent={"space-between"}
           margin="0 auto"
@@ -68,18 +68,38 @@ export default function Simple() {
             onClick={isOpen ? onClose : onOpen}
           />
           <Link href="/" _hover={{ textDecoration: "none" }}>
-            <HStack spacing={3} alignItems={"center"}>
-              <Image width={24} height={24} src={logoBlack} alt="logo" />
-              <Flex flex="column">
+            <HStack spacing={3} alignItems={"center"} position="relative">
+              <Image height={24} src={logoBlack} alt="logo" />
+              <Box
+                _after={{
+                  content: "''",
+                  position: "absolute",
+                  top: "0",
+                  width: "2px",
+                  height: "100%",
+                  bg: "brand.50",
+                }}
+              />
+              <Flex direction="column">
                 <Heading
                   color="brand.50"
-                  textTransform="uppercase"
-                  fontWeight="600"
+                  fontWeight="500"
                   fontSize="md"
-                  letterSpacing="1px"
+                  letterSpacing="0.5px"
                   as="h1"
+                  lineHeight="1"
                 >
-                  Neformalus vilnius
+                  Neformalus
+                </Heading>
+                <Heading
+                  color="brand.50"
+                  fontWeight="500"
+                  fontSize="md"
+                  letterSpacing="0.5px"
+                  as="h1"
+                  lineHeight="1"
+                >
+                  vilnius
                 </Heading>
               </Flex>
             </HStack>
