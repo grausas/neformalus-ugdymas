@@ -59,7 +59,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           return ClassData.map((item) => {
             if (arrItem === item.value) {
               return (
-                <Box key={item.id} mb="1">
+                <Box key={item.id} mb="1" shadow="md">
                   <Tooltip
                     label={item.text}
                     fontSize="sm"
@@ -116,8 +116,8 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           </Flex>
         )}
         {cardData.attributes.SOC_TINKL && (
-          <Flex>
-            {/* <Text>Soc. tinklai: </Text> */}
+          <Flex direction="row">
+            <Text mr="2">Soc. tinklai:</Text>
             <Link href={cardData.attributes.SOC_TINKL} isExternal>
               <Image width={24} height={24} src={facebook} alt="facebook" />
             </Link>
@@ -136,7 +136,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
               return ActivitiesData.map((activity) => {
                 if (related.attributes.VEIKLAID === activity.value) {
                   return (
-                    <Box key={activity.id} mr="1">
+                    <Box key={activity.id} mr="1" shadow="md">
                       <Tooltip
                         label={activity.text}
                         fontSize="sm"
@@ -156,7 +156,7 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
               });
             })}
         </Flex>
-        <Flex justify="center">
+        <Flex justify="center" shadow="md">
           <Tooltip
             label={
               hasNvsKrepse

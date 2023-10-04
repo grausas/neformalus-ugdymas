@@ -47,6 +47,16 @@ const theme = extendTheme({
         },
       },
     },
+    Switch: {
+      baseStyle: {
+        control: {
+          _checked: {
+            bg: "brand.30", // Change this to your desired color
+            borderColor: "brand.30",
+          },
+        },
+      },
+    },
     Button: {
       baseStyle: {
         rounded: "lg",

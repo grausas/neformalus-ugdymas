@@ -32,6 +32,7 @@ import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
 import GroupTabs from "@/components/GroupTabs";
 import { calculateArea } from "@/helpers/calculateArea";
+import ServiceArea from "@/components/ServiceArea";
 
 const defaultWhereParams = "1=1";
 const defaultGroup = 1;
@@ -73,6 +74,7 @@ export default function Map() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activities, setActivities] = useState<string[]>([]);
   const [group, setGroup] = useState(defaultGroup);
+  const [activeServiceArea, setActiveServiceArea] = useState(false);
 
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group));
@@ -129,10 +131,9 @@ export default function Map() {
         const filteredFeatures = featureResults.features.filter((f) => {
           return globalIdsAsNumber.includes(f.attributes.OBJECTID);
         });
-        const filterWhereClause =
-          "OBJECTID IN (" + globalIdsAsNumber.join(",") + ")";
+
         const featureFilter = await new FeatureFilter({
-          where: filterWhereClause,
+          where: whereParams,
         });
         layerView.filter = featureFilter;
 
@@ -171,7 +172,6 @@ export default function Map() {
 
     view.whenLayerView(layer).then((layerView) => {
       queryFeatures(publicLayer, layerView);
-      calculateArea(view);
 
       // subsequent map interaction
       handles.add(
@@ -195,25 +195,14 @@ export default function Map() {
     setFilteredData(data);
   }, [data]);
 
-  // useEffect(() => {
-  //   // optimize this code, because now theres is a delay between data and filteredData
-  //   const filterData = async () => {
-  //     if (!searchTerm) {
-  //       setFilteredData(data);
-  //       return;
-  //     }
+  useEffect(() => {
+    if (!view) return;
+    // check if null
+    console.log("activeServiceAreasssssss", activeServiceArea);
+    calculateArea(view, activeServiceArea);
+  }, [activeServiceArea, view]);
 
-  //     const filteredData = data.filter((item) => {
-  //       return item.attributes.PAVADIN.toLowerCase().includes(
-  //         searchTerm.toLowerCase()
-  //       );
-  //     });
-
-  //     setFilteredData(filteredData);
-  //   };
-
-  //   filterData();
-  // }, [searchTerm, data]);
+  console.log("activeServiceArea", activeServiceArea);
 
   // filter features on map click
   useEffect(() => {
@@ -400,6 +389,14 @@ export default function Map() {
     setActivities(activity);
   }, []);
 
+  const handleServiceArea = (e: boolean) => {
+    if (e) {
+      setActiveServiceArea(true);
+    } else {
+      setActiveServiceArea(false);
+    }
+  };
+
   return (
     <Stack direction="row" gap="0">
       <Flex
@@ -460,6 +457,7 @@ export default function Map() {
         </Stack>
       </Flex>
       <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.10">
+        <ServiceArea handleServiceArea={handleServiceArea} />
         <ArcGISMap />
         {auth.user.token && <Form auth={auth.user.token} view={view} />}
       </Box>

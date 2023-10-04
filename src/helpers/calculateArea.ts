@@ -8,24 +8,35 @@ const serviceAreaUrl =
 const graphicLayer = new GraphicsLayer({
   id: "Service_Areas",
 });
+let handler: any;
 
-export const calculateArea = (view: __esri.MapView) => {
-  view?.on("click", async function (event) {
+export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
+  console.log("areaStatus", areaStatus);
+  if (areaStatus) {
+    if (handler) {
+      return;
+    }
+    handler = view?.on("click", async function (event) {
+      graphicLayer.removeAll();
+      const locationGraphic = createGraphic(event.mapPoint);
+
+      const params = {
+        Facilities: {
+          features: [locationGraphic],
+        },
+        Impedance: "WalkTime",
+        Time_Impedance: "WalkTime",
+      };
+
+      await solveServiceArea(serviceAreaUrl, params);
+
+      console.log("vieLAyer", view.map);
+    });
+  } else {
+    handler?.remove();
     graphicLayer.removeAll();
-    const locationGraphic = createGraphic(event.mapPoint);
-
-    const params = {
-      Facilities: {
-        features: [locationGraphic],
-      },
-      Impedance: "WalkTime",
-      Time_Impedance: "WalkTime",
-    };
-
-    await solveServiceArea(serviceAreaUrl, params);
-
-    console.log("vieLAyer", view.map);
-  });
+    handler = null;
+  }
 
   // Create the location graphic
   function createGraphic(point: __esri.Point) {
