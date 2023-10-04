@@ -6,7 +6,6 @@ import {
   IconButton,
   Button,
   useDisclosure,
-  Divider,
   Heading,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
@@ -99,7 +98,7 @@ export default function Simple() {
                   as="h1"
                   lineHeight="1"
                 >
-                  vilnius
+                  Vilnius
                 </Heading>
               </Flex>
             </HStack>
