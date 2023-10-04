@@ -12,7 +12,7 @@ export type FormValues = {
     KLASE_1_4?: number;
     KLASE_5_8?: number;
     KLASE_9_12?: number;
-    NVS_KREPSE?: number;
+    NVS_KREPSE?: number | null;
     SPC_POREIK?: number;
     PEDAGOGAS?: string;
     PASTABA?: string;
@@ -25,7 +25,7 @@ export type FormRelated = {
   KLASE_1_4?: number;
   KLASE_5_8?: number;
   KLASE_9_12?: number;
-  NVS_KREPSE?: number;
+  NVS_KREPSE?: number | null;
   SPC_POREIK?: number;
   PEDAGOGAS?: string;
   PASTABA?: string;

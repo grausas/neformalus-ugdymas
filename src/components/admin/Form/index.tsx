@@ -13,7 +13,7 @@ import {
   Checkbox,
   HStack,
 } from "@chakra-ui/react";
-import { PhoneIcon, EmailIcon, LinkIcon } from "@chakra-ui/icons";
+import { PhoneIcon, EmailIcon, LinkIcon, SmallAddIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
 import SelectField from "../Select";
 import { drawPoints } from "@/helpers/sketch";
@@ -35,12 +35,14 @@ export default function Form({ auth, view }: Props) {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
   const [geometry, setGeometry] = useState<__esri.Geometry>();
-  const [nvsKrepse, setNvsKrepse] = useState<boolean>(false);
   const [spcPoreikiai, setSpcPoreikiai] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [checkedNVS, setCheckedNVS] = useState<number | null>();
+  console.log("checkedNVS", checkedNVS);
   const onSubmit = async (attributes: FormValues) => {
     console.log("attributes", attributes);
     if (!geometry) return console.log("error nera geometrijos");
@@ -49,6 +51,13 @@ export default function Form({ auth, view }: Props) {
     // console.log("results", results);
   };
   const onInvalid = () => null;
+
+  const selectedValueGroup = watch("related.VEIKLAGRID");
+  console.log("selectedValueGroup", selectedValueGroup);
+
+  const handleCheckboxChange = (value: number | null) => {
+    setCheckedNVS(value); // Update the state with the value of the checked checkbox
+  };
 
   // add sketch widget to map if user is logged in
   useEffect(() => {
@@ -82,16 +91,18 @@ export default function Form({ auth, view }: Props) {
     <>
       <Button
         position="absolute"
-        bg="brand.30"
-        _hover={{ bg: "brand.31" }}
+        bg="brand.10"
+        _hover={{ bg: "brand.20" }}
         shadow="md"
         right="4"
         top="20"
         size="sm"
         onClick={onOpen}
-        px="5"
+        textTransform="uppercase"
+        px="4"
       >
-        Užpildyti formą
+        <SmallAddIcon />
+        Pridėti
       </Button>
       {isOpen && (
         <VStack
@@ -104,7 +115,7 @@ export default function Form({ auth, view }: Props) {
           bg="brand.10"
           p="4"
           shadow="md"
-          rounded="xl"
+          rounded="md"
           onSubmit={handleSubmit(onSubmit, onInvalid)}
           align="left"
         >
@@ -117,14 +128,14 @@ export default function Form({ auth, view }: Props) {
           />
           <SelectField
             register={register}
-            registerValue={`related.${"VEIKLAGRID "}`}
+            registerValue={`related.${"VEIKLAGRID"}`}
             options={{ valueAsNumber: true }}
             error={
               errors.related?.VEIKLAGRID && errors.related?.VEIKLAGRID.message
             }
             name="Grupės"
             id="VEIKLAGRID"
-            text="Pasirinkti grupę"
+            text="Pasirinkite grupę"
             selectOptions={GroupData}
           />
           <SimpleGrid columns={[1, 2]} spacing="3">
@@ -223,22 +234,46 @@ export default function Form({ auth, view }: Props) {
               id="PEDAGOGAS"
             />
           </SimpleGrid>
-          <HStack spacing="4" my="1">
-            <Text fontWeight="500" fontSize="sm">
-              Klasės:
-            </Text>
+          <HStack spacing="4" mt="1">
+            <Text>Klasės:</Text>
             <Checkbox>1-4 klasė</Checkbox>
             <Checkbox>5-8 klasė</Checkbox>
             <Checkbox>9-12 klasė</Checkbox>
           </HStack>
-          <Flex flexDirection="column" mb="2">
+          <Flex flexDirection="row">
+            <Text mr="4">Taikomas NVŠ krepšelis:</Text>
+            <Checkbox
+              mr="4"
+              onChange={(e) => {
+                setValue("related.NVS_KREPSE", e.target.checked ? 1 : null);
+                handleCheckboxChange(checkedNVS === 1 ? null : 1);
+              }}
+              isChecked={checkedNVS === 1}
+            >
+              Taip
+            </Checkbox>
             <Checkbox
               onChange={(e) => {
-                setValue("related.NVS_KREPSE", e.target.checked ? 1 : 2);
-                setNvsKrepse(!nvsKrepse);
+                setValue("related.NVS_KREPSE", e.target.checked ? 2 : null);
+                handleCheckboxChange(checkedNVS === 2 ? null : 2);
+              }}
+              isChecked={checkedNVS === 2}
+            >
+              Ne
+            </Checkbox>
+          </Flex>
+          <Flex flexDirection="row" mb="2">
+            <Text mr="4">
+              Priimami vaikai turintys specialiųjų ugdymo poreikių:
+            </Text>
+            <Checkbox
+              mr="4"
+              onChange={(e) => {
+                setValue("related.SPC_POREIK", e.target.checked ? 1 : 2);
+                setSpcPoreikiai(!spcPoreikiai);
               }}
             >
-              Taikomas NVŠ krepšelis
+              Taip
             </Checkbox>
             <Checkbox
               onChange={(e) => {
@@ -246,9 +281,10 @@ export default function Form({ auth, view }: Props) {
                 setSpcPoreikiai(!spcPoreikiai);
               }}
             >
-              Priimami vaikai turintys specialiųjų ugdymo poreikių
+              Ne
             </Checkbox>
           </Flex>
+
           <Flex justify="space-between" w="100%">
             <Button
               bg="brand.20"

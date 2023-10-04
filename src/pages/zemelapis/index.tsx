@@ -432,7 +432,7 @@ export default function Map() {
           </AbsoluteCenter>
         )}
         <Stack
-          h="calc(100vh - 180px)"
+          h="calc(100vh - 200px)"
           overflow="auto"
           css={{
             "&::-webkit-scrollbar": {
