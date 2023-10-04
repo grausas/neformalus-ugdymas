@@ -9,10 +9,12 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Radio,
   Select,
 } from "@chakra-ui/react";
 import React from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { text } from "stream/consumers";
 
 type Props = {
   register: any;
@@ -20,9 +22,8 @@ type Props = {
   options?: any;
   error?: string;
   name: string;
-  placeholder?: string;
   id: string;
-  children?: React.ReactNode;
+  text?: string;
   selectOptions?: { text: string; id: number; value: number }[];
 };
 
@@ -32,9 +33,8 @@ export default function SelectField({
   options,
   error,
   name,
-  placeholder,
   id,
-  children,
+  text,
   selectOptions,
 }: Props) {
   return (
@@ -52,7 +52,7 @@ export default function SelectField({
           fontWeight="400"
           rounded="md"
         >
-          Pasirinkti veiklas
+          {text}
         </MenuButton>
         <MenuList>
           {selectOptions &&

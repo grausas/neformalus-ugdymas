@@ -22,6 +22,7 @@ import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { AddFeature } from "@/helpers/addFeature";
 import { FormValues } from "@/types/form";
 import { ActivitiesData } from "@/utils/activitiesData";
+import { GroupData } from "@/utils/groupData";
 
 type Props = {
   auth: any;
@@ -114,6 +115,18 @@ export default function Form({ auth, view }: Props) {
             right="0"
             onClick={onClose}
           />
+          <SelectField
+            register={register}
+            registerValue={`related.${"VEIKLAGRID "}`}
+            options={{ valueAsNumber: true }}
+            error={
+              errors.related?.VEIKLAGRID && errors.related?.VEIKLAGRID.message
+            }
+            name="Grupės"
+            id="VEIKLAGRID"
+            text="Pasirinkti grupę"
+            selectOptions={GroupData}
+          />
           <SimpleGrid columns={[1, 2]} spacing="3">
             <InputField
               register={register}
@@ -197,6 +210,7 @@ export default function Form({ auth, view }: Props) {
               }
               name="Veiklos"
               id="LO_VEIKLA"
+              text="Pasirinkti veiklą"
               selectOptions={ActivitiesData}
             />
             <InputField

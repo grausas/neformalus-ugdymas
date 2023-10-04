@@ -20,11 +20,13 @@ import nonvs from "@/assets/nonvs.svg";
 export default function Card({ cardData }: { cardData: __esri.Graphic }) {
   const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
 
-  const hasNvsKrepse =
-    cardData.attributes.relatedFeatures &&
-    cardData.attributes.relatedFeatures.some(
-      (related: any) => related.attributes.NVS_KREPSE === 1
-    );
+  // const hasNvsKrepse =
+  //   cardData.attributes.relatedFeatures &&
+  //   cardData.attributes.relatedFeatures.some(
+  //     (related: any) => related.attributes.NVS_KREPSE === 1
+  //   );
+
+  // console.log(hasNvsKrepse);
   const classArr: any = [];
 
   const filteredClass = klaseArr.find((klase) => {
@@ -157,27 +159,37 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
             })}
         </Flex>
         <Flex justify="center" shadow="md">
-          <Tooltip
-            label={
-              hasNvsKrepse
-                ? "Taikomas NVŠ krepšelis"
-                : "Netaikomas NVŠ krepšelis"
-            }
-            fontSize="sm"
-            bg="brand.30"
-            color="brand.50"
-          >
-            <Image
-              width={24}
-              height={24}
-              src={hasNvsKrepse ? nvs : nonvs}
-              alt={
-                hasNvsKrepse
+          {Array.from(
+            new Set(
+              cardData.attributes.relatedFeatures?.map(
+                (related: any) => related.attributes.NVS_KREPSE
+              )
+            )
+          )
+            .filter((isNvsKrepse) => isNvsKrepse)
+            .map((isNvsKrepse, index) => {
+              const tooltipLabel =
+                isNvsKrepse === 1
                   ? "Taikomas NVŠ krepšelis"
-                  : "Netaikomas NVŠ krepšelis"
-              }
-            />
-          </Tooltip>
+                  : "Netaikomas NVŠ krepšelis";
+
+              return (
+                <Tooltip
+                  key={index}
+                  label={tooltipLabel}
+                  fontSize="sm"
+                  bg="brand.30"
+                  color="brand.50"
+                >
+                  <Image
+                    width={24}
+                    height={24}
+                    src={isNvsKrepse === 1 ? nvs : nonvs}
+                    alt={tooltipLabel}
+                  />
+                </Tooltip>
+              );
+            })}
         </Flex>
       </Flex>
     </Flex>

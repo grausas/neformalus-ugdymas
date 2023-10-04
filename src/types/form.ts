@@ -16,16 +16,17 @@ export type FormValues = {
     SPC_POREIK?: number;
     PEDAGOGAS?: string;
     PASTABA?: string;
+    VEIKLAGRID?: number;
   };
 };
 
 export type FormRelated = {
-    LO_VEIKLA?: number;
-    KLASE_1_4?: number;
-    KLASE_5_8?: number;
-    KLASE_9_12?: number;
-    NVS_KREPSE?: number;
-    SPC_POREIK?: number;
-    PEDAGOGAS?: string;
-    PASTABA?: string;
-}
+  LO_VEIKLA?: number;
+  KLASE_1_4?: number;
+  KLASE_5_8?: number;
+  KLASE_9_12?: number;
+  NVS_KREPSE?: number;
+  SPC_POREIK?: number;
+  PEDAGOGAS?: string;
+  PASTABA?: string;
+};
