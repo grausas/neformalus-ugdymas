@@ -65,6 +65,21 @@ const theme = extendTheme({
         borderColor: "brand.11",
       },
     },
+    Input: {
+      variants: {
+        baseStyle: {
+          color: "red",
+        },
+        outline: {
+          field: {
+            _focus: {
+              borderColor: "brand.21",
+              boxShadow: "md",
+            },
+          },
+        },
+      },
+    },
   },
 });
 

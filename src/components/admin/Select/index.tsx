@@ -24,7 +24,10 @@ type Props = {
   name: string;
   id: string;
   text?: string;
-  selectOptions?: { text: string; id: number; value: number }[];
+  selectOptions?: {
+    name: string;
+    code: number;
+  }[];
 };
 
 export default function SelectField({
@@ -57,14 +60,14 @@ export default function SelectField({
         <MenuList>
           {selectOptions &&
             selectOptions.map((option) => (
-              <MenuItem key={option.id}>
+              <MenuItem key={option.code}>
                 <Checkbox
-                  value={option.value}
+                  value={option.code}
                   size="sm"
                   id={id}
                   {...register(registerValue, options)}
                 >
-                  {option.text}
+                  {option.name}
                 </Checkbox>
               </MenuItem>
             ))}

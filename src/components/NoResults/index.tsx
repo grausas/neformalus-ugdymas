@@ -5,12 +5,13 @@ export default function NoResults() {
   return (
     <Box
       textAlign="center"
-      mt="8"
+      mt="6"
       border="1px solid"
-      borderColor="brand.20"
-      p="4"
+      borderColor="brand.11"
+      px="4"
+      py="8"
       borderRadius="md"
-      shadow="md"
+      shadow="sm"
     >
       <Flex align="center" justify="center">
         <Icon as={WarningIcon} mr="2" color="brand.30" boxSize="5" />

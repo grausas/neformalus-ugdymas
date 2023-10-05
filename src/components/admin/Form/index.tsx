@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useMemo, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import {
   Text,
   Button,
@@ -12,7 +12,11 @@ import {
   CloseButton,
   Checkbox,
   HStack,
+  FormLabel,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
 import { PhoneIcon, EmailIcon, LinkIcon, SmallAddIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
 import SelectField from "../Select";
@@ -23,6 +27,7 @@ import { AddFeature } from "@/helpers/addFeature";
 import { FormValues } from "@/types/form";
 import { ActivitiesData } from "@/utils/activitiesData";
 import { GroupData } from "@/utils/groupData";
+import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
 type Props = {
   auth: any;
@@ -36,13 +41,17 @@ export default function Form({ auth, view }: Props) {
     setValue,
     formState: { errors, isSubmitting },
     watch,
+    reset,
+    control,
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
   const [geometry, setGeometry] = useState<__esri.Geometry>();
   const [spcPoreikiai, setSpcPoreikiai] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [checkedNVS, setCheckedNVS] = useState<number | null>();
-  console.log("checkedNVS", checkedNVS);
+  const [activityGroup, setActivityGroup] = useState<any>();
+  const [domains, setDomains] = useState<any>();
+
   const onSubmit = async (attributes: FormValues) => {
     console.log("attributes", attributes);
     if (!geometry) return console.log("error nera geometrijos");
@@ -50,6 +59,7 @@ export default function Form({ auth, view }: Props) {
     const results = await AddFeature(attributes, geometry, relatedAttributes);
     // console.log("results", results);
   };
+
   const onInvalid = () => null;
 
   const selectedValueGroup = watch("related.VEIKLAGRID");
@@ -86,6 +96,51 @@ export default function Form({ auth, view }: Props) {
       setGeometry(event.graphic.geometry);
     }
   });
+
+  useEffect(() => {
+    // you can do async server request and fill up form
+    reset({
+      related: {
+        VEIKLAGRID: 1,
+      },
+    });
+  }, [reset]);
+
+  const watchedGroups = watch("related.VEIKLAGRID");
+
+  useEffect(() => {
+    if (!view) return;
+    async function queryData() {
+      const results = await queryActivityGroupTable();
+      // console.log("results", results);
+      setActivityGroup(results);
+      const domainsResults = await queryDomains();
+      setDomains(domainsResults);
+    }
+
+    queryData();
+  }, [view]);
+
+  const filteredActivitiesData: any = useMemo(() => {
+    if (!activityGroup || !domains) return [];
+    const results = activityGroup.filter(
+      (item: { attributes: { VEIKLAGRID: number | undefined } }) =>
+        item.attributes.VEIKLAGRID === watchedGroups
+    );
+    console.log("results", results);
+    console.log("domains", domains);
+    // @ts-ignore
+    const filteredData = domains[0].domain.codedValues.filter(
+      (item: { code: number }) => {
+        return results.some(
+          (result: { attributes: { VEIKLAID: number } }) =>
+            result.attributes.VEIKLAID === item.code
+        );
+      }
+    );
+    console.log("filteredData", filteredData);
+    return filteredData;
+  }, [activityGroup, domains, watchedGroups]);
 
   return (
     <>
@@ -126,7 +181,7 @@ export default function Form({ auth, view }: Props) {
             right="0"
             onClick={onClose}
           />
-          <SelectField
+          {/* <SelectField
             register={register}
             registerValue={`related.${"VEIKLAGRID"}`}
             options={{ valueAsNumber: true }}
@@ -137,6 +192,38 @@ export default function Form({ auth, view }: Props) {
             id="VEIKLAGRID"
             text="Pasirinkite grupę"
             selectOptions={GroupData}
+          /> */}
+          <Controller
+            control={control}
+            name="related.VEIKLAGRID"
+            rules={{ required: "Please enter at least one food group." }}
+            render={({
+              field: { onChange, onBlur, name, ref },
+              fieldState: { error },
+            }) => (
+              <FormControl py={1} isInvalid={!!error} id="food">
+                <FormLabel m="0" fontSize="sm" color="brand.40">
+                  Grupės
+                </FormLabel>
+
+                <Select
+                  useBasicStyles
+                  selectedOptionStyle="check"
+                  name={name}
+                  ref={ref}
+                  onChange={(select: any) => onChange(select.value)}
+                  onBlur={onBlur}
+                  options={GroupData}
+                  defaultValue={{
+                    label: GroupData[0].label,
+                    value: GroupData[0].value,
+                  }}
+                  isSearchable={false}
+                />
+
+                <FormErrorMessage>{error && error.message}</FormErrorMessage>
+              </FormControl>
+            )}
           />
           <SimpleGrid columns={[1, 2]} spacing="3">
             <InputField
@@ -212,18 +299,18 @@ export default function Form({ auth, view }: Props) {
               id="PASTABA"
             />
 
-            <SelectField
+            {/* <SelectField
               register={register}
-              registerValue={`related.${"LO_VEIKLA"}`}
+              registerValue={`related.${"VEIKLAID"}`}
               options={{ valueAsNumber: true }}
               error={
-                errors.related?.LO_VEIKLA && errors.related?.LO_VEIKLA.message
+                errors.related?.VEIKLAID  && errors.related?.VEIKLAID.message
               }
               name="Veiklos"
-              id="LO_VEIKLA"
+              id="VEIKLAID"
               text="Pasirinkti veiklą"
-              selectOptions={ActivitiesData}
-            />
+              selectOptions={filteredActivitiesData}
+            /> */}
             <InputField
               register={register}
               registerValue={`related.${"PEDAGOGAS"}`}
@@ -234,6 +321,42 @@ export default function Form({ auth, view }: Props) {
               id="PEDAGOGAS"
             />
           </SimpleGrid>
+          <Controller
+            control={control}
+            name="related.VEIKLAID"
+            render={({
+              field: { onChange, onBlur, name, ref },
+              fieldState: { error },
+            }) => (
+              <FormControl py={1} isInvalid={!!error} id="veikla">
+                <FormLabel m="0" fontSize="sm" color="brand.40">
+                  Veiklos
+                </FormLabel>
+
+                <Select
+                  isMulti
+                  useBasicStyles
+                  selectedOptionStyle="check"
+                  name={name}
+                  ref={ref}
+                  onChange={(select: any) =>
+                    onChange(select.map((item: { code: number }) => item.code))
+                  }
+                  onBlur={onBlur}
+                  options={filteredActivitiesData}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.code}
+                  placeholder="Pasirinkti veiklas"
+                  closeMenuOnSelect={false}
+                  noOptionsMessage={() => "Nėra pasirinkimų"}
+                />
+
+                <FormErrorMessage>
+                  {errors.related?.VEIKLAID && errors.related?.VEIKLAID.message}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+          />
           <HStack spacing="4" mt="1">
             <Text>Klasės:</Text>
             <Checkbox>1-4 klasė</Checkbox>

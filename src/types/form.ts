@@ -8,7 +8,7 @@ export type FormValues = {
   SOC_TINKL?: string;
   PASTABA?: string;
   related: {
-    LO_VEIKLA?: number;
+    VEIKLAID?: number;
     KLASE_1_4?: number;
     KLASE_5_8?: number;
     KLASE_9_12?: number;
@@ -21,7 +21,7 @@ export type FormValues = {
 };
 
 export type FormRelated = {
-  LO_VEIKLA?: number;
+  VEIKLAID?: number;
   KLASE_1_4?: number;
   KLASE_5_8?: number;
   KLASE_9_12?: number;
@@ -29,4 +29,5 @@ export type FormRelated = {
   SPC_POREIK?: number;
   PEDAGOGAS?: string;
   PASTABA?: string;
+  VEIKLAGRID?: number;
 };
