@@ -414,7 +414,12 @@ export default function Map() {
         /> */}
         <GroupTabs changeGroup={(e) => setGroup(e)} loading={loading} />
         <Flex direction="row" alignItems="center">
-          <Filter handleFilter={handleFilter} loading={loading} />
+          <Filter
+            handleFilter={handleFilter}
+            loading={loading}
+            group={group}
+            view={view}
+          />
           <Box w="100%" textAlign="right" fontSize="sm">
             Rodoma {!loading ? filteredData.length : "..."}
           </Box>

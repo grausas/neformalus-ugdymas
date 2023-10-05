@@ -75,7 +75,7 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
 
       const options = {
         interval: 1500,
-        statusCallback: (j) => {
+        statusCallback: (j: any) => {
           console.log("Job Status: ", j.jobStatus);
         },
       };

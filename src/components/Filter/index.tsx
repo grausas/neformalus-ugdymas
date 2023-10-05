@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Text,
   Button,
@@ -13,10 +13,18 @@ import {
 } from "@chakra-ui/react";
 import { TriangleDownIcon } from "@chakra-ui/icons";
 import { ActivitiesData } from "@/utils/activitiesData";
+import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
 type FilterProps = {
   handleFilter: (activity: string[]) => void;
   loading: boolean;
+  group?: number;
+  view?: __esri.MapView;
+};
+
+type ItemType = {
+  code: number;
+  name: string;
 };
 
 const NVS = [
@@ -30,11 +38,49 @@ const classData = [
   { value: 1, text: "9-12 klasė" },
 ];
 
-function Filter({ handleFilter, loading }: FilterProps) {
+function Filter({ handleFilter, loading, group, view }: FilterProps) {
   const [activity, setActivity] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
     ActivitiesData.map(() => false)
   );
+  const [activityGroup, setActivityGroup] = useState<__esri.Graphic[]>();
+  const [domains, setDomains] = useState();
+
+  useEffect(() => {
+    if (!view) return;
+    async function queryData() {
+      const results = await queryActivityGroupTable();
+      // console.log("results", results);
+      setActivityGroup(results);
+      const domainsResults = await queryDomains();
+      setDomains(domainsResults);
+    }
+
+    queryData();
+  }, [view]);
+
+  const filteredActivitiesData: any = useMemo(() => {
+    if (!activityGroup || !domains) return [];
+    const results = activityGroup.filter(
+      (item) => item.attributes.VEIKLAGRID === group
+    );
+    console.log("results", results);
+    console.log("domains", domains);
+    // @ts-ignore
+    const filteredData = domains[0].domain.codedValues.filter(
+      (item: { code: number }) => {
+        return results.some(
+          (result) => result.attributes.VEIKLAID === item.code
+        );
+      }
+    );
+    console.log("filteredData", filteredData);
+    return filteredData;
+  }, [activityGroup, domains, group]);
+
+  console.log("filteredActivitiesData", filteredActivitiesData);
+
+  console.log("filter group", group);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -69,24 +115,25 @@ function Filter({ handleFilter, loading }: FilterProps) {
             bg="brand.10"
             color="brand.21"
             px="5"
+            display={filteredActivitiesData.length > 0 ? "block" : "none"}
             rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
             _active={{ borderColor: "brand.21", bg: "brand.10" }}
           >
             Veiklos
           </MenuButton>
           <MenuList>
-            {ActivitiesData.map((item, index) => {
+            {filteredActivitiesData.map((item: ItemType, index: number) => {
               return (
-                <MenuItem key={item.id} py="1">
+                <MenuItem key={item.code} py="1">
                   <Checkbox
-                    value={item.value}
+                    value={item.code}
                     onChange={(e) => handleChange(e, index)}
                     size="sm"
                     isChecked={checkedItems[index]}
                     color="brand.40"
                     isDisabled={loading}
                   >
-                    {item.text}
+                    {item.name}
                   </Checkbox>
                 </MenuItem>
               );

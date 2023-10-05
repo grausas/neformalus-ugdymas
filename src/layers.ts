@@ -30,7 +30,6 @@ export const featureLayerPrivate = () => {
     outFields: ["*"],
     title: "Jaunimo ugdymas",
     id: "private",
-    effect: "drop-shadow(0px, 0px, 3px)",
   });
   return layer;
 };
@@ -41,7 +40,6 @@ export const featureLayerPrivateTable = () => {
     outFields: ["*"],
     title: "Jaunimo ugdymas",
     id: "private-table",
-    effect: "drop-shadow(0px, 0px, 3px)",
   });
   return layer;
 };
@@ -55,6 +53,16 @@ export const featureLayerForRenderer = (renderer: any) => {
     effect: "drop-shadow(0px, 0px, 3px)",
     // definitionExpression: "VEIKLAGRID = 1",
     renderer,
+  });
+  return layer;
+};
+
+export const featureLayerActivityGroupTable = () => {
+  const layer = new FeatureLayer({
+    url: "https://opencity.vplanas.lt/arcgis/rest/services/P_Vaiku_ugdymas/Vaiku_ugdymas/MapServer/6",
+    outFields: ["*"],
+    title: "Jaunimo ugdymas",
+    id: "activity-group-table",
   });
   return layer;
 };
