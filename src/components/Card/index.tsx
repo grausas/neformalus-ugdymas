@@ -118,10 +118,10 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
           </Flex>
         )}
         {cardData.attributes.SOC_TINKL && (
-          <Flex direction="row">
-            <Text mr="2">Soc. tinklai:</Text>
+          <Flex direction="row" align="center" mt="2">
+            {/* <Text mr="2">Facebook:</Text> */}
             <Link href={cardData.attributes.SOC_TINKL} isExternal>
-              <Image width={24} height={24} src={facebook} alt="facebook" />
+              <Image width={20} height={20} src={facebook} alt="facebook" />
             </Link>
           </Flex>
         )}

@@ -176,7 +176,7 @@ export default function Form({ auth, view }: Props) {
           onSubmit={handleSubmit(onSubmit, onInvalid)}
           align="left"
         >
-          <Heading size="md">Pridėti naują veiklą</Heading>
+          <Heading size="md">Pridėti naują objektą</Heading>
           <CloseButton
             position="absolute"
             top="0"

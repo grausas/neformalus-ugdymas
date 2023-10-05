@@ -126,12 +126,14 @@ export default function Map() {
       console.log("relatedFeatures", relatedFeatures);
 
       const globalIdsAsNumber = Object.keys(relatedFeatures).map(Number);
+      console.log("globalIdsAsNumber", globalIdsAsNumber);
 
       if (whereParams) {
         const filteredFeatures = featureResults.features.filter((f) => {
           return globalIdsAsNumber.includes(f.attributes.OBJECTID);
         });
 
+        console.log("whereParams", whereParams);
         const featureFilter = await new FeatureFilter({
           where: whereParams,
         });
