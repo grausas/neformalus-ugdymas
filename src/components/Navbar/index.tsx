@@ -120,11 +120,10 @@ export default function Simple() {
             {auth.user.token && (
               <Button
                 onClick={() => auth.logout()}
-                size="sm"
-                ml="2"
-                bg="brand.10"
+                bg="brand.20"
+                fontSize="sm"
+                textTransform="uppercase"
                 shadow="md"
-                px="5"
               >
                 Atsijungti
               </Button>

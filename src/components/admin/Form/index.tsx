@@ -102,6 +102,8 @@ export default function Form({ auth, view }: Props) {
     reset({
       related: {
         VEIKLAGRID: 1,
+        VEIKLAID: null,
+        PEDAGOGAS: null,
       },
     });
   }, [reset]);

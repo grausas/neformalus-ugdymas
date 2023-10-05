@@ -8,26 +8,26 @@ export type FormValues = {
   SOC_TINKL?: string;
   PASTABA?: string;
   related: {
-    VEIKLAID?: number;
+    VEIKLAID?: number | null;
     KLASE_1_4?: number;
     KLASE_5_8?: number;
     KLASE_9_12?: number;
     NVS_KREPSE?: number | null;
     SPC_POREIK?: number;
-    PEDAGOGAS?: string;
+    PEDAGOGAS?: string | null;
     PASTABA?: string;
     VEIKLAGRID?: number;
   };
 };
 
 export type FormRelated = {
-  VEIKLAID?: number;
+  VEIKLAID?: number | null;
   KLASE_1_4?: number;
   KLASE_5_8?: number;
   KLASE_9_12?: number;
   NVS_KREPSE?: number | null;
   SPC_POREIK?: number;
-  PEDAGOGAS?: string;
+  PEDAGOGAS?: string | null;
   PASTABA?: string;
   VEIKLAGRID?: number;
 };
