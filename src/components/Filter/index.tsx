@@ -16,7 +16,7 @@ import { ActivitiesData } from "@/utils/activitiesData";
 import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
 type FilterProps = {
-  handleFilter: (activity: string[]) => void;
+  handleFilter: (activity: string[], nvsKrepse?: number) => void;
   loading: boolean;
   group?: number;
   view?: __esri.MapView;
@@ -40,11 +40,14 @@ const classData = [
 
 function Filter({ handleFilter, loading, group, view }: FilterProps) {
   const [activity, setActivity] = useState<string[]>([]);
+  const [nvsKrepse, setNvsKrepse] = useState<number>();
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
     ActivitiesData.map(() => false)
   );
   const [activityGroup, setActivityGroup] = useState<__esri.Graphic[]>();
   const [domains, setDomains] = useState();
+
+  console.log("nvsKrepse", nvsKrepse);
 
   useEffect(() => {
     if (!view) return;
@@ -95,8 +98,24 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
     setActivity(newActivity);
   };
 
+  const handleChangeNvsKrepse = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = Number(event.target.value);
+    const checked = event.target.checked;
+    if (checked) {
+      setNvsKrepse(value);
+    } else {
+      setNvsKrepse(undefined);
+    }
+  };
+
   const handleActivities = () => {
-    handleFilter(activity);
+    handleFilter(activity, nvsKrepse);
+  };
+
+  const handleNvsKrepse = () => {
+    handleFilter(activity, nvsKrepse);
   };
 
   const clearFilterActivity = () => {
@@ -159,88 +178,98 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
             </Flex>
           </MenuList>
         </Menu>
-        <Menu closeOnSelect={false}>
-          <MenuButton
-            as={Button}
-            size="sm"
-            bg="brand.10"
-            color="brand.21"
-            px="5"
-            rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
-            _active={{ borderColor: "brand.21", bg: "brand.10" }}
-          >
-            NVŠ krepšelis
-          </MenuButton>
-          <MenuList>
-            {NVS.map((item, index) => {
-              return (
-                <MenuItem key={index} py="1">
-                  <Checkbox
-                    value={item.value}
-                    // onChange={(e) => handleChange(e, index)}
-                    size="sm"
-                  >
-                    {item.text}
-                  </Checkbox>
-                </MenuItem>
-              );
-            })}
-            <Flex justify="space-between" px="4" align="center" mt="2">
-              <Text
-                fontSize="sm"
-                fontWeight="600"
-                _hover={{ cursor: "pointer", textDecoration: "underline" }}
-                color="brand.31"
-              >
-                Išvalyti
-              </Text>
-              <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
-                Ieškoti
-              </Button>
-            </Flex>
-          </MenuList>
-        </Menu>
-        <Menu closeOnSelect={false}>
-          <MenuButton
-            as={Button}
-            size="sm"
-            bg="brand.10"
-            px="5"
-            color="brand.21"
-            rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
-            _active={{ borderColor: "brand.21", bg: "brand.10" }}
-          >
-            Klasės
-          </MenuButton>
-          <MenuList>
-            {classData.map((item, index) => {
-              return (
-                <MenuItem key={index} py="1">
-                  <Checkbox
-                    value={item.value}
-                    // onChange={(e) => handleChange(e, index)}
-                    size="sm"
-                  >
-                    {item.text}
-                  </Checkbox>
-                </MenuItem>
-              );
-            })}
-            <Flex justify="space-between" px="4" align="center" mt="2">
-              <Text
-                fontSize="sm"
-                fontWeight="600"
-                _hover={{ cursor: "pointer", textDecoration: "underline" }}
-                color="brand.31"
-              >
-                Išvalyti
-              </Text>
-              <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
-                Ieškoti
-              </Button>
-            </Flex>
-          </MenuList>
-        </Menu>
+        {group === 1 && (
+          <Menu closeOnSelect={false}>
+            <MenuButton
+              as={Button}
+              size="sm"
+              bg="brand.10"
+              color="brand.21"
+              px="5"
+              rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
+              _active={{ borderColor: "brand.21", bg: "brand.10" }}
+            >
+              NVŠ krepšelis
+            </MenuButton>
+            <MenuList>
+              {NVS.map((item, index) => {
+                return (
+                  <MenuItem key={index} py="1">
+                    <Checkbox
+                      value={item.value}
+                      onChange={handleChangeNvsKrepse}
+                      size="sm"
+                      isChecked={nvsKrepse === item.value}
+                    >
+                      {item.text}
+                    </Checkbox>
+                  </MenuItem>
+                );
+              })}
+              <Flex justify="space-between" px="4" align="center" mt="2">
+                <Text
+                  fontSize="sm"
+                  fontWeight="600"
+                  _hover={{ cursor: "pointer", textDecoration: "underline" }}
+                  color="brand.31"
+                >
+                  Išvalyti
+                </Text>
+                <Button
+                  size="sm"
+                  bg="brand.30"
+                  _hover={{ bg: "brand.31" }}
+                  onClick={handleNvsKrepse}
+                >
+                  Ieškoti
+                </Button>
+              </Flex>
+            </MenuList>
+          </Menu>
+        )}
+        {group === 1 && (
+          <Menu closeOnSelect={false}>
+            <MenuButton
+              as={Button}
+              size="sm"
+              bg="brand.10"
+              px="5"
+              color="brand.21"
+              rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
+              _active={{ borderColor: "brand.21", bg: "brand.10" }}
+            >
+              Klasės
+            </MenuButton>
+            <MenuList>
+              {classData.map((item, index) => {
+                return (
+                  <MenuItem key={index} py="1">
+                    <Checkbox
+                      value={item.value}
+                      // onChange={(e) => handleChange(e, index)}
+                      size="sm"
+                    >
+                      {item.text}
+                    </Checkbox>
+                  </MenuItem>
+                );
+              })}
+              <Flex justify="space-between" px="4" align="center" mt="2">
+                <Text
+                  fontSize="sm"
+                  fontWeight="600"
+                  _hover={{ cursor: "pointer", textDecoration: "underline" }}
+                  color="brand.31"
+                >
+                  Išvalyti
+                </Text>
+                <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
+                  Ieškoti
+                </Button>
+              </Flex>
+            </MenuList>
+          </Menu>
+        )}
       </Stack>
     </FormControl>
   );
