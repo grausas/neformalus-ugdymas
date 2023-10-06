@@ -3,6 +3,9 @@ import { Box } from "@chakra-ui/react";
 import { MapContext } from "../../context/map-context";
 import { featureLayerForRenderer } from "../../layers";
 import { simpleRenderer } from "@/helpers/layerRenderer";
+import * as intl from "@arcgis/core/intl";
+
+intl.setLocale("lt");
 
 const ArcGISMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);

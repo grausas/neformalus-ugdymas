@@ -45,9 +45,10 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
       geometry: point,
       symbol: {
         // @ts-ignore
-        type: "simple-marker",
-        color: "white",
-        size: 8,
+        type: "picture-marker",
+        url: "/location.svg",
+        width: "23px",
+        height: "23px",
       },
     });
 
@@ -102,12 +103,18 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
               type: "simple-fill",
               // @ts-ignore
               color: colors[index],
+              outline: {
+                // @ts-ignore
+                color: "#ffffff",
+              },
             };
             graphics.push(feature);
             // view?.graphics.add(graphic, 0);
           });
-          graphicLayer.addMany(graphics);
-          // console.log("graphics", graphics);
+          await graphicLayer.addMany(graphics);
+          const pointGraphic = graphicLayer.graphics.shift();
+          graphicLayer.graphics.push(pointGraphic);
+          console.log("graphicLayer", graphicLayer);
         }
       });
     });
