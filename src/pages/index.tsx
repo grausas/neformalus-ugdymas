@@ -73,7 +73,7 @@ export default function Map() {
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [searchTerm, setSearchTerm] = useState("");
   const [activities, setActivities] = useState<string[]>([]);
-  const [nvs, setNvs] = useState<number>();
+  const [nvs, setNvs] = useState<number | undefined>();
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
 
@@ -389,10 +389,13 @@ export default function Map() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, featureLayer]);
 
-  const handleFilter = useCallback((activity: string[], nvsKreps: number) => {
-    setActivities(activity);
-    setNvs(nvsKreps);
-  }, []);
+  const handleFilter = useCallback(
+    (activity: string[], nvsKrepse: number | undefined) => {
+      setActivities(activity);
+      setNvs(nvsKrepse);
+    },
+    []
+  );
 
   const handleServiceArea = (e: boolean) => {
     if (e) {

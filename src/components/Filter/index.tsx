@@ -16,7 +16,7 @@ import { ActivitiesData } from "@/utils/activitiesData";
 import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
 type FilterProps = {
-  handleFilter: (activity: string[], nvsKrepse?: number) => void;
+  handleFilter: (activity: string[], nvsKrepse?: number | undefined) => void;
   loading: boolean;
   group?: number;
   view?: __esri.MapView;
@@ -40,7 +40,7 @@ const classData = [
 
 function Filter({ handleFilter, loading, group, view }: FilterProps) {
   const [activity, setActivity] = useState<string[]>([]);
-  const [nvsKrepse, setNvsKrepse] = useState<number>();
+  const [nvsKrepse, setNvsKrepse] = useState<number | undefined>();
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
     ActivitiesData.map(() => false)
   );
