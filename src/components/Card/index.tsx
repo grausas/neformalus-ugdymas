@@ -17,7 +17,13 @@ import facebook from "@/assets/facebook.svg";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
-export default function Card({ cardData }: { cardData: __esri.Graphic }) {
+export default function Card({
+  cardData,
+  view,
+}: {
+  cardData: __esri.Graphic;
+  view?: __esri.MapView;
+}) {
   const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
 
   // const hasNvsKrepse =
@@ -39,6 +45,17 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
       });
   });
 
+  const zoomToFeature = async (results: any) => {
+    console.log("resultsSSS", results);
+    view?.goTo(
+      {
+        target: results,
+        zoom: 17,
+      },
+      { duration: 400 }
+    );
+  };
+
   return (
     <Flex
       direction="column"
@@ -54,6 +71,9 @@ export default function Card({ cardData }: { cardData: __esri.Graphic }) {
         transition: "0.3s ease-in-out",
         shadow: "md",
         // pt: "10",
+      }}
+      onClick={() => {
+        zoomToFeature(cardData.geometry);
       }}
     >
       <Flex flexDirection="column" position="absolute" right="4">

@@ -523,7 +523,11 @@ export default function Map() {
               {!loading &&
                 filteredData.length > 0 &&
                 filteredData.map((item) => (
-                  <Card key={item.attributes.OBJECTID} cardData={item} />
+                  <Card
+                    key={item.attributes.OBJECTID}
+                    cardData={item}
+                    view={view}
+                  />
                 ))}
               {!loading && data.length === 0 && <NoResults />}
             </Stack>
