@@ -74,12 +74,17 @@ export default function Map() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activities, setActivities] = useState<string[]>([]);
   const [nvs, setNvs] = useState<number | undefined>();
+  const [classFilter, setClassFilter] = useState<
+    { name?: string | undefined; value?: number | undefined }[] | undefined
+  >([]);
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
 
   useEffect(() => {
-    setWhereParams(whereParamsChange(activities, group, nvs));
-  }, [activities, group, nvs]);
+    setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
+  }, [activities, group, nvs, classFilter]);
+
+  console.log("whereParams", whereParams);
 
   useEffect(() => {
     if (objIds.length === 0) return;
@@ -390,9 +395,16 @@ export default function Map() {
   }, [view, featureLayer]);
 
   const handleFilter = useCallback(
-    (activity: string[], nvsKrepse: number | undefined) => {
+    (
+      activity: string[],
+      nvsKrepse: number | undefined,
+      classFilter:
+        | { name?: string | undefined; value?: number | undefined }[]
+        | undefined
+    ) => {
       setActivities(activity);
       setNvs(nvsKrepse);
+      setClassFilter(classFilter);
     },
     []
   );
@@ -432,7 +444,7 @@ export default function Map() {
             Rodoma {!loading ? filteredData.length : "..."}
           </Box>
         </Flex>
-        {activities.length > 0 && <AppliedFilters activities={activities} />}
+        {/* {activities.length > 0 && <AppliedFilters activities={activities} />} */}
         {loading && (
           <AbsoluteCenter axis="both">
             <Spinner

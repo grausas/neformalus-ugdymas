@@ -16,7 +16,13 @@ import { ActivitiesData } from "@/utils/activitiesData";
 import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
 type FilterProps = {
-  handleFilter: (activity: string[], nvsKrepse?: number | undefined) => void;
+  handleFilter: (
+    activity: string[],
+    nvsKrepse?: number | undefined,
+    classFilter?:
+      | { name?: string | undefined; value?: number | undefined }[]
+      | undefined
+  ) => void;
   loading: boolean;
   group?: number;
   view?: __esri.MapView;
@@ -33,14 +39,17 @@ const NVS = [
 ];
 
 const classData = [
-  { value: 1, text: "1-4 klasė" },
-  { value: 1, text: "5-8 klasė" },
-  { value: 1, text: "9-12 klasė" },
+  { value: 1, text: "1-4 klasė", name: "KLASE_1_4" },
+  { value: 1, text: "5-8 klasė", name: "KLASE_5_8" },
+  { value: 1, text: "9-12 klasė", name: "KLASE_9_12" },
 ];
 
 function Filter({ handleFilter, loading, group, view }: FilterProps) {
   const [activity, setActivity] = useState<string[]>([]);
   const [nvsKrepse, setNvsKrepse] = useState<number | undefined>();
+  const [classFilter, setClassFilter] = useState<
+    { name?: string; value?: number }[]
+  >([]);
   const [checkedItems, setCheckedItems] = useState<boolean[]>(
     ActivitiesData.map(() => false)
   );
@@ -110,12 +119,33 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
     }
   };
 
+  // filter by classData
+  const handleFilterByClass = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, value, name } = event.target;
+    console.log("event.target", event.target);
+    if (checked) {
+      setClassFilter((prevClassFilter) => [
+        ...prevClassFilter,
+        { name, value: Number(value) },
+      ]);
+    } else {
+      setClassFilter((prevClassFilter) =>
+        prevClassFilter.filter((item) => item.name !== name)
+      );
+    }
+  };
+
+  console.log("classFilter", classFilter);
+
   const handleActivities = () => {
-    handleFilter(activity, nvsKrepse);
+    handleFilter(activity, nvsKrepse, classFilter);
   };
 
   const handleNvsKrepse = () => {
-    handleFilter(activity, nvsKrepse);
+    handleFilter(activity, nvsKrepse, classFilter);
+  };
+  const handleClasses = () => {
+    handleFilter(activity, nvsKrepse, classFilter);
   };
 
   const clearFilterActivity = () => {
@@ -246,7 +276,8 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
                   <MenuItem key={index} py="1">
                     <Checkbox
                       value={item.value}
-                      // onChange={(e) => handleChange(e, index)}
+                      name={item.name}
+                      onChange={(e) => handleFilterByClass(e)}
                       size="sm"
                     >
                       {item.text}
@@ -263,7 +294,12 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
                 >
                   Išvalyti
                 </Text>
-                <Button size="sm" bg="brand.30" _hover={{ bg: "brand.31" }}>
+                <Button
+                  size="sm"
+                  bg="brand.30"
+                  _hover={{ bg: "brand.31" }}
+                  onClick={handleClasses}
+                >
                   Ieškoti
                 </Button>
               </Flex>

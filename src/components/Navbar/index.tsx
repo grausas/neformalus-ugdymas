@@ -84,7 +84,7 @@ export default function Simple() {
                   color="brand.50"
                   fontWeight="500"
                   fontSize="md"
-                  letterSpacing="0.5px"
+                  letterSpacing="0.9px"
                   as="h1"
                   lineHeight="1"
                 >
@@ -94,7 +94,7 @@ export default function Simple() {
                   color="brand.50"
                   fontWeight="500"
                   fontSize="md"
-                  letterSpacing="0.5px"
+                  letterSpacing="0.9px"
                   as="h1"
                   lineHeight="1"
                 >
