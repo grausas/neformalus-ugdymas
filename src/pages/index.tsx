@@ -17,6 +17,7 @@ import {
   AbsoluteCenter,
   useDisclosure,
   Button,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
@@ -87,7 +88,9 @@ export default function Map() {
   >([]);
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+  const { isOpen, onOpen, onClose } = useDisclosure({
+    defaultIsOpen: true,
+  });
 
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
@@ -502,7 +505,6 @@ export default function Map() {
             )}
             <Stack
               h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
-              maxH="100%"
               overflow="auto"
               css={{
                 "&::-webkit-scrollbar": {
@@ -529,7 +531,7 @@ export default function Map() {
         )}
       </Flex>
       <Box
-        position={isOpen ? "absolute" : "relative"}
+        position="relative"
         zIndex="0"
         w="100%"
         h={{ base: "100%", md: "calc(100vh - 64px)" }}

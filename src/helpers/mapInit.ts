@@ -59,8 +59,8 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       components: ["attribution"],
     },
     constraints: {
-      maxZoom: 20,
-      minZoom: 10,
+      minScale: 500000,
+      maxScale: 100,
       snapToZoom: false,
     },
   });
