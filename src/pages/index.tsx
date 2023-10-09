@@ -431,6 +431,8 @@ export default function Map() {
       direction={{ base: "column", md: "row" }}
       gap="0"
       position="relative"
+      height={{ base: "calc(100vh - 32px)", md: "auto" }}
+      overflow="hidden"
     >
       <Button
         display={{ base: "block", md: "none" }}
@@ -444,7 +446,11 @@ export default function Map() {
         bg={isOpen ? "brand.40" : "brand.10"}
         color={isOpen ? "brand.10" : "brand.40"}
       >
-        {isOpen ? "Žemėlapis" : filteredData.length + " Sąrašas"}
+        {loading
+          ? "Kraunasi ..."
+          : isOpen
+          ? "Žemėlapis"
+          : filteredData.length + " Sąrašas"}
       </Button>
       <Flex
         maxW="550px"
@@ -496,6 +502,7 @@ export default function Map() {
             )}
             <Stack
               h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
+              maxH="100%"
               overflow="auto"
               css={{
                 "&::-webkit-scrollbar": {
@@ -525,7 +532,7 @@ export default function Map() {
         position={isOpen ? "absolute" : "relative"}
         zIndex="0"
         w="100%"
-        h={{ base: "calc(100vh - 155px)", md: "calc(100vh - 64px)" }}
+        h={{ base: "100%", md: "calc(100vh - 64px)" }}
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />

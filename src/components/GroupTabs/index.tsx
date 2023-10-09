@@ -29,7 +29,11 @@ const GroupTabs = ({ changeGroup, loading }: Props) => {
     >
       <TabList borderColor="brand.11">
         {GroupData.map((group) => (
-          <Tooltip label={group.text} key={group.id}>
+          <Tooltip
+            label={group.text}
+            key={group.id}
+            display={{ base: "none", md: "flex" }}
+          >
             <Tab
               borderBottom="none"
               bg={selectedTab === group.id ? "brand.10" : "transparent"}
