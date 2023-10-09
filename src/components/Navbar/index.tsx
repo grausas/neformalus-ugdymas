@@ -52,20 +52,20 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg="brand.30" px={4}>
+      <Box bg="brand.30" px={{ base: 2, md: 3 }}>
         <Flex
-          h={16}
+          h={{ base: 12, md: 16 }}
           alignItems={"center"}
           justifyContent={"space-between"}
           margin="0 auto"
         >
-          <IconButton
+          {/* <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             aria-label={"Open Menu"}
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
-          />
+          /> */}
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"} position="relative">
               <Image height={24} src={logoBlack} alt="logo" />
@@ -104,18 +104,18 @@ export default function Simple() {
             </HStack>
           </Link>
           <Flex alignItems={"center"}>
-            <HStack
+            {/* <HStack
               as={"nav"}
               spacing={2}
               display={{ base: "none", md: "flex" }}
               mr="5"
             >
-              {/* {Links.map((link) => (
+              {Links.map((link) => (
                 <NavLink key={link.name} url={link.url}>
                   {link.name}
                 </NavLink>
-              ))} */}
-            </HStack>
+              ))}
+            </HStack> */}
 
             {auth.user.token && (
               <Button

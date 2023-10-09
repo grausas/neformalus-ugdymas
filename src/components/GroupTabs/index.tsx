@@ -26,7 +26,6 @@ const GroupTabs = ({ changeGroup, loading }: Props) => {
         setSelectedTab(e + 1);
       }}
       variant="enclosed"
-      mt="2"
     >
       <TabList borderColor="brand.11">
         {GroupData.map((group) => (

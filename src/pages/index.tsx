@@ -9,7 +9,15 @@ import dynamic from "next/dynamic";
 const ArcGISMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
-import { Box, Spinner, Flex, Stack, AbsoluteCenter } from "@chakra-ui/react";
+import {
+  Box,
+  Spinner,
+  Flex,
+  Stack,
+  AbsoluteCenter,
+  useDisclosure,
+  Button,
+} from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
 import AppliedFilters from "@/components/AppliedFilters";
@@ -79,6 +87,7 @@ export default function Map() {
   >([]);
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
@@ -418,14 +427,35 @@ export default function Map() {
   };
 
   return (
-    <Stack direction="row" gap="0">
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      gap="0"
+      position="relative"
+    >
+      <Button
+        display={{ base: "block", md: "none" }}
+        size="sm"
+        w="120px"
+        position="absolute"
+        top="90%"
+        left="calc(50% - 60px)"
+        onClick={isOpen ? onClose : onOpen}
+        zIndex={999}
+        bg={isOpen ? "brand.40" : "brand.10"}
+        color={isOpen ? "brand.10" : "brand.40"}
+      >
+        {isOpen ? "Žemėlapis" : filteredData.length + " Sąrašas"}
+      </Button>
       <Flex
         maxW="550px"
         w="100%"
         flexDirection="column"
         position="relative"
-        px="3"
+        px={{ base: "2", md: "3" }}
         gap="2"
+        py="2"
+        zIndex="1"
+        bg="brand.20"
       >
         {/* <Search
           handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -440,48 +470,64 @@ export default function Map() {
             group={group}
             view={view}
           />
-          <Box w="100%" textAlign="right" fontSize="sm">
+          <Box
+            display={{ base: "none", md: "block" }}
+            w="100%"
+            textAlign="right"
+            fontSize="sm"
+          >
             Rodoma {!loading ? filteredData.length : "..."}
           </Box>
         </Flex>
-        {/* {activities.length > 0 && <AppliedFilters activities={activities} />} */}
-        {loading && (
-          <AbsoluteCenter axis="both">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="brand.10"
-              size="xl"
-              color="brand.31"
-            />
-          </AbsoluteCenter>
+
+        {isOpen && (
+          <Box>
+            {/* {activities.length > 0 && <AppliedFilters activities={activities} />} */}
+            {loading && (
+              <AbsoluteCenter axis="both">
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="brand.10"
+                  size="xl"
+                  color="brand.31"
+                />
+              </AbsoluteCenter>
+            )}
+            <Stack
+              h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
+              overflow="auto"
+              css={{
+                "&::-webkit-scrollbar": {
+                  height: "8px",
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#f15a24",
+                  borderRadius: "24px",
+                },
+              }}
+            >
+              {!loading &&
+                filteredData.length > 0 &&
+                filteredData.map((item) => (
+                  <Card key={item.attributes.OBJECTID} cardData={item} />
+                ))}
+              {!loading && data.length === 0 && <NoResults />}
+            </Stack>
+          </Box>
         )}
-        <Stack
-          h="calc(100vh - 200px)"
-          overflow="auto"
-          css={{
-            "&::-webkit-scrollbar": {
-              height: "8px",
-              width: "6px",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "6px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "#f15a24",
-              borderRadius: "24px",
-            },
-          }}
-        >
-          {!loading &&
-            filteredData.length > 0 &&
-            filteredData.map((item) => (
-              <Card key={item.attributes.OBJECTID} cardData={item} />
-            ))}
-          {!loading && data.length === 0 && <NoResults />}
-        </Stack>
       </Flex>
-      <Box position="relative" w="100%" h="calc(100vh - 64px)" bg="brand.10">
+      <Box
+        position={isOpen ? "absolute" : "relative"}
+        zIndex="0"
+        w="100%"
+        h={{ base: "calc(100vh - 155px)", md: "calc(100vh - 64px)" }}
+        bg="brand.10"
+      >
         <ServiceArea handleServiceArea={handleServiceArea} />
         <ArcGISMap />
         {auth.user.token && <Form auth={auth.user.token} view={view} />}
