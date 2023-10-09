@@ -153,7 +153,7 @@ export default function Map() {
 
         console.log("whereParams", whereParams);
         const featureFilter = await new FeatureFilter({
-          where: "OBJECTID IN (" + globalIdsAsNumber + ")",
+          where: whereParams,
         });
         console.log("featureFilter", featureFilter);
         layerView.filter = featureFilter;
