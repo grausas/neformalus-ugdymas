@@ -465,7 +465,7 @@ export default function Map() {
         size="sm"
         w="120px"
         position="absolute"
-        top="90%"
+        bottom="10"
         left="calc(50% - 60px)"
         onClick={isOpen ? onClose : onOpen}
         zIndex={999}
