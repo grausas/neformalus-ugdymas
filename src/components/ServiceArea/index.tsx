@@ -70,6 +70,7 @@ const ServiceArea = ({
           borderRadius="md"
           shadow="md"
           p="3"
+          maxW={{ base: "250px", md: "100%" }}
         >
           <CloseButton
             onClick={onClose}
@@ -77,19 +78,29 @@ const ServiceArea = ({
             top="0"
             right="0"
           />
-          <Flex direction="row">
+          <Flex direction="row" alignItems="center">
             <Switch
-              mr="3"
+              size={{ base: "sm", md: "md" }}
+              mr={{ base: "2", md: "3" }}
               isChecked={isChecked}
               value={isChecked ? "true" : "false"}
               onChange={handleChange}
             />
-            <Text>{isChecked ? "Įjungta" : "Išjungta"}</Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>
+              {isChecked ? "Įjungta" : "Išjungta"}
+            </Text>
           </Flex>
-          <Text mb="2">Matuoti pasiekiamumą aplink nurodytą vietą</Text>
+          <Text mb="2" fontSize={{ base: "sm", md: "md" }}>
+            Matuoti pasiekiamumą aplink nurodytą vietą
+          </Text>
           <Box>
             {colors.map((item, index) => (
-              <Text key={index} bg={item.color} px="2">
+              <Text
+                key={index}
+                bg={item.color}
+                px="2"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 {item.text}
               </Text>
             ))}

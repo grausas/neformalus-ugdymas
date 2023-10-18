@@ -150,7 +150,7 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
             size="sm"
             bg="brand.10"
             color="brand.21"
-            px="5"
+            px={{ base: "3", md: "5" }}
             display={filteredActivitiesData.length > 0 ? "block" : "none"}
             rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
             _active={{

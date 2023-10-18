@@ -245,6 +245,7 @@ export default function Map() {
   useEffect(() => {
     if (view && featureLayer) {
       view.on("click", async (event) => {
+        console.log(view.zoom + " " + view.scale);
         if (view.zoom < 12) return;
         const response = await view.hitTest(event, {
           include: featureLayer,
@@ -567,10 +568,10 @@ export default function Map() {
       </Flex>
       <Box
         position={{ base: "absolute", md: "relative" }}
-        bottom="0"
+        bottom={{ base: "3", md: "unset" }}
         zIndex="0"
         w="100%"
-        h={{ base: "calc(100vh - 158px)", md: "calc(100vh - 64px)" }}
+        h={{ base: "calc(100vh - 168px)", md: "calc(100vh - 64px)" }}
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />
@@ -585,7 +586,7 @@ export default function Map() {
           />
         )}
         <Link href="https://www.vilniausplanas.lt/">
-          <Flex position="absolute" bottom="2" right="2" bg="brand.10" px="1">
+          <Flex position="absolute" bottom="2" right="2" px="1">
             <Text fontSize="xs" color="brand.50">
               &copy; {new Date().getFullYear()} Vilniaus planas
             </Text>

@@ -68,7 +68,7 @@ export default function Simple() {
           /> */}
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"} position="relative">
-              <Image height={24} src={logoBlack} alt="logo" />
+              <Image height={22} width={22} src={logoBlack} alt="logo" />
               <Box
                 _after={{
                   content: "''",
@@ -83,7 +83,7 @@ export default function Simple() {
                 <Heading
                   color="brand.50"
                   fontWeight="500"
-                  fontSize="md"
+                  fontSize={{ base: "sm", md: "md" }}
                   letterSpacing="0.9px"
                   as="h1"
                   lineHeight="1"
@@ -93,7 +93,7 @@ export default function Simple() {
                 <Heading
                   color="brand.50"
                   fontWeight="500"
-                  fontSize="md"
+                  fontSize={{ base: "sm", md: "md" }}
                   letterSpacing="0.9px"
                   as="h1"
                   lineHeight="1"
