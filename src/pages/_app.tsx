@@ -6,6 +6,7 @@ import { MapProvider } from "@/context/map-context";
 import Layout from "@/components/Layout";
 import { Open_Sans, Poppins } from "next/font/google";
 import AuthProvider from "@/context/auth";
+import Head from "next/head";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -23,6 +24,12 @@ const poppins = Poppins({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimal-ui"
+        ></meta>
+      </Head>
       <style jsx global>
         {`
           :root {
