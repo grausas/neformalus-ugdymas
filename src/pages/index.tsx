@@ -494,6 +494,7 @@ export default function Map() {
         py="2"
         zIndex="1"
         bg="brand.20"
+        h="100%"
       >
         {/* <Search
           handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
