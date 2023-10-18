@@ -170,7 +170,11 @@ export default function Map() {
         });
 
         const featureFilter = await new FeatureFilter({
-          where: "OBJECTID IN (" + globalIdsAsNumber.join(",") + ")",
+          where:
+            "OBJECTID IN (" +
+            globalIdsAsNumber.join(",") +
+            ") AND VEIKLAGRID = " +
+            group,
         });
         layerView.filter = featureFilter;
 
