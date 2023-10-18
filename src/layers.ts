@@ -1,4 +1,3 @@
-import { relatedFeaturesFields } from "./utils/featureLayer";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 
 export const featureLayerPublic = () => {
@@ -36,7 +35,7 @@ export const featureLayerPrivate = () => {
 
 export const featureLayerPrivateTable = () => {
   const layer = new FeatureLayer({
-    url: "https://opencity.vplanas.lt/arcgis/rest/services/P_Vaiku_ugdymas/Vaiku_ugdymas/MapServer/4",
+    url: "https://opencity.vplanas.lt/arcgis/rest/services/P_Vaiku_ugdymas/Vaiku_ugdymas_edit/FeatureServer/2",
     outFields: ["*"],
     title: "Jaunimo ugdymas",
     id: "private-table",

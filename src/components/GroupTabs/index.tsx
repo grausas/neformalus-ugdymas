@@ -58,6 +58,9 @@ const GroupTabs = ({ changeGroup, loading }: Props) => {
             borderColor="brand.11"
             bg={selectedTab === group.id ? "brand.10" : "transparent"}
             shadow="sm"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
           >
             {group.text}
           </TabPanel>

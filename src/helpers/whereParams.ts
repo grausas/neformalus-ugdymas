@@ -4,7 +4,6 @@ export const whereParamsChange = (
   nvs?: number,
   classFilter?: { name?: string; value?: number }[]
 ) => {
-  console.log("classFilterWhereParams", classFilter);
   const params: string[] = [];
   if (group) params.push(`VEIKLAGRID = ${group}`);
   if (activity.length) params.push(`VEIKLAID IN (${activity.join(",")})`);

@@ -67,7 +67,7 @@ const uniqueValueInfos = [
   {
     value: "15",
     label: "Kitos veiklos",
-    symbol: symbol("medijos.svg", "23px", "23px"),
+    symbol: symbol("kitos.svg", "23px", "23px"),
   },
   {
     value: "16",
@@ -78,7 +78,7 @@ const uniqueValueInfos = [
 
 export const simpleRenderer = {
   type: "unique-value",
-  defaultSymbol: symbol("medijos.svg", "23px", "23px"),
+  defaultSymbol: symbol("kitos.svg", "23px", "23px"),
   field: "VEIKLAID",
   uniqueValueInfos,
 };

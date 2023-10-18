@@ -11,7 +11,6 @@ const graphicLayer = new GraphicsLayer({
 let handler: any;
 
 export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
-  console.log("areaStatus", areaStatus);
   if (areaStatus) {
     if (handler) {
       return;
@@ -29,8 +28,6 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
       };
 
       await solveServiceArea(serviceAreaUrl, params);
-
-      console.log("vieLAyer", view.map);
     });
   } else {
     handler?.remove();
@@ -68,24 +65,18 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
   ) {
     const graphics: Graphic[] = [];
 
-    console.log("serviceAreaParams", serviceAreaParams);
     await geoprocessor.submitJob(url, serviceAreaParams).then((jobInfo) => {
-      console.log("jobInfo", jobInfo);
       const jobid = jobInfo.jobId;
-      console.log("ArcGIS Server job ID: ", jobid);
 
       const options = {
         interval: 1500,
-        statusCallback: (j: any) => {
-          console.log("Job Status: ", j.jobStatus);
-        },
+        statusCallback: (j: any) => {},
       };
 
       // reikai pridėti loading kol skaičiuoja service area
 
       jobInfo.waitForJobCompletion().then(async () => {
         const layer = await jobInfo.fetchResultData("Service_Areas");
-        console.log("layer", layer);
         // @ts-ignore
         if (layer.value.features.length) {
           // @ts-ignore
@@ -93,7 +84,6 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
             feature: __esri.Graphic,
             index: number
           ) {
-            console.log("features", feature);
             const colors = [
               "rgba(177,211,50,.25)",
               "rgba(177,211,50,.5)",
@@ -114,7 +104,6 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
           await graphicLayer.addMany(graphics);
           const pointGraphic = graphicLayer.graphics.shift();
           graphicLayer.graphics.push(pointGraphic);
-          console.log("graphicLayer", graphicLayer);
         }
       });
     });

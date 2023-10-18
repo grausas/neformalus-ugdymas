@@ -65,8 +65,6 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
     },
   });
 
-  console.log("layer", layer);
-
   layer.featureReduction = {
     type: "cluster",
     clusterRadius: 80,
@@ -103,8 +101,6 @@ export function init(container: HTMLDivElement, layer: __esri.FeatureLayer) {
       },
     ],
   };
-
-  console.log("layer.featureReduction", layer.featureReduction);
 
   const marker = new SimpleMarkerSymbol({ color: [222, 222, 152, 0.93] });
 

@@ -7,8 +7,6 @@ export const queryDomains = async () => {
     .then((response) => response.json())
     .then((data) => data);
 
-  console.log("res", res);
-
   const filteredDomains = res.fields.filter((field: any) => {
     if (!field.domain) return;
     if (!field.domain.codedValues) return;

@@ -87,7 +87,7 @@ export const ActivitiesData = [
     id: 15,
     value: 15,
     text: "Kitos veiklos",
-    url: "/medijos.svg",
+    url: "/kitos.svg",
   },
   {
     id: 16,

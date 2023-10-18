@@ -88,7 +88,7 @@ export default function Simple() {
                   as="h1"
                   lineHeight="1"
                 >
-                  Neformalus
+                  Vilniaus miesto neformaliojo
                 </Heading>
                 <Heading
                   color="brand.50"
@@ -98,7 +98,7 @@ export default function Simple() {
                   as="h1"
                   lineHeight="1"
                 >
-                  Vilnius
+                  švietimo žemėlapis
                 </Heading>
               </Flex>
             </HStack>

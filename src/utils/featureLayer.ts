@@ -13,7 +13,7 @@ export const featuresFields = [
 
 export const relatedFeaturesFields = [
   "OBJECTID",
-  "GlobalID ",
+  "GlobalID",
   "VEIKLAID",
   "KLASE_1_4",
   "KLASE_5_8",

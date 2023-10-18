@@ -48,7 +48,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const esriId = await importIdentifyManager;
     esriId.tokenValidity = 720;
 
-    esriId.generateToken(serverInfo, users).then((response) => {
+    try {
+      const response = await esriId.generateToken(serverInfo, users);
       response.server = serverInfo.server;
       response.userId = users.username;
       esriId.registerToken(response);
@@ -65,7 +66,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         })
       );
       router.push("/");
-    });
+    } catch (error) {
+      return "Neteisingas prisijungimo vardas arba slaptažodis";
+    }
   };
 
   const logout = async () => {

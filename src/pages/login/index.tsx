@@ -17,18 +17,20 @@ import { AuthContext } from "@/context/auth";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const [loginResult, setLoginResult] = useState();
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
   const auth = useContext(AuthContext);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!user.username || !user.password) {
       setError(true);
       return;
     }
-    auth.login(user);
+    const results = await auth.login(user);
+    setLoginResult(results);
   };
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -50,6 +52,7 @@ export default function Login() {
           bg="brand.10"
         >
           <Heading fontSize={"2xl"}>Prisijungti prie savo paskyros</Heading>
+
           <FormControl
             id="email"
             isRequired
@@ -92,6 +95,8 @@ export default function Login() {
               <FormErrorMessage>Slaptažodis reikalingas</FormErrorMessage>
             )}
           </FormControl>
+          {loginResult && <Flex color="red">{loginResult}</Flex>}
+
           <Stack spacing={6}>
             <Button
               bg="brand.30"

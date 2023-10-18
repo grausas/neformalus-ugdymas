@@ -7,27 +7,32 @@ export type FormValues = {
   TELEFONAS?: string;
   SOC_TINKL?: string;
   PASTABA?: string;
-  related: {
-    VEIKLAID?: number | null;
-    KLASE_1_4?: number;
-    KLASE_5_8?: number;
-    KLASE_9_12?: number;
+  GlobalID?: string;
+  related?: {
+    VEIKLAID?: number[] | null;
+    KLASE_1_4?: number | null;
+    KLASE_5_8?: number | null;
+    KLASE_9_12?: number | null;
     NVS_KREPSE?: number | null;
-    SPC_POREIK?: number;
+    SPC_POREIK?: number | null;
     PEDAGOGAS?: string | null;
     PASTABA?: string;
     VEIKLAGRID?: number;
+    GUID?: string;
+    OBJECTID?: number | null;
   };
 };
 
 export type FormRelated = {
-  VEIKLAID?: number | null;
-  KLASE_1_4?: number;
-  KLASE_5_8?: number;
-  KLASE_9_12?: number;
+  VEIKLAID?: number[] | null;
+  KLASE_1_4?: number | null;
+  KLASE_5_8?: number | null;
+  KLASE_9_12?: number | null;
   NVS_KREPSE?: number | null;
-  SPC_POREIK?: number;
+  SPC_POREIK?: number | null;
   PEDAGOGAS?: string | null;
-  PASTABA?: string;
+  PASTABA?: string | null;
   VEIKLAGRID?: number;
+  GUID?: string;
+  OBJECTID?: number | null;
 };

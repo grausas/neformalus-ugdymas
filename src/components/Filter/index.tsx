@@ -56,13 +56,10 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
   const [activityGroup, setActivityGroup] = useState<__esri.Graphic[]>();
   const [domains, setDomains] = useState();
 
-  console.log("nvsKrepse", nvsKrepse);
-
   useEffect(() => {
     if (!view) return;
     async function queryData() {
       const results = await queryActivityGroupTable();
-      // console.log("results", results);
       setActivityGroup(results);
       const domainsResults = await queryDomains();
       setDomains(domainsResults);
@@ -76,8 +73,6 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
     const results = activityGroup.filter(
       (item) => item.attributes.VEIKLAGRID === group
     );
-    console.log("results", results);
-    console.log("domains", domains);
     // @ts-ignore
     const filteredData = domains[0].domain.codedValues.filter(
       (item: { code: number }) => {
@@ -86,13 +81,8 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
         );
       }
     );
-    console.log("filteredData", filteredData);
     return filteredData;
   }, [activityGroup, domains, group]);
-
-  console.log("filteredActivitiesData", filteredActivitiesData);
-
-  console.log("filter group", group);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -122,7 +112,6 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
   // filter by classData
   const handleFilterByClass = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value, name } = event.target;
-    console.log("event.target", event.target);
     if (checked) {
       setClassFilter((prevClassFilter) => [
         ...prevClassFilter,
@@ -134,8 +123,6 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
       );
     }
   };
-
-  console.log("classFilter", classFilter);
 
   const handleActivities = () => {
     handleFilter(activity, nvsKrepse, classFilter);
@@ -166,7 +153,11 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
             px="5"
             display={filteredActivitiesData.length > 0 ? "block" : "none"}
             rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
-            _active={{ borderColor: "brand.21", bg: "brand.10" }}
+            _active={{
+              borderColor: "brand.21",
+              bg: "brand.10",
+              boxShadow: "md",
+            }}
           >
             Veiklos
           </MenuButton>
@@ -217,7 +208,11 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
               color="brand.21"
               px="5"
               rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
-              _active={{ borderColor: "brand.21", bg: "brand.10" }}
+              _active={{
+                borderColor: "brand.21",
+                bg: "brand.10",
+                boxShadow: "md",
+              }}
             >
               NVŠ krepšelis
             </MenuButton>
@@ -266,7 +261,11 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
               px="5"
               color="brand.21"
               rightIcon={<TriangleDownIcon boxSize="2" color="brand.50" />}
-              _active={{ borderColor: "brand.21", bg: "brand.10" }}
+              _active={{
+                borderColor: "brand.21",
+                bg: "brand.10",
+                boxShadow: "md",
+              }}
             >
               Klasės
             </MenuButton>

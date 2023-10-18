@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Text,
@@ -15,9 +15,10 @@ import {
   FormLabel,
   FormControl,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
-import { PhoneIcon, EmailIcon, LinkIcon, SmallAddIcon } from "@chakra-ui/icons";
+import { PhoneIcon, EmailIcon, LinkIcon, AddIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
 import SelectField from "../Select";
 import { drawPoints } from "@/helpers/sketch";
@@ -34,6 +35,11 @@ type Props = {
   view?: __esri.MapView;
 };
 
+type ToastState = {
+  text: string;
+  status: "info" | "success" | "error" | "warning";
+};
+
 export default function Form({ auth, view }: Props) {
   const {
     register,
@@ -46,24 +52,47 @@ export default function Form({ auth, view }: Props) {
   } = useForm<FormValues>();
   const [sketch, setSketch] = useState<__esri.Sketch>();
   const [geometry, setGeometry] = useState<__esri.Geometry>();
-  const [spcPoreikiai, setSpcPoreikiai] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [checkedNVS, setCheckedNVS] = useState<number | null>();
   const [activityGroup, setActivityGroup] = useState<any>();
   const [domains, setDomains] = useState<any>();
+  const [resultsText, setResultsText] = useState<ToastState>({
+    text: "",
+    status: "info",
+  });
+  const toast = useToast();
 
+  // add new features on form submit
   const onSubmit = async (attributes: FormValues) => {
-    console.log("attributes", attributes);
-    if (!geometry) return console.log("error nera geometrijos");
+    if (!geometry)
+      return setResultsText({
+        text: "Padėkite tašką žemėlapyje",
+        status: "warning",
+      });
     const relatedAttributes = attributes.related;
+    delete attributes.related;
     const results = await AddFeature(attributes, geometry, relatedAttributes);
-    // console.log("results", results);
+    if (results === "success") {
+      view?.graphics.removeAll();
+      sketch?.layer.graphics.removeAll();
+      setGeometry(undefined);
+      setResultsText({
+        text: "Objektas sėkmingai pridėtas",
+        status: "success",
+      });
+      reset();
+      handleCheckboxChange(null);
+      const layer = view?.map.layers.getItemAt(0);
+      // @ts-ignore
+      await layer.refresh();
+    } else {
+      setResultsText({ text: "Įvyko klaida", status: "error" });
+    }
   };
 
   const onInvalid = () => null;
 
   const selectedValueGroup = watch("related.VEIKLAGRID");
-  console.log("selectedValueGroup", selectedValueGroup);
 
   const handleCheckboxChange = (value: number | null) => {
     setCheckedNVS(value); // Update the state with the value of the checked checkbox
@@ -93,7 +122,17 @@ export default function Form({ auth, view }: Props) {
 
   sketch?.on("create", function (event) {
     if (event.state === "complete") {
-      setGeometry(event.graphic.geometry);
+      if (geometry) {
+        sketch.layer.graphics.remove(event.graphic);
+      } else {
+        setGeometry(event.graphic.geometry);
+      }
+    }
+  });
+
+  sketch?.on("update", function (event) {
+    if (event.state === "complete") {
+      setGeometry(event.graphics[0].geometry);
     }
   });
 
@@ -104,6 +143,11 @@ export default function Form({ auth, view }: Props) {
         VEIKLAGRID: 1,
         VEIKLAID: null,
         PEDAGOGAS: null,
+        KLASE_1_4: null,
+        KLASE_5_8: null,
+        KLASE_9_12: null,
+        NVS_KREPSE: null,
+        SPC_POREIK: null,
       },
     });
   }, [reset]);
@@ -114,7 +158,6 @@ export default function Form({ auth, view }: Props) {
     if (!view) return;
     async function queryData() {
       const results = await queryActivityGroupTable();
-      // console.log("results", results);
       setActivityGroup(results);
       const domainsResults = await queryDomains();
       setDomains(domainsResults);
@@ -129,8 +172,6 @@ export default function Form({ auth, view }: Props) {
       (item: { attributes: { VEIKLAGRID: number | undefined } }) =>
         item.attributes.VEIKLAGRID === watchedGroups
     );
-    console.log("results", results);
-    console.log("domains", domains);
     // @ts-ignore
     const filteredData = domains[0].domain.codedValues.filter(
       (item: { code: number }) => {
@@ -140,9 +181,31 @@ export default function Form({ auth, view }: Props) {
         );
       }
     );
-    console.log("filteredData", filteredData);
     return filteredData;
   }, [activityGroup, domains, watchedGroups]);
+
+  // show toast message on add new feature results
+  useEffect(() => {
+    if (resultsText.text !== "") {
+      const { text, status } = resultsText;
+
+      toast({
+        description: text,
+        status: status,
+        duration: 3000,
+        position: "top",
+        isClosable: true,
+      });
+    }
+  }, [resultsText, toast]);
+
+  // default values for veikla
+  const defaultValuesActivities = useCallback(() => {
+    const defaultValues = filteredActivitiesData.filter((value: any) => {
+      return watch("related.VEIKLAID")?.includes(value.code);
+    });
+    return defaultValues;
+  }, [filteredActivitiesData, watch]);
 
   return (
     <>
@@ -151,14 +214,15 @@ export default function Form({ auth, view }: Props) {
         bg="brand.10"
         _hover={{ bg: "brand.20" }}
         shadow="md"
-        right="4"
-        top="20"
-        size="sm"
-        onClick={onOpen}
+        right="200px"
+        top="15px"
+        size="md"
+        onClick={isOpen ? onClose : onOpen}
+        px="6"
+        fontSize="sm"
         textTransform="uppercase"
-        px="4"
       >
-        <SmallAddIcon />
+        <AddIcon color="brand.40" mr="1" boxSize="3" />
         Pridėti
       </Button>
       {isOpen && (
@@ -167,7 +231,7 @@ export default function Form({ auth, view }: Props) {
           position="absolute"
           top="20"
           right="4"
-          maxW="650px"
+          maxW="800px"
           maxH="100%"
           bg="brand.10"
           p="4"
@@ -198,7 +262,8 @@ export default function Form({ auth, view }: Props) {
           <Controller
             control={control}
             name="related.VEIKLAGRID"
-            rules={{ required: "Please enter at least one food group." }}
+            defaultValue={watch("related.VEIKLAGRID")}
+            rules={{ required: "Reikalinga grupė" }}
             render={({
               field: { onChange, onBlur, name, ref },
               fieldState: { error },
@@ -216,10 +281,14 @@ export default function Form({ auth, view }: Props) {
                   onChange={(select: any) => onChange(select.value)}
                   onBlur={onBlur}
                   options={GroupData}
-                  defaultValue={{
-                    label: GroupData[0].label,
-                    value: GroupData[0].value,
-                  }}
+                  value={GroupData.map((item) => {
+                    if (item.value === watch("related.VEIKLAGRID")) {
+                      return {
+                        label: item.label,
+                        value: item.value,
+                      };
+                    }
+                  })}
                   isSearchable={false}
                 />
 
@@ -265,12 +334,14 @@ export default function Form({ auth, view }: Props) {
               </InputLeftAddon>
             </InputField>
             <InputField
-              type="number"
+              type="tel"
               register={register}
               registerValue="TELEF_MOB"
               error={errors.TELEF_MOB && errors.TELEF_MOB.message}
               name="Mobilaus telefono numeris"
               id="TELEF_MOB"
+              maxLength={8}
+              minLength={8}
             >
               <InputLeftAddon bg="brand.10">+370</InputLeftAddon>
             </InputField>
@@ -351,6 +422,7 @@ export default function Form({ auth, view }: Props) {
                   placeholder="Pasirinkti veiklas"
                   closeMenuOnSelect={false}
                   noOptionsMessage={() => "Nėra pasirinkimų"}
+                  value={defaultValuesActivities()}
                 />
 
                 <FormErrorMessage>
@@ -361,9 +433,30 @@ export default function Form({ auth, view }: Props) {
           />
           <HStack spacing="4" mt="1">
             <Text>Klasės:</Text>
-            <Checkbox>1-4 klasė</Checkbox>
-            <Checkbox>5-8 klasė</Checkbox>
-            <Checkbox>9-12 klasė</Checkbox>
+            <Checkbox
+              onChange={(e) =>
+                setValue("related.KLASE_1_4", e.target.checked ? 1 : null)
+              }
+              defaultChecked={watch("related.KLASE_1_4") === 1}
+            >
+              1-4 klasė
+            </Checkbox>
+            <Checkbox
+              onChange={(e) =>
+                setValue("related.KLASE_5_8", e.target.checked ? 1 : null)
+              }
+              defaultChecked={watch("related.KLASE_5_8") === 1}
+            >
+              5-8 klasė
+            </Checkbox>
+            <Checkbox
+              onChange={(e) =>
+                setValue("related.KLASE_9_12", e.target.checked ? 1 : null)
+              }
+              defaultChecked={watch("related.KLASE_9_12") === 1}
+            >
+              9-12 klasė
+            </Checkbox>
           </HStack>
           <Flex flexDirection="row">
             <Text mr="4">Taikomas NVŠ krepšelis:</Text>
@@ -371,18 +464,16 @@ export default function Form({ auth, view }: Props) {
               mr="4"
               onChange={(e) => {
                 setValue("related.NVS_KREPSE", e.target.checked ? 1 : null);
-                handleCheckboxChange(checkedNVS === 1 ? null : 1);
               }}
-              isChecked={checkedNVS === 1}
+              isChecked={watch("related.NVS_KREPSE") === 1}
             >
               Taip
             </Checkbox>
             <Checkbox
               onChange={(e) => {
                 setValue("related.NVS_KREPSE", e.target.checked ? 2 : null);
-                handleCheckboxChange(checkedNVS === 2 ? null : 2);
               }}
-              isChecked={checkedNVS === 2}
+              isChecked={watch("related.NVS_KREPSE") === 2}
             >
               Ne
             </Checkbox>
@@ -394,17 +485,19 @@ export default function Form({ auth, view }: Props) {
             <Checkbox
               mr="4"
               onChange={(e) => {
-                setValue("related.SPC_POREIK", e.target.checked ? 1 : 2);
-                setSpcPoreikiai(!spcPoreikiai);
+                setValue("related.SPC_POREIK", e.target.checked ? 1 : null);
               }}
+              defaultChecked={watch("related.SPC_POREIK") === 1}
+              isChecked={watch("related.SPC_POREIK") === 1}
             >
               Taip
             </Checkbox>
             <Checkbox
               onChange={(e) => {
-                setValue("related.SPC_POREIK", e.target.checked ? 1 : 2);
-                setSpcPoreikiai(!spcPoreikiai);
+                setValue("related.SPC_POREIK", e.target.checked ? 2 : null);
               }}
+              defaultChecked={watch("related.SPC_POREIK") === 2}
+              isChecked={watch("related.SPC_POREIK") === 2}
             >
               Ne
             </Checkbox>

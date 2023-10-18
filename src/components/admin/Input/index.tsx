@@ -17,6 +17,8 @@ type Props = {
   placeholder?: string;
   id: string;
   children?: React.ReactNode;
+  maxLength?: number;
+  minLength?: number;
 };
 
 export default function InputField({
@@ -29,6 +31,8 @@ export default function InputField({
   placeholder,
   id,
   children,
+  maxLength,
+  minLength,
 }: Props) {
   return (
     <FormControl>
@@ -43,6 +47,8 @@ export default function InputField({
           placeholder={placeholder}
           {...register(registerValue, options)}
           bg="brand.10"
+          maxLength={maxLength}
+          minLength={minLength}
         />
       </InputGroup>
       <FormErrorMessage>{error}</FormErrorMessage>

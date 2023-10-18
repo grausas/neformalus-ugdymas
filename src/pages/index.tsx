@@ -4,7 +4,9 @@ import React, {
   useContext,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 const ArcGISMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -18,6 +20,8 @@ import {
   useDisclosure,
   Button,
   useMediaQuery,
+  Link,
+  Text,
 } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Filter from "@/components/Filter";
@@ -42,6 +46,8 @@ import Polyline from "@arcgis/core/geometry/Polyline.js";
 import GroupTabs from "@/components/GroupTabs";
 import { calculateArea } from "@/helpers/calculateArea";
 import ServiceArea from "@/components/ServiceArea";
+import EditForm from "@/components/admin/EditForm";
+import vplanas from "@/assets/Vplanas.png";
 
 const defaultWhereParams = "1=1";
 const defaultGroup = 1;
@@ -76,6 +82,7 @@ export default function Map() {
   >();
   const auth = useContext(AuthContext);
   const [data, setData] = useState<__esri.Graphic[]>([]);
+  const [editData, setEditData] = useState<__esri.Graphic>();
   const [filteredData, setFilteredData] = useState<__esri.Graphic[]>([]);
   const [objIds, setObjIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,24 +95,38 @@ export default function Map() {
   >([]);
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure({
-    defaultIsOpen: true,
+    defaultIsOpen: isMobile ? false : true,
   });
+  const {
+    isOpen: isOpenEdit,
+    onOpen: onOpenEdit,
+    onClose: onCloseEdit,
+  } = useDisclosure();
 
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
   }, [activities, group, nvs, classFilter]);
 
-  console.log("whereParams", whereParams);
+  useEffect(() => {
+    if (view) {
+      view.goTo({
+        target: [25.28093, 54.681],
+        zoom: 13,
+      });
+      setActivities([]);
+      setNvs(undefined);
+      setClassFilter([]);
+    }
+  }, [group, view]);
 
   useEffect(() => {
     if (objIds.length === 0) return;
     const filterDataOnClick = async () => {
-      console.log("objectIds", objIds);
       const filteredArray = await data.filter((item) => {
         return objIds.includes(item.attributes.OBJECTID);
       });
-      console.log("filteredArray", filteredArray);
       setFilteredData(filteredArray);
       setLoading(false);
     };
@@ -132,7 +153,6 @@ export default function Map() {
     });
 
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
-    console.log("objectIds", objectIds);
 
     if (objectIds.length > 0) {
       const relatedFeatures = await layer.queryRelatedFeatures({
@@ -141,21 +161,17 @@ export default function Map() {
         objectIds: objectIds,
         where: whereParams,
       });
-      console.log("relatedFeatures", relatedFeatures);
 
       const globalIdsAsNumber = Object.keys(relatedFeatures).map(Number);
-      console.log("globalIdsAsNumber", globalIdsAsNumber);
 
       if (whereParams) {
         const filteredFeatures = featureResults.features.filter((f) => {
           return globalIdsAsNumber.includes(f.attributes.OBJECTID);
         });
 
-        console.log("whereParams", whereParams);
         const featureFilter = await new FeatureFilter({
-          where: whereParams,
+          where: "OBJECTID IN (" + globalIdsAsNumber.join(",") + ")",
         });
-        console.log("featureFilter", featureFilter);
         layerView.filter = featureFilter;
 
         featureResults.features = filteredFeatures;
@@ -178,7 +194,6 @@ export default function Map() {
       }
     }
 
-    console.log("featureResults", featureResults);
     setData(featureResults.features);
     setLoading(false);
   };
@@ -219,17 +234,14 @@ export default function Map() {
   useEffect(() => {
     if (!view) return;
     // check if null
-    console.log("activeServiceAreasssssss", activeServiceArea);
     calculateArea(view, activeServiceArea);
   }, [activeServiceArea, view]);
-
-  console.log("activeServiceArea", activeServiceArea);
 
   // filter features on map click
   useEffect(() => {
     if (view && featureLayer) {
       view.on("click", async (event) => {
-        console.log("event", event);
+        if (view.zoom < 12) return;
         const response = await view.hitTest(event, {
           include: featureLayer,
         });
@@ -240,7 +252,6 @@ export default function Map() {
             let objectIds: number[] = [];
 
             const results = response.results;
-            console.log("response", response.results);
             // @ts-ignore
             if (results[0].graphic.attributes.aggregateId) {
               const query = layerView.createQuery();
@@ -250,7 +261,6 @@ export default function Map() {
               const clusterGeometry = results[0].graphic.geometry;
 
               query.aggregateIds = [aggregateId];
-              console.log("query", query);
               const { features } = await layerView.queryFeatures(query);
               const uniqueFeatures = features.filter(
                 (obj, index) =>
@@ -260,15 +270,8 @@ export default function Map() {
                   ) === index
               );
 
-              console.log("uniqueFeatures", uniqueFeatures);
-
               objectIds = features.map((f) => f.attributes.OBJECTID);
               setObjIds(objectIds);
-              console.log("objectIds", objectIds);
-              console.log("data", data);
-
-              console.log("features", features);
-
               const radius =
                 uniqueFeatures.length < 8 ? view.scale / 85 : view.scale / 70;
 
@@ -277,8 +280,6 @@ export default function Map() {
                 uniqueFeatures.length,
                 radius
               );
-
-              console.log("points", points);
 
               let pointUrl: string;
 
@@ -290,7 +291,6 @@ export default function Map() {
                 );
 
                 if (activity && index < points.length) {
-                  console.log("poitn", points);
                   const point = points[index];
                   const pointUrl = activity.url;
 
@@ -332,7 +332,6 @@ export default function Map() {
                   graphicArray.push(graphic);
                 }
               });
-              console.log("graphicArray", graphicArray);
 
               const centerPoint = {
                 // @ts-ignore
@@ -353,7 +352,6 @@ export default function Map() {
 
               view.graphics.addMany(graphicArray);
               view.graphics.add(centerPointGraphic);
-              console.log("view", view);
             } else {
               //@ts-ignore
               objectIds = [results[0].graphic.attributes.OBJECTID];
@@ -382,18 +380,15 @@ export default function Map() {
 
               view.graphics.add(graphic);
             }
-            console.log("objectIdsHere", objectIds);
             const featureFilter = new FeatureFilter({
               objectIds: objectIds,
             });
-            console.log("featureFilter", featureFilter);
 
             layerView.featureEffect = new FeatureEffect({
               filter: featureFilter,
               excludedEffect: "grayscale(100%) opacity(30%)",
             });
           } else {
-            console.log("hererere");
             layerView.featureEffect = new FeatureEffect({
               excludedEffect: "opacity(100%)",
             });
@@ -429,6 +424,29 @@ export default function Map() {
     }
   };
 
+  const handleEdit = (e: __esri.Graphic) => {
+    if (!view || !featureLayer) return;
+    setEditData(e);
+
+    view?.whenLayerView(featureLayer).then((layerView) => {
+      const objectIds = e.attributes.relatedFeatures.map(
+        (f: __esri.Graphic) => f.attributes.OBJECTID
+      );
+
+      const featureFilter = new FeatureFilter({
+        objectIds: objectIds,
+        // where: "OBJECTID = 66",
+      });
+
+      layerView.featureEffect = new FeatureEffect({
+        filter: featureFilter,
+        excludedEffect: "grayscale(100%) opacity(30%)",
+      });
+    });
+
+    onOpenEdit();
+  };
+
   return (
     <Stack
       direction={{ base: "column", md: "row" }}
@@ -448,6 +466,12 @@ export default function Map() {
         zIndex={999}
         bg={isOpen ? "brand.40" : "brand.10"}
         color={isOpen ? "brand.10" : "brand.40"}
+        shadow="lg"
+        _focus={{
+          bg: isOpen ? "brand.40" : "brand.10",
+          color: isOpen ? "brand.10" : "brand.40",
+        }}
+        opacity="0.9"
       >
         {loading
           ? "Kraunasi ..."
@@ -522,28 +546,47 @@ export default function Map() {
             >
               {!loading &&
                 filteredData.length > 0 &&
-                filteredData.map((item) => (
+                filteredData.map((item, index) => (
                   <Card
                     key={item.attributes.OBJECTID}
                     cardData={item}
                     view={view}
+                    auth={auth}
+                    handleEdit={handleEdit}
                   />
                 ))}
+
               {!loading && data.length === 0 && <NoResults />}
             </Stack>
           </Box>
         )}
       </Flex>
       <Box
-        position="relative"
+        position={{ base: "absolute", md: "relative" }}
+        bottom="0"
         zIndex="0"
         w="100%"
-        h={{ base: "100%", md: "calc(100vh - 64px)" }}
+        h={{ base: "calc(100vh - 158px)", md: "calc(100vh - 64px)" }}
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />
         <ArcGISMap />
         {auth.user.token && <Form auth={auth.user.token} view={view} />}
+        {auth.user.token && editData && (
+          <EditForm
+            isOpen={isOpenEdit}
+            onClose={onCloseEdit}
+            editData={editData}
+            view={view}
+          />
+        )}
+        <Link href="https://www.vilniausplanas.lt/">
+          <Flex position="absolute" bottom="2" right="2" bg="brand.10" px="1">
+            <Text fontSize="xs" color="brand.50">
+              &copy; {new Date().getFullYear()} Vilniaus planas
+            </Text>
+          </Flex>
+        </Link>
       </Box>
     </Stack>
   );

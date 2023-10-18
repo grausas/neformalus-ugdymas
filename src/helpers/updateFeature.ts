@@ -1,34 +1,29 @@
+import { DeleteFeature } from "@/helpers/deleteFeature";
 import { featureLayerPrivate, featureLayerPrivateTable } from "@/layers";
 import Graphic from "@arcgis/core/Graphic";
 import { FormValues, FormRelated } from "@/types/form";
 
-export const AddFeature = async (
+export const UpdateFeature = async (
   attributes: FormValues,
-  geometry: __esri.Geometry,
-  relatedAttributes?: FormRelated
+  //   geometry: __esri.Geometry,
+  relatedAttributes?: FormRelated,
+  deleteVeiklaIds?: number[]
 ) => {
-  const addFeature = new Graphic({
+  const updateFeature = new Graphic({
     attributes,
-    geometry,
+    // geometry,
   });
 
-  if (attributes.TELEF_MOB) {
-    attributes.TELEF_MOB = `+370${attributes.TELEF_MOB}`;
-  }
-
-  const addRelatedFeatures: Graphic[] = [];
-
-  // const addRelatedFeatures = new Graphic({
-  //   attributes: relatedAttributes,
-  // });
+  const updateRelatedFeatures: Graphic[] = [];
 
   if (relatedAttributes?.VEIKLAID && relatedAttributes.VEIKLAID.length > 0) {
     const itemToAdd = { ...relatedAttributes };
+    delete itemToAdd.OBJECTID;
     relatedAttributes?.VEIKLAID.map((item: number) => {
       const activityNumber = item;
       // @ts-ignore
       itemToAdd.VEIKLAID = activityNumber;
-      addRelatedFeatures.push(
+      updateRelatedFeatures.push(
         new Graphic({
           attributes: {
             ...itemToAdd,
@@ -37,7 +32,7 @@ export const AddFeature = async (
       );
     });
   } else {
-    addRelatedFeatures.push(
+    updateRelatedFeatures.push(
       new Graphic({
         attributes: relatedAttributes,
       })
@@ -45,21 +40,42 @@ export const AddFeature = async (
   }
 
   const edits = {
-    addFeatures: [addFeature],
+    updateFeatures: [updateFeature],
   };
 
   const relatedEdits = {
-    addFeatures: addRelatedFeatures,
+    addFeatures: updateRelatedFeatures,
+  };
+
+  const deleteVeiklas = {
+    deleteFeatures: deleteVeiklaIds?.map((item) => {
+      return { objectId: item };
+    }),
   };
 
   let results;
 
-  const addRelatedData = async (globalId: string) => {
+  const addRelatedData = async () => {
     relatedEdits.addFeatures.forEach((item) => {
-      item.attributes.GUID = globalId;
+      item.attributes.GUID = attributes.GlobalID;
     });
     await featureLayerPrivateTable()
       .applyEdits(relatedEdits)
+      .then((response) => {
+        if (response) {
+          results = "success";
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          results = "error";
+        }
+      });
+  };
+
+  const deleteVeikla = async () => {
+    await featureLayerPrivateTable()
+      .applyEdits(deleteVeiklas)
       .then((response) => {
         if (response) {
           results = "success";
@@ -76,8 +92,8 @@ export const AddFeature = async (
     .applyEdits(edits)
     .then(async (response) => {
       if (response) {
-        const globalId = response.addFeatureResults[0].globalId;
-        await addRelatedData(globalId);
+        await deleteVeikla();
+        await addRelatedData();
         results = "success";
       }
     })

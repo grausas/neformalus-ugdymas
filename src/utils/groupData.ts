@@ -16,9 +16,9 @@ export const GroupData = [
   {
     id: 3,
     value: 3,
-    text: "Atviri jaunimo centrai",
+    text: "Atviri jaunimo centrai ir grupės",
     url: "/atviri_jaunimo_centrai.svg",
-    label: "Atviri jaunimo centrai",
+    label: "Atviri jaunimo centrai ir grupės",
   },
   {
     id: 4,

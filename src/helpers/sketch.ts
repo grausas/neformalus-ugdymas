@@ -6,6 +6,25 @@ export const gLayer = new graphicLayer({
 export const drawPoints = async (view: __esri.MapView | undefined) => {
   view?.map.layers.add(gLayer);
   const sketch = await (await import("@arcgis/core/widgets/Sketch.js")).default;
+  const sketchViewModel = await (
+    await import("@arcgis/core/widgets/Sketch/SketchViewModel")
+  ).default;
+
+  const sketchModel = new sketchViewModel({
+    view: view,
+    layer: gLayer,
+    pointSymbol: {
+      type: "simple-marker",
+      style: "circle",
+      color: "#f15a24",
+      size: "14px",
+      outline: {
+        width: 1,
+        style: "solid",
+        color: "#c2c2c2",
+      },
+    },
+  });
 
   const home = new sketch({
     view: view,
@@ -29,6 +48,7 @@ export const drawPoints = async (view: __esri.MapView | undefined) => {
     },
   });
 
+  home.viewModel = sketchModel;
   view?.ui.add(home, {
     position: "top-right",
   });

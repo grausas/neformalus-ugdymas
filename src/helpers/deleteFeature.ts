@@ -1,4 +1,5 @@
 import { featureLayerPrivate } from "@/layers";
+import Graphic from "@arcgis/core/Graphic";
 
 export const DeleteFeature = async (objectId: number) => {
   const featureDelete = {
