@@ -376,7 +376,7 @@ export default function Map() {
                 symbol: {
                   // @ts-ignore
                   type: "picture-marker",
-                  url: pointUrl,
+                  url: pointUrl ? pointUrl : "/kitos.svg",
                   width: "25px",
                   height: "25px",
                 },
