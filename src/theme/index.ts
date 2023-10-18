@@ -7,9 +7,14 @@ const theme = extendTheme({
       body: {
         bg: "brand.20",
         // bg: "brand.40",
-        minHeight: "100vh",
+        // minHeight: "100vh",
+        /* mobile viewport bug fix */
+        minHeight: "webkit-fill-available",
         textRendering: "optimizeSpeed",
         lineHeight: "1.5",
+      },
+      html: {
+        minHeight: "webkit-fill-available",
       },
       // styles for the `a`
       a: {
