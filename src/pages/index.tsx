@@ -95,9 +95,11 @@ export default function Map() {
   >([]);
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [isMobile] = useMediaQuery("(min-width: 768px)");
+
+  console.log("isMobile", isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure({
-    defaultIsOpen: isMobile ? false : true,
+    defaultIsOpen: isMobile === true ? false : true,
   });
   const {
     isOpen: isOpenEdit,
@@ -494,7 +496,6 @@ export default function Map() {
         py="2"
         zIndex="1"
         bg="brand.20"
-        h="100%"
       >
         {/* <Search
           handleSearch={(e: React.ChangeEvent<HTMLInputElement>) =>
