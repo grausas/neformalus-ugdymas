@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 const ArcGISMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -96,8 +97,6 @@ export default function Map() {
   const [group, setGroup] = useState(defaultGroup);
   const [activeServiceArea, setActiveServiceArea] = useState(false);
   const [isMobile] = useMediaQuery("(min-width: 768px)");
-
-  console.log("isMobile", isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure({
     defaultIsOpen: isMobile === true ? false : true,
   });
@@ -106,6 +105,7 @@ export default function Map() {
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
+  const router = useRouter();
 
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
@@ -154,6 +154,9 @@ export default function Map() {
       outFields: featuresFields,
     });
 
+    const queryParameters = new URLSearchParams(window.location.search);
+    const shareID = queryParameters.get("id");
+
     const objectIds = featureResults.features.map((f) => f.attributes.OBJECTID);
 
     if (objectIds.length > 0) {
@@ -200,7 +203,31 @@ export default function Map() {
       }
     }
 
-    setData(featureResults.features);
+    if (shareID) {
+      console.log("featuresResults", featureResults);
+      const feature = featureResults.features.filter((f) => {
+        return f.attributes.OBJECTID === Number(shareID);
+      });
+      console.log(feature);
+      const featureFilter = new FeatureFilter({
+        where: "OBJECTID = " + shareID,
+      });
+      //  layerView.featureEffect = new FeatureEffect({
+      //    filter: featureFilter,
+      //    excludedEffect: "grayscale(100%) opacity(30%)",
+      //  });
+      if (view?.zoom !== 17) {
+        await view?.goTo({
+          target: feature[0].geometry,
+          zoom: 17,
+        });
+      }
+      layerView.filter = featureFilter;
+      setData(feature);
+    } else {
+      setData(featureResults.features);
+    }
+
     setLoading(false);
   };
 
@@ -212,16 +239,20 @@ export default function Map() {
 
     setFeatureLayer(layer);
 
-    view.whenLayerView(layer).then((layerView) => {
-      queryFeatures(publicLayer, layerView);
+    view.whenLayerView(layer).then(async (layerView) => {
+      await queryFeatures(publicLayer, layerView);
 
       // subsequent map interaction
       handles.add(
         reactiveUtils.watch(
           () => [view.stationary, view.extent],
-          ([stationary]) => {
+          async ([stationary]) => {
             if (stationary) {
-              promiseUtils.debounce(queryFeatures(publicLayer, layerView));
+              console.log("hello");
+              await promiseUtils.debounce(
+                queryFeatures(publicLayer, layerView)
+              );
+              router.push("/");
             }
           }
         )
@@ -560,6 +591,9 @@ export default function Map() {
                     view={view}
                     auth={auth}
                     handleEdit={handleEdit}
+                    FeatureFilter={FeatureFilter}
+                    FeatureEffect={FeatureEffect}
+                    layer={featureLayer}
                   />
                 ))}
 

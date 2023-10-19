@@ -19,6 +19,7 @@ import {
   EditIcon,
 } from "@chakra-ui/icons";
 import facebook from "@/assets/facebook.svg";
+import share from "@/assets/share.png";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
 
@@ -29,11 +30,17 @@ const Card = forwardRef(
       view,
       auth,
       handleEdit,
+      FeatureFilter,
+      FeatureEffect,
+      layer,
     }: {
       cardData: __esri.Graphic;
       view?: __esri.MapView;
       auth: any;
       handleEdit: (cardData: __esri.Graphic) => void;
+      FeatureFilter?: any;
+      FeatureEffect?: any;
+      layer?: __esri.FeatureLayer;
     },
     ref
   ) => {
@@ -51,14 +58,30 @@ const Card = forwardRef(
     });
 
     const zoomToFeature = async (results: any) => {
-      view?.goTo(
-        {
-          target: results,
-          zoom: 17,
-        },
-        { duration: 400 }
-      );
+      if (!view || !layer) return;
+      view?.whenLayerView(layer).then((layerView) => {
+        // const featureFilter = new FeatureFilter({
+        //   objectIds: [results.attributes.OBJECTID],
+        //   // where: "OBJECTID = 549",
+        // });
+
+        // console.log(featureFilter);
+
+        // layerView.featureEffect = new FeatureEffect({
+        //   filter: featureFilter,
+        //   excludedEffect: "grayscale(100%) opacity(30%)",
+        // });
+        view?.goTo(
+          {
+            target: results.geometry,
+            zoom: 17,
+          },
+          { duration: 400 }
+        );
+      });
     };
+
+    const shareUrl = window.location.origin;
 
     return (
       <Flex
@@ -77,7 +100,7 @@ const Card = forwardRef(
           // pt: "10",
         }}
         onClick={() => {
-          zoomToFeature(cardData.geometry);
+          zoomToFeature(cardData);
         }}
         ref={ref}
         w="100%"
@@ -100,6 +123,7 @@ const Card = forwardRef(
             />
           </Tooltip>
         )}
+
         <Flex flexDirection="column" position="absolute" right="4">
           {classArr.map((arrItem: any) => {
             return ClassData.map((item) => {
@@ -131,9 +155,30 @@ const Card = forwardRef(
             {cardData.attributes.ADRESAS}
           </Text>
         </Flex>
-        <Heading size="md" color="brand.50" pr="8" fontWeight="600">
-          {cardData.attributes.PAVADIN}
-        </Heading>
+        <Flex mr="8" align="center">
+          <Tooltip
+            label="Dalintis"
+            fontSize="sm"
+            bg="brand.30"
+            color="brand.50"
+          >
+            <Box
+              position="absolute"
+              left="3"
+              onClick={(e) => {
+                navigator.clipboard.writeText(
+                  `${shareUrl}?id=${cardData.attributes.OBJECTID}`
+                );
+                e.stopPropagation();
+              }}
+            >
+              <Image width={16} height={16} src={share} alt="adresas" />
+            </Box>
+          </Tooltip>
+          <Heading size="md" color="brand.50" fontWeight="600" ml="5">
+            {cardData.attributes.PAVADIN}
+          </Heading>
+        </Flex>
         <Stack color="brand.40" my="2" spacing="0" minH="40px" fontSize="md">
           {cardData.attributes.EL_PASTAS && (
             <Flex alignItems="center">
