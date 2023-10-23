@@ -68,7 +68,7 @@ export default function Simple() {
           /> */}
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"} position="relative">
-              <Image height={22} width={22} src={logoBlack} alt="logo" />
+              <Image height={22} width={22} src="/logo_black.png" alt="logo" />
               <Box
                 _after={{
                   content: "''",
