@@ -136,12 +136,14 @@ const Card = forwardRef(
                       bg="brand.30"
                       color="brand.50"
                     >
-                      <Image
-                        width={24}
-                        height={24}
-                        src={item.icon}
-                        alt={item.text}
-                      />
+                      <Box>
+                        <Image
+                          width={24}
+                          height={24}
+                          src={item.icon}
+                          alt={item.text}
+                        />
+                      </Box>
                     </Tooltip>
                   </Box>
                 );
@@ -246,21 +248,22 @@ const Card = forwardRef(
                 return ActivitiesData.map((activity) => {
                   if (related.attributes.VEIKLAID === activity.value) {
                     return (
-                      <Box key={activity.id} mr="1" shadow="md">
-                        <Tooltip
-                          label={activity.text}
-                          fontSize="sm"
-                          bg="brand.30"
-                          color="brand.50"
-                        >
+                      <Tooltip
+                        key={activity.id}
+                        label={activity.text}
+                        fontSize="sm"
+                        bg="brand.30"
+                        color="brand.50"
+                      >
+                        <Box mr="1" shadow="md">
                           <Image
                             width={24}
                             height={24}
                             src={activity.url}
                             alt={activity.text}
                           />
-                        </Tooltip>
-                      </Box>
+                        </Box>
+                      </Tooltip>
                     );
                   }
                 });
@@ -289,12 +292,14 @@ const Card = forwardRef(
                     bg="brand.30"
                     color="brand.50"
                   >
-                    <Image
-                      width={24}
-                      height={24}
-                      src={isNvsKrepse === 1 ? nvs : nonvs}
-                      alt={tooltipLabel}
-                    />
+                    <Box>
+                      <Image
+                        width={24}
+                        height={24}
+                        src={isNvsKrepse === 1 ? nvs : nonvs}
+                        alt={tooltipLabel}
+                      />
+                    </Box>
                   </Tooltip>
                 );
               })}
