@@ -7,7 +7,7 @@ import {
   TabPanel,
   Tooltip,
 } from "@chakra-ui/react";
-import Image from "next/image";
+import Image from "../Image";
 import { GroupData } from "@/utils/groupData";
 
 type Props = {

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { ActivitiesData } from "@/utils/activitiesData";
 import { ClassData } from "@/utils/classData";
-import Image from "next/image";
+import Image from "../Image";
 import {
   EmailIcon,
   PhoneIcon,

@@ -9,7 +9,7 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
-import Image from "next/image";
+import Image from "../Image";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { AuthContext } from "@/context/auth";
 import logo from "@/assets/logo.png";
@@ -68,13 +68,7 @@ export default function Simple() {
           /> */}
           <Link href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={3} alignItems={"center"} position="relative">
-              <Image
-                height={22}
-                width={22}
-                src="/logo_black.png"
-                alt="logo"
-                unoptimized={true}
-              />
+              <Image height={22} width={22} src="/logo_black.png" alt="logo" />
               <Box
                 _after={{
                   content: "''",

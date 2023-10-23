@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   images: {
-    formats: ["image/webp", "image/avif"],
+    loader: "custom",
   },
 };
 
