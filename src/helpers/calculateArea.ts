@@ -10,12 +10,17 @@ const graphicLayer = new GraphicsLayer({
 });
 let handler: any;
 
-export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
+export const calculateArea = (
+  view: __esri.MapView,
+  areaStatus: boolean,
+  setLoading?: any
+) => {
   if (areaStatus) {
     if (handler) {
       return;
     }
     handler = view?.on("click", async function (event) {
+      setLoading(true);
       graphicLayer.removeAll();
       const locationGraphic = createGraphic(event.mapPoint);
 
@@ -104,8 +109,11 @@ export const calculateArea = (view: __esri.MapView, areaStatus: boolean) => {
           await graphicLayer.addMany(graphics);
           const pointGraphic = graphicLayer.graphics.shift();
           graphicLayer.graphics.push(pointGraphic);
+          setLoading(false);
         }
       });
     });
+
+    return graphics;
   }
 };

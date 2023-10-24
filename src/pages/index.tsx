@@ -87,6 +87,7 @@ export default function Map() {
   const [filteredData, setFilteredData] = useState<__esri.Graphic[]>([]);
   const [objIds, setObjIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMap, setLoadingMap] = useState(false);
   const [whereParams, setWhereParams] = useState(defaultWhereParams);
   const [searchTerm, setSearchTerm] = useState("");
   const [activities, setActivities] = useState<string[]>([]);
@@ -270,8 +271,7 @@ export default function Map() {
 
   useEffect(() => {
     if (!view) return;
-    // check if null
-    calculateArea(view, activeServiceArea);
+    calculateArea(view, activeServiceArea, setLoadingMap);
   }, [activeServiceArea, view]);
 
   // filter features on map click
@@ -611,6 +611,28 @@ export default function Map() {
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />
+        {loadingMap && (
+          <Box
+            bg="rgba(0, 0, 0, 0.1)"
+            w="100%"
+            h="100%"
+            zIndex="999"
+            position="absolute"
+            top="0"
+            left="0"
+          >
+            <Spinner
+              thickness="2px"
+              speed="0.65s"
+              emptyColor="brand.10"
+              size="lg"
+              position="absolute"
+              top="50%"
+              left="50%"
+              zIndex="999"
+            />
+          </Box>
+        )}
         <ArcGISMap />
         {auth.user.token && <Form auth={auth.user.token} view={view} />}
         {auth.user.token && editData && (
