@@ -48,7 +48,7 @@ import GroupTabs from "@/components/GroupTabs";
 import { calculateArea } from "@/helpers/calculateArea";
 import ServiceArea from "@/components/ServiceArea";
 import EditForm from "@/components/admin/EditForm";
-import vplanas from "@/assets/Vplanas.png";
+import { SearchIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 const defaultWhereParams = "1=1";
 const defaultGroup = 1;
@@ -491,30 +491,30 @@ export default function Map() {
       gap="0"
       position="relative"
       height={{ base: "calc(100vh - 32px)", md: "auto" }}
-      overflow="hidden"
+      // overflow="hidden"
     >
       <Button
         display={{ base: "block", md: "none" }}
         size="sm"
-        w="120px"
+        // width="20%"
+        width="fit-content"
         position="absolute"
-        bottom="10"
-        left="calc(50% - 60px)"
+        bottom="20%"
+        left="50%"
+        transform="translateX(-50%)"
         onClick={isOpen ? onClose : onOpen}
-        zIndex={999}
-        bg={isOpen ? "brand.40" : "brand.10"}
+        zIndex="999"
+        bg={isOpen ? "brand.50" : "brand.10"}
         color={isOpen ? "brand.10" : "brand.40"}
         shadow="lg"
-        _focus={{
-          bg: isOpen ? "brand.40" : "brand.10",
-          color: isOpen ? "brand.10" : "brand.40",
-        }}
+        sx={{ _hover: {} }}
         opacity="0.9"
+        leftIcon={isOpen ? <SearchIcon /> : <HamburgerIcon />}
       >
         {loading
           ? "Kraunasi ..."
           : isOpen
-          ? "Žemėlapis"
+          ? "Paieška žemėlapyje"
           : filteredData.length + " Sąrašas"}
       </Button>
       <Flex
@@ -567,7 +567,7 @@ export default function Map() {
             )}
             <Stack
               h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
-              overflow="auto"
+              overflowY="auto"
               css={{
                 "&::-webkit-scrollbar": {
                   height: "8px",
@@ -613,7 +613,7 @@ export default function Map() {
         <ServiceArea handleServiceArea={handleServiceArea} />
         {loadingMap && (
           <Box
-            bg="rgba(0, 0, 0, 0.1)"
+            bg="rgba(79, 79, 79, 0.1)"
             w="100%"
             h="100%"
             zIndex="999"

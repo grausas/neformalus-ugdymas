@@ -57,20 +57,11 @@ const Card = forwardRef(
         });
     });
 
+    let highlight: any;
+
     const zoomToFeature = async (results: any) => {
       if (!view || !layer) return;
       view?.whenLayerView(layer).then((layerView) => {
-        // const featureFilter = new FeatureFilter({
-        //   objectIds: [results.attributes.OBJECTID],
-        //   // where: "OBJECTID = 549",
-        // });
-
-        // console.log(featureFilter);
-
-        // layerView.featureEffect = new FeatureEffect({
-        //   filter: featureFilter,
-        //   excludedEffect: "grayscale(100%) opacity(30%)",
-        // });
         view?.goTo(
           {
             target: results.geometry,
@@ -78,6 +69,24 @@ const Card = forwardRef(
           },
           { duration: 400 }
         );
+        const featureFilter = new FeatureFilter({
+          where: "OBJECTID = " + results.attributes.OBJECTID,
+        });
+
+        console.log(featureFilter);
+
+        layerView.featureEffect = new FeatureEffect({
+          filter: featureFilter,
+          excludedEffect: "grayscale(100%) opacity(30%)",
+        });
+
+        let query = layer.createQuery();
+        query.where = "OBJECTID = " + results.attributes.OBJECTID;
+        layer.queryFeatures(query).then(function (result) {
+          console.log("result", result);
+          highlight?.remove();
+          highlight = layerView.highlight(result.features);
+        });
       });
     };
 

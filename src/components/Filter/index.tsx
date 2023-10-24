@@ -161,7 +161,7 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
           >
             Veiklos
           </MenuButton>
-          <MenuList>
+          <MenuList maxH={{ base: "50vh", md: "600px" }} overflow="auto">
             {filteredActivitiesData.map((item: ItemType, index: number) => {
               return (
                 <MenuItem key={item.code} py="1">
