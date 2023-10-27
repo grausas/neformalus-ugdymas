@@ -108,7 +108,6 @@ export default function Form({ auth, view }: Props) {
               const home = await drawPoints(view);
               setSketch(home);
             };
-            console.log("sketch rerenders");
             getPolygons();
           },
           { once: true }
@@ -119,7 +118,6 @@ export default function Form({ auth, view }: Props) {
   }, [auth, view]);
 
   sketch?.on("create", function (event) {
-    console.log("geomtry", geometry);
     if (event.state === "complete") {
       if (geometry) {
         sketch.layer.graphics.remove(event.graphic);

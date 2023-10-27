@@ -148,7 +148,6 @@ export default function Map() {
     layerView.featureEffect = new FeatureEffect({
       excludedEffect: "opacity(100%)",
     });
-    console.log("whereParams", whereParams);
 
     const featureResults = await layer.queryFeatures({
       returnGeometry: true,
