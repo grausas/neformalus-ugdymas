@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { text } from "stream/consumers";
 
 type Props = {
   register: any;

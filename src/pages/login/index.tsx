@@ -18,6 +18,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [loginResult, setLoginResult] = useState();
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -29,8 +30,10 @@ export default function Login() {
       setError(true);
       return;
     }
+    setLoading(true);
     const results = await auth.login(user);
     setLoginResult(results);
+    setLoading(false);
   };
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -103,6 +106,7 @@ export default function Login() {
               color="brand.40"
               _hover={{ bg: "brand.31", color: "brand.40" }}
               onClick={handleLogin}
+              isLoading={loading}
             >
               Prisijungti
             </Button>

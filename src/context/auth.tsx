@@ -23,8 +23,8 @@ interface AuthProviderProps {
 
 // Define the server information object
 const serverInfo: any = {
-  server: "https://opencity.vplanas.lt/",
-  tokenServiceUrl: "https://opencity.vplanas.lt/sharing/generateToken",
+  server: "https://opencity.vplanas.lt",
+  tokenServiceUrl: "https://opencity.vplanas.lt/sharing/rest/generateToken",
 };
 
 const serviceUrl =
@@ -50,22 +50,25 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
     try {
       const response = await esriId.generateToken(serverInfo, users);
-      response.server = serverInfo.server;
-      response.userId = users.username;
-      esriId.registerToken(response);
-      const token = response.token;
-      const name = response.userId;
-      const expires = response.expires;
-      setUser({ token, name, expires });
-      localStorage.setItem(
-        "item",
-        JSON.stringify({
-          token,
-          name,
-          expires,
-        })
-      );
-      router.push("/");
+      if (response) {
+        response.server = serverInfo.server;
+        response.userId = users.username;
+        await esriId.registerToken(response);
+        const token = response.token;
+        const name = response.userId;
+        const expires = response.expires;
+        setUser({ token, name, expires });
+        localStorage.setItem(
+          "item",
+          JSON.stringify({
+            token,
+            name,
+            expires,
+          })
+        );
+        await router.push("/");
+        window.location.reload();
+      }
     } catch (error) {
       return "Neteisingas prisijungimo vardas arba slaptažodis";
     }

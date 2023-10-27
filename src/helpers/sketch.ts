@@ -21,7 +21,7 @@ export const drawPoints = async (view: __esri.MapView | undefined) => {
       outline: {
         width: 1,
         style: "solid",
-        color: "#c2c2c2",
+        color: "#808080",
       },
     },
   });

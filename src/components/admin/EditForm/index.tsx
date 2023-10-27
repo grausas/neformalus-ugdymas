@@ -27,14 +27,9 @@ import {
 import { Select } from "chakra-react-select";
 import { PhoneIcon, EmailIcon, LinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
-import SelectField from "../Select";
-import { drawPoints } from "@/helpers/sketch";
-import Handles from "@arcgis/core/core/Handles.js";
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { UpdateFeature } from "@/helpers/updateFeature";
 import { DeleteFeature } from "@/helpers/deleteFeature";
 import { FormValues } from "@/types/form";
-import { ActivitiesData } from "@/utils/activitiesData";
 import { GroupData } from "@/utils/groupData";
 import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
@@ -199,7 +194,7 @@ export default function EditForm({ isOpen, onClose, editData, view }: any) {
       <VStack
         as="form"
         position="absolute"
-        bottom="5"
+        bottom="7"
         maxW="800px"
         w="100%"
         maxH={{ base: "450px", xl: "800px" }}

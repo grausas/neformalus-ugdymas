@@ -22,6 +22,7 @@ import facebook from "@/assets/facebook.svg";
 import share from "@/assets/share.png";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const Card = forwardRef(
   (
@@ -46,6 +47,7 @@ const Card = forwardRef(
   ) => {
     const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
     const classArr: any = [];
+    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
 
     const filteredClass = klaseArr.find((klase) => {
       cardData.attributes.relatedFeatures &&
@@ -73,8 +75,6 @@ const Card = forwardRef(
           where: "OBJECTID = " + results.attributes.OBJECTID,
         });
 
-        console.log(featureFilter);
-
         layerView.featureEffect = new FeatureEffect({
           filter: featureFilter,
           excludedEffect: "grayscale(100%) opacity(30%)",
@@ -83,7 +83,6 @@ const Card = forwardRef(
         let query = layer.createQuery();
         query.where = "OBJECTID = " + results.attributes.OBJECTID;
         layer.queryFeatures(query).then(function (result) {
-          console.log("result", result);
           highlight?.remove();
           highlight = layerView.highlight(result.features);
         });
@@ -161,7 +160,6 @@ const Card = forwardRef(
           })}
         </Flex>
         <Flex alignItems="center">
-          {/* <Image width={16} height={16} src={location} alt="adresas" /> */}
           <Text color="brand.21" fontWeight="600" fontSize="sm">
             {cardData.attributes.ADRESAS}
           </Text>
@@ -198,15 +196,19 @@ const Card = forwardRef(
             </Flex>
           )}
           {cardData.attributes.TELEF_MOB && (
-            <Flex alignItems="center">
+            <Flex alignItems="center" onClick={(e) => e.stopPropagation()}>
               <PhoneIcon mr="2" color="brand.40" />
-              <Text fontWeight="500">+{cardData.attributes.TELEF_MOB}</Text>
+              <a href={`tel:${cardData.attributes.TELEF_MOB}`}>
+                <Text fontWeight="500">+{cardData.attributes.TELEF_MOB}</Text>
+              </a>
             </Flex>
           )}
           {cardData.attributes.TELEFONAS && (
-            <Flex alignItems="center">
+            <Flex alignItems="center" onClick={(e) => e.stopPropagation()}>
               <PhoneIcon mr="2" color="brand.40" />
-              <Text fontWeight="500">{cardData.attributes.TELEFONAS}</Text>
+              <a href={`tel:${cardData.attributes.TELEFONAS}`}>
+                <Text fontWeight="500">{cardData.attributes.TELEFONAS}</Text>
+              </a>
             </Flex>
           )}
           {cardData.attributes.NUORODA && (
@@ -216,6 +218,7 @@ const Card = forwardRef(
                 href={`http://${cardData.attributes.NUORODA}`}
                 isExternal
                 fontWeight="500"
+                _hover={{ color: "brand.31", textDecoration: "underline" }}
               >
                 {cardData.attributes.NUORODA}
               </Link>

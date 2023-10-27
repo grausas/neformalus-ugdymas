@@ -205,11 +205,9 @@ export default function Map() {
     }
 
     if (shareID) {
-      console.log("featuresResults", featureResults);
       const feature = featureResults.features.filter((f) => {
         return f.attributes.OBJECTID === Number(shareID);
       });
-      console.log(feature);
       const featureFilter = new FeatureFilter({
         where: "OBJECTID = " + shareID,
       });
@@ -249,7 +247,6 @@ export default function Map() {
           () => [view.stationary, view.extent],
           async ([stationary]) => {
             if (stationary) {
-              console.log("hello");
               await promiseUtils.debounce(
                 queryFeatures(publicLayer, layerView)
               );
@@ -278,7 +275,6 @@ export default function Map() {
   useEffect(() => {
     if (view && featureLayer) {
       view.on("click", async (event) => {
-        console.log(view.zoom + " " + view.scale);
         if (view.zoom < 12) return;
         const response = await view.hitTest(event, {
           include: featureLayer,
@@ -490,7 +486,7 @@ export default function Map() {
       direction={{ base: "column", md: "row" }}
       gap="0"
       position="relative"
-      height={{ base: "calc(100vh - 32px)", md: "auto" }}
+      height={{ base: "calc(100dvh - 30px)", md: "auto" }}
       // overflow="hidden"
     >
       <Button
@@ -499,7 +495,7 @@ export default function Map() {
         // width="20%"
         width="fit-content"
         position="absolute"
-        bottom="20%"
+        bottom="10dvh"
         left="50%"
         transform="translateX(-50%)"
         onClick={isOpen ? onClose : onOpen}
@@ -566,7 +562,7 @@ export default function Map() {
               </AbsoluteCenter>
             )}
             <Stack
-              h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
+              h={{ base: "calc(100dvh - 188px)", md: "calc(100vh - 200px)" }}
               overflowY="auto"
               css={{
                 "&::-webkit-scrollbar": {
@@ -607,7 +603,7 @@ export default function Map() {
         bottom={{ base: "3", md: "unset" }}
         zIndex="0"
         w="100%"
-        h={{ base: "calc(100vh - 168px)", md: "calc(100vh - 64px)" }}
+        h={{ base: "calc(100dvh - 168px)", md: "calc(100vh - 64px)" }}
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />
