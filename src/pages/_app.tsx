@@ -29,6 +29,18 @@ export default function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1"
         ></meta>
+        <meta
+          property="og:title"
+          content="Vilniaus miesto neformaliojo švietimo žemėlapis"
+        />
+        <meta
+          name="description"
+          content="Vilniaus miesto neformaliojo švietimo žemėlapis kuriame galima rasti neformaliojiojo vaikų švietimo bųrelius "
+        />
+        <meta
+          property="og:description"
+          content="Neformaliojo švietimo žemėlapis"
+        />
       </Head>
       <style jsx global>
         {`
