@@ -7,7 +7,6 @@ import React, {
   useRef,
 } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 const ArcGISMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -106,23 +105,24 @@ export default function Map() {
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
-  const router = useRouter();
 
+  // set whereParams when filter params change
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
   }, [activities, group, nvs, classFilter]);
 
-  useEffect(() => {
-    if (view) {
-      view.goTo({
-        target: [25.28093, 54.681],
-        zoom: 13,
-      });
-      setActivities([]);
-      setNvs(undefined);
-      setClassFilter([]);
-    }
-  }, [group, view]);
+  // change group, zoom to default center
+  const handleChangeGroup = async (value: number) => {
+    if (!view) return;
+    await view.goTo({
+      target: [25.28093, 54.68],
+      zoom: 13,
+    });
+    setActivities([]);
+    setNvs(undefined);
+    setClassFilter([]);
+    setGroup(value);
+  };
 
   useEffect(() => {
     if (objIds.length === 0) return;
@@ -148,6 +148,7 @@ export default function Map() {
     layerView.featureEffect = new FeatureEffect({
       excludedEffect: "opacity(100%)",
     });
+    console.log("whereParams", whereParams);
 
     const featureResults = await layer.queryFeatures({
       returnGeometry: true,
@@ -250,7 +251,6 @@ export default function Map() {
               await promiseUtils.debounce(
                 queryFeatures(publicLayer, layerView)
               );
-              router.push("/");
             }
           }
         )
@@ -529,7 +529,7 @@ export default function Map() {
             setSearchTerm(e.target.value)
           }
         /> */}
-        <GroupTabs changeGroup={(e) => setGroup(e)} loading={loading} />
+        <GroupTabs changeGroup={handleChangeGroup} loading={loading} />
         <Flex direction="row" alignItems="center">
           <Filter
             handleFilter={handleFilter}

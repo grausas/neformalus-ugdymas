@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Text,
@@ -8,6 +8,7 @@ import {
   Link,
   Stack,
   forwardRef,
+  useToast,
 } from "@chakra-ui/react";
 import { ActivitiesData } from "@/utils/activitiesData";
 import { ClassData } from "@/utils/classData";
@@ -22,7 +23,11 @@ import facebook from "@/assets/facebook.svg";
 import share from "@/assets/share.png";
 import nvs from "@/assets/nvs.svg";
 import nonvs from "@/assets/nonvs.svg";
-import { useMediaQuery } from "@chakra-ui/react";
+
+type ToastState = {
+  text: string;
+  status: "info" | "success" | "error";
+};
 
 const Card = forwardRef(
   (
@@ -47,7 +52,11 @@ const Card = forwardRef(
   ) => {
     const klaseArr = ["KLASE_1_4", "KLASE_5_8", "KLASE_9_12"];
     const classArr: any = [];
-    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
+    const [resultsText, setResultsText] = useState<ToastState>({
+      text: "",
+      status: "info",
+    });
+    const toast = useToast();
 
     const filteredClass = klaseArr.find((klase) => {
       cardData.attributes.relatedFeatures &&
@@ -90,6 +99,21 @@ const Card = forwardRef(
     };
 
     const shareUrl = window.location.origin;
+
+    // show toast message on add new feature results
+    useEffect(() => {
+      if (resultsText.text !== "") {
+        const { text, status } = resultsText;
+
+        toast({
+          description: text,
+          status: status,
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
+      }
+    }, [resultsText, toast]);
 
     return (
       <Flex
@@ -179,6 +203,10 @@ const Card = forwardRef(
                   `${shareUrl}?id=${cardData.attributes.OBJECTID}`
                 );
                 e.stopPropagation();
+                setResultsText({
+                  text: "Nuoroda nukopijuota",
+                  status: "success",
+                });
               }}
             >
               <Image width={16} height={16} src={share} alt="adresas" />
