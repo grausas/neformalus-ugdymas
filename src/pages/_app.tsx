@@ -27,18 +27,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Vilniaus miesto neformaliojo švietimo žemėlapis</title>
         <link rel="shortcut icon" href="/favicon.svg" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1"
-        ></meta>
-        <meta
-          name="description"
-          content="Vilniaus miesto neformaliojo švietimo žemėlapis kuriame galima rasti neformaliojiojo vaikų švietimo bųrelius "
-        />
-        <meta
-          property="og:description"
-          content="Neformaliojo švietimo žemėlapis"
-        />
+        <meta name="description">
+          Vilniaus miesto neformaliojo švietimo žemėlapis kuriame galima rasti
+          neformaliojiojo vaikų švietimo bųrelius
+        </meta>
       </Head>
       <style jsx global>
         {`
