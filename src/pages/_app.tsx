@@ -25,14 +25,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <Head>
+        <title>Vilniaus miesto neformaliojo švietimo žemėlapis</title>
+        <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1"
         ></meta>
-        <meta
-          property="og:title"
-          content="Vilniaus miesto neformaliojo švietimo žemėlapis"
-        />
         <meta
           name="description"
           content="Vilniaus miesto neformaliojo švietimo žemėlapis kuriame galima rasti neformaliojiojo vaikų švietimo bųrelius "
