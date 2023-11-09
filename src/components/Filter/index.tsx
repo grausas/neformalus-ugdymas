@@ -141,6 +141,21 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
     handleFilter([]);
   };
 
+  const clearNvsKrepse = () => {
+    setNvsKrepse(undefined);
+    handleFilter([]);
+  };
+
+  const clearClass = () => {
+    setClassFilter([]);
+    handleFilter([]);
+  };
+
+  useEffect(() => {
+    clearFilterActivity();
+    clearNvsKrepse();
+  }, [group]);
+
   return (
     <FormControl>
       <Stack direction="row">
@@ -237,6 +252,7 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
                   fontWeight="600"
                   _hover={{ cursor: "pointer", textDecoration: "underline" }}
                   color="brand.31"
+                  onClick={clearNvsKrepse}
                 >
                   Išvalyti
                 </Text>
@@ -278,6 +294,9 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
                       name={item.name}
                       onChange={(e) => handleFilterByClass(e)}
                       size="sm"
+                      isChecked={classFilter.some(
+                        (filter) => filter.name === item.name
+                      )}
                     >
                       {item.text}
                     </Checkbox>
@@ -290,6 +309,7 @@ function Filter({ handleFilter, loading, group, view }: FilterProps) {
                   fontWeight="600"
                   _hover={{ cursor: "pointer", textDecoration: "underline" }}
                   color="brand.31"
+                  onClick={clearClass}
                 >
                   Išvalyti
                 </Text>

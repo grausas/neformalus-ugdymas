@@ -29,7 +29,7 @@ const theme = extendTheme({
   },
   fonts: {
     body: "var(--font-openSans)",
-    heading: "var(--font-poppins)",
+    heading: "var(--font-openSans)",
   },
   colors: {
     brand: {

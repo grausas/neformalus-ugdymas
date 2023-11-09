@@ -1,4 +1,3 @@
-import { DeleteFeature } from "@/helpers/deleteFeature";
 import { featureLayerPrivate, featureLayerPrivateTable } from "@/layers";
 import Graphic from "@arcgis/core/Graphic";
 import { FormValues, FormRelated } from "@/types/form";

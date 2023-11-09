@@ -118,12 +118,16 @@ export default function Form({ auth, view }: Props) {
   }, [auth, view]);
 
   sketch?.on("create", function (event) {
+    if (event.state === "start") {
+      // Remove all graphics except the currently drawn one
+      sketch?.layer.graphics.removeMany(
+        sketch?.layer.graphics.filter(function (graphic) {
+          return graphic !== event.graphic;
+        })
+      );
+    }
     if (event.state === "complete") {
-      if (geometry) {
-        sketch.layer.graphics.remove(event.graphic);
-      } else {
-        setGeometry(event.graphic.geometry);
-      }
+      setGeometry(event.graphic.geometry);
     }
   });
 
@@ -289,9 +293,11 @@ export default function Form({ auth, view }: Props) {
             <InputField
               register={register}
               registerValue="PAVADIN"
+              options={{ required: "Pavadinimas yra būtinas" }}
               error={errors.PAVADIN && errors.PAVADIN.message}
               name="Pavadinimas"
               id="PAVADIN"
+              isError={!!errors.PAVADIN}
             />
             <InputField
               register={register}
@@ -373,6 +379,7 @@ export default function Form({ auth, view }: Props) {
           <Controller
             control={control}
             name="related.VEIKLAID"
+            rules={{ required: "Pasirinkti veiklą yra būtina." }}
             render={({
               field: { onChange, onBlur, name, ref },
               fieldState: { error },

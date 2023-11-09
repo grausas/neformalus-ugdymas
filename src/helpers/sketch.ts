@@ -29,6 +29,7 @@ export const drawPoints = async (view: __esri.MapView | undefined) => {
   const home = new sketch({
     view: view,
     layer: gLayer,
+    creationMode: "single",
     visibleElements: {
       createTools: {
         circle: false,

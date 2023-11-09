@@ -5,7 +5,6 @@ import {
   Input,
   InputGroup,
 } from "@chakra-ui/react";
-import React from "react";
 
 type Props = {
   register: any;
@@ -19,6 +18,7 @@ type Props = {
   children?: React.ReactNode;
   maxLength?: number;
   minLength?: number;
+  isError?: boolean;
 };
 
 export default function InputField({
@@ -33,9 +33,10 @@ export default function InputField({
   children,
   maxLength,
   minLength,
+  isError,
 }: Props) {
   return (
-    <FormControl>
+    <FormControl isInvalid={isError}>
       <FormLabel htmlFor={id} m="0" fontSize="sm" color="brand.40">
         {name}
       </FormLabel>

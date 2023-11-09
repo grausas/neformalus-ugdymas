@@ -1,12 +1,5 @@
 import { useContext } from "react";
-import {
-  Box,
-  Flex,
-  HStack,
-  Button,
-  useDisclosure,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, Button, Heading } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import Image from "../Image";
 import { AuthContext } from "@/context/auth";
@@ -39,7 +32,7 @@ export default function Simple() {
               <Flex direction="column">
                 <Heading
                   color="brand.50"
-                  fontWeight="500"
+                  fontWeight="600"
                   fontSize={{ base: "sm", md: "md" }}
                   letterSpacing="0.9px"
                   as="h1"
@@ -49,7 +42,7 @@ export default function Simple() {
                 </Heading>
                 <Heading
                   color="brand.50"
-                  fontWeight="500"
+                  fontWeight="600"
                   fontSize={{ base: "sm", md: "md" }}
                   letterSpacing="0.9px"
                   as="h1"
