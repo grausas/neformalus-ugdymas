@@ -18,16 +18,18 @@ const theme = extendTheme({
       },
       // styles for the `a`
       a: {
-        _hover: {
-          textDecoration: "underline",
-          color: "brand.31",
-        },
+        textDecoration: "none",
+        color: "unset",
+        // _hover: {
+        //   textDecoration: "underline",
+        //   color: "brand.31",
+        // },
       },
     },
   },
   fonts: {
     body: "var(--font-openSans)",
-    heading: "var(--font-poppins)",
+    heading: "var(--font-openSans)",
   },
   colors: {
     brand: {

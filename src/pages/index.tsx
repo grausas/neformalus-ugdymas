@@ -7,7 +7,6 @@ import React, {
   useRef,
 } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 const ArcGISMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -106,23 +105,24 @@ export default function Map() {
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
-  const router = useRouter();
 
+  // set whereParams when filter params change
   useEffect(() => {
     setWhereParams(whereParamsChange(activities, group, nvs, classFilter));
   }, [activities, group, nvs, classFilter]);
 
-  useEffect(() => {
-    if (view) {
-      view.goTo({
-        target: [25.28093, 54.681],
-        zoom: 13,
-      });
-      setActivities([]);
-      setNvs(undefined);
-      setClassFilter([]);
-    }
-  }, [group, view]);
+  // change group, zoom to default center
+  const handleChangeGroup = async (value: number) => {
+    if (!view) return;
+    await view.goTo({
+      target: [25.28093, 54.68],
+      zoom: 13,
+    });
+    setActivities([]);
+    setNvs(undefined);
+    setClassFilter([]);
+    setGroup(value);
+  };
 
   useEffect(() => {
     if (objIds.length === 0) return;
@@ -205,11 +205,9 @@ export default function Map() {
     }
 
     if (shareID) {
-      console.log("featuresResults", featureResults);
       const feature = featureResults.features.filter((f) => {
         return f.attributes.OBJECTID === Number(shareID);
       });
-      console.log(feature);
       const featureFilter = new FeatureFilter({
         where: "OBJECTID = " + shareID,
       });
@@ -249,11 +247,9 @@ export default function Map() {
           () => [view.stationary, view.extent],
           async ([stationary]) => {
             if (stationary) {
-              console.log("hello");
               await promiseUtils.debounce(
                 queryFeatures(publicLayer, layerView)
               );
-              router.push("/");
             }
           }
         )
@@ -278,7 +274,6 @@ export default function Map() {
   useEffect(() => {
     if (view && featureLayer) {
       view.on("click", async (event) => {
-        console.log(view.zoom + " " + view.scale);
         if (view.zoom < 12) return;
         const response = await view.hitTest(event, {
           include: featureLayer,
@@ -490,7 +485,7 @@ export default function Map() {
       direction={{ base: "column", md: "row" }}
       gap="0"
       position="relative"
-      height={{ base: "calc(100vh - 32px)", md: "auto" }}
+      height={{ base: "calc(100dvh - 30px)", md: "auto" }}
       // overflow="hidden"
     >
       <Button
@@ -499,7 +494,7 @@ export default function Map() {
         // width="20%"
         width="fit-content"
         position="absolute"
-        bottom="20%"
+        bottom="10dvh"
         left="50%"
         transform="translateX(-50%)"
         onClick={isOpen ? onClose : onOpen}
@@ -533,7 +528,7 @@ export default function Map() {
             setSearchTerm(e.target.value)
           }
         /> */}
-        <GroupTabs changeGroup={(e) => setGroup(e)} loading={loading} />
+        <GroupTabs changeGroup={handleChangeGroup} loading={loading} />
         <Flex direction="row" alignItems="center">
           <Filter
             handleFilter={handleFilter}
@@ -566,7 +561,7 @@ export default function Map() {
               </AbsoluteCenter>
             )}
             <Stack
-              h={{ base: "calc(100vh - 190px)", md: "calc(100vh - 200px)" }}
+              h={{ base: "calc(100dvh - 188px)", md: "calc(100vh - 200px)" }}
               overflowY="auto"
               css={{
                 "&::-webkit-scrollbar": {
@@ -607,7 +602,7 @@ export default function Map() {
         bottom={{ base: "3", md: "unset" }}
         zIndex="0"
         w="100%"
-        h={{ base: "calc(100vh - 168px)", md: "calc(100vh - 64px)" }}
+        h={{ base: "calc(100dvh - 168px)", md: "calc(100vh - 64px)" }}
         bg="brand.10"
       >
         <ServiceArea handleServiceArea={handleServiceArea} />

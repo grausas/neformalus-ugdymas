@@ -20,13 +20,11 @@ import {
 import { Select } from "chakra-react-select";
 import { PhoneIcon, EmailIcon, LinkIcon, AddIcon } from "@chakra-ui/icons";
 import InputField from "../Input";
-import SelectField from "../Select";
 import { drawPoints } from "@/helpers/sketch";
 import Handles from "@arcgis/core/core/Handles.js";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { AddFeature } from "@/helpers/addFeature";
 import { FormValues } from "@/types/form";
-import { ActivitiesData } from "@/utils/activitiesData";
 import { GroupData } from "@/utils/groupData";
 import { queryActivityGroupTable, queryDomains } from "@/helpers/queryDomains";
 
@@ -110,7 +108,6 @@ export default function Form({ auth, view }: Props) {
               const home = await drawPoints(view);
               setSketch(home);
             };
-
             getPolygons();
           },
           { once: true }
@@ -121,12 +118,16 @@ export default function Form({ auth, view }: Props) {
   }, [auth, view]);
 
   sketch?.on("create", function (event) {
+    if (event.state === "start") {
+      // Remove all graphics except the currently drawn one
+      sketch?.layer.graphics.removeMany(
+        sketch?.layer.graphics.filter(function (graphic) {
+          return graphic !== event.graphic;
+        })
+      );
+    }
     if (event.state === "complete") {
-      if (geometry) {
-        sketch.layer.graphics.remove(event.graphic);
-      } else {
-        setGeometry(event.graphic.geometry);
-      }
+      setGeometry(event.graphic.geometry);
     }
   });
 
@@ -134,6 +135,10 @@ export default function Form({ auth, view }: Props) {
     if (event.state === "complete") {
       setGeometry(event.graphics[0].geometry);
     }
+  });
+
+  sketch?.on("delete", function () {
+    setGeometry(undefined);
   });
 
   useEffect(() => {
@@ -247,18 +252,6 @@ export default function Form({ auth, view }: Props) {
             right="0"
             onClick={onClose}
           />
-          {/* <SelectField
-            register={register}
-            registerValue={`related.${"VEIKLAGRID"}`}
-            options={{ valueAsNumber: true }}
-            error={
-              errors.related?.VEIKLAGRID && errors.related?.VEIKLAGRID.message
-            }
-            name="Grupės"
-            id="VEIKLAGRID"
-            text="Pasirinkite grupę"
-            selectOptions={GroupData}
-          /> */}
           <Controller
             control={control}
             name="related.VEIKLAGRID"
@@ -300,9 +293,11 @@ export default function Form({ auth, view }: Props) {
             <InputField
               register={register}
               registerValue="PAVADIN"
+              options={{ required: "Pavadinimas yra būtinas" }}
               error={errors.PAVADIN && errors.PAVADIN.message}
               name="Pavadinimas"
               id="PAVADIN"
+              isError={!!errors.PAVADIN}
             />
             <InputField
               register={register}
@@ -371,19 +366,6 @@ export default function Form({ auth, view }: Props) {
               name="Pastaba"
               id="PASTABA"
             />
-
-            {/* <SelectField
-              register={register}
-              registerValue={`related.${"VEIKLAID"}`}
-              options={{ valueAsNumber: true }}
-              error={
-                errors.related?.VEIKLAID  && errors.related?.VEIKLAID.message
-              }
-              name="Veiklos"
-              id="VEIKLAID"
-              text="Pasirinkti veiklą"
-              selectOptions={filteredActivitiesData}
-            /> */}
             <InputField
               register={register}
               registerValue={`related.${"PEDAGOGAS"}`}
@@ -397,6 +379,7 @@ export default function Form({ auth, view }: Props) {
           <Controller
             control={control}
             name="related.VEIKLAID"
+            rules={{ required: "Pasirinkti veiklą yra būtina." }}
             render={({
               field: { onChange, onBlur, name, ref },
               fieldState: { error },

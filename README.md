@@ -30,7 +30,7 @@ Norėdami paleisti projektą vietiniame kompiuteryje, sekite šiuos paprastus ž
 1. Klonuokite repozitoriją
 
 ```sh
-git clone https://github.com/grausas/neformalus-ugdymas.git
+git clone https://github.com/mevplanas/neformalus-ugdymas.git
 ```
 
 2. Įdiekite NPM paketus

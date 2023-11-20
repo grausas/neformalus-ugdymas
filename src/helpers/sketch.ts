@@ -21,7 +21,7 @@ export const drawPoints = async (view: __esri.MapView | undefined) => {
       outline: {
         width: 1,
         style: "solid",
-        color: "#c2c2c2",
+        color: "#808080",
       },
     },
   });
@@ -29,6 +29,7 @@ export const drawPoints = async (view: __esri.MapView | undefined) => {
   const home = new sketch({
     view: view,
     layer: gLayer,
+    creationMode: "single",
     visibleElements: {
       createTools: {
         circle: false,
